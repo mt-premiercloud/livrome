@@ -54,3 +54,10 @@ test-results/
 
 # Lulu / print artifacts
 print-jobs-debug/
+
+# Handoff archives (built locally for Claude Design / external tooling, not for repo)
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.tar
