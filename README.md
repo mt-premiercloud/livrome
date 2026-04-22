@@ -65,4 +65,8 @@ The nano-banana AI pattern (auth + streamAssist + reference-image multimodal) is
 
 ## License & ownership
 
-Proprietary. All rights reserved.
+Copyright © 2026 Mohamed Touihri. All rights reserved.
+
+This repository is public for collaboration purposes (AI coding assistants, design tools, contractors). The source code, brand assets, design tokens, and copy are not licensed for reuse, redistribution, or derivative work without prior written permission. Shopify's Dawn theme at `shopify/theme/` is covered by its original BSD-3-Clause license (see `shopify/theme/LICENSE.md`); modifications to it are owned by the copyright holder above.
+
+For licensing inquiries: m.touihri@premiercloud.com
