@@ -1,0 +1,86 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-404 { padding: clamp(80px, 12vw, 180px) 0; text-align: center; }
+  .ph-404__inner { max-width: 640px; margin: 0 auto; }
+  .ph-404__number { font-family: var(--ph-font-display); font-size: clamp(80px, 14vw, 160px); font-style: italic; color: var(--ph-plum); line-height: 1; margin: 0 0 24px; letter-spacing: -0.04em; }
+  .ph-404__caption { font-family: var(--ph-font-script); font-size: clamp(20px, 2vw, 26px); color: var(--ph-honey-deep); margin: 0 0 32px; }
+  .ph-404 .ph-display { font-size: clamp(32px, 4vw, 48px); margin-bottom: 20px; }
+  .ph-404__lede { color: var(--ph-ink-70); font-size: 17px; line-height: 1.65; max-width: 42ch; margin: 0 auto 40px; }
+  .ph-404__ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  .ph-404__suggest { margin-top: 80px; padding-top: 48px; border-top: 1px solid var(--ph-ink-15); }
+  .ph-404__suggest p { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-ink-60); margin-bottom: 24px; }
+  .ph-404__suggest-list { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .ph-404__suggest-list a { color: var(--ph-plum); text-decoration: none; font-size: 15px; font-weight: 500; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: border-color 0.2s; }
+  .ph-404__suggest-list a:hover { border-bottom-color: var(--ph-plum); }
+</style>
+
+<section class="ph-section ph-section--cream ph-404">
+  <div class="ph-inner ph-404__inner">
+    <p class="ph-404__number">{{ section.settings.number }}</p>
+    {% if section.settings.caption != blank %}<p class="ph-404__caption">{{ section.settings.caption }}</p>{% endif %}
+    <h1 class="ph-display">{{ section.settings.heading }}</h1>
+    {% if section.settings.lede != blank %}<p class="ph-404__lede">{{ section.settings.lede }}</p>{% endif %}
+
+    <div class="ph-404__ctas">
+      {% if section.settings.cta_primary_label != blank %}
+        <a href="{{ section.settings.cta_primary_link | default: '/' }}" class="ph-btn">{{ section.settings.cta_primary_label }} →</a>
+      {% endif %}
+      {% if section.settings.cta_secondary_label != blank %}
+        <a href="{{ section.settings.cta_secondary_link | default: '/pages/faq' }}" class="ph-btn ph-btn--ghost">{{ section.settings.cta_secondary_label }}</a>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="ph-404__suggest">
+        <p>{{ section.settings.suggest_label }}</p>
+        <div class="ph-404__suggest-list">
+          {% for block in section.blocks %}
+            {% if block.type == 'link' %}
+              <a href="{{ block.settings.url | default: '/' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · 404",
+  "settings": [
+    { "type": "text", "id": "number", "label": "Big number", "default": "404" },
+    { "type": "text", "id": "caption", "label": "Handwritten caption", "default": "Lost in the library —" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "This page doesn't live here." },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "The page you tried to reach has either moved, been retired, or never existed. Nothing's broken — just the wrong shelf. Let's get you back to a story." },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary CTA label", "default": "Back to home" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary CTA link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA label", "default": "Read the FAQ" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary CTA link" },
+    { "type": "text", "id": "suggest_label", "label": "Suggestions label", "default": "Or try one of these" }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Suggested link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "url", "id": "url", "label": "URL" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "Livrome · 404",
+      "blocks": [
+        { "type": "link", "settings": { "label": "The library" } },
+        { "type": "link", "settings": { "label": "About Livrome" } },
+        { "type": "link", "settings": { "label": "Track an order" } },
+        { "type": "link", "settings": { "label": "Contact us" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
