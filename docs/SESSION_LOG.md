@@ -4,6 +4,31 @@ Running log of each build session. Most recent at top.
 
 ---
 
+## S6 + S7 — steps 3 through 7 UI (2026-04-22)
+
+**Objective**: fill in the remaining 5 preview-flow routes with real UI (photo upload, generation loading, page review, flipbook, order).
+
+**Delivered**:
+- `components/book-page-spread.tsx` — SVG spread with 4 interchangeable scenes (circle + ground, tall trees, waves + heart, open book) driven by `pageNum % 4`. Takes `palette` triple + `name` + `lang`. Used by Step 5 and Step 6.
+- `components/preview-top-bar.tsx` already tracks `usePathname()` so the step rail now lights up correctly across all 7 steps.
+- `app/globals.css` — added keyframes `book-reveal`, `sparkle-float`, `shimmer`, `spin-slow`, `dash-pulse`, `fadeSlide`; utility class `.anim-fade-slide`. Matches `UI/tokens.css`.
+- `app/preview/photo/page.tsx` — drop zone or click-to-browse, enforces image/* MIME and 6 MB cap (sessionStorage quota is ~5 MB; we stay under). `FileReader.readAsDataURL` writes into state; faux 1.4 s `setTimeout` flips status from `analyzing` → `detected` and overlays the dashed green face rectangle from the artboard. Privacy pill + two tip cards (good / avoid). "Replace photo" clears state. Continue CTA is disabled until `status === "detected"`.
+- `app/preview/generating/page.tsx` — centred composition: radial glow + 14-point `StarField` (seeded positions, `sparkle-float` animation) + rotating plum card with honey `Sparkles` icon. Progress integer bumps `+0.75%` every 60 ms (≈ 8 s total) — 4 phase titles (`Drawing your hero…` → `Adding their smile…` → `Polishing every page…` → `Almost ready.`) swap based on thresholds. At 100% it `patch({ generated: true })` and `router.push('/preview/review')`. Email capture writes to a saved-state pill (not wired to backend; S15 plugs in Klaviyo). Shimmer gradient on the progress bar.
+- `app/preview/review/page.tsx` — 8-page stub (24 in real prod), 4 variants per page using `PAGE_PALETTES`. Big selected spread on top, thumbnail row underneath; click thumb → `patch({ pageChoices: {…, [pageNum]: variantIdx} })`. Bottom controls: "Regenerate options" (hook for S10), "Pick best automatically for the rest" (fills remaining choices with `0`), and "Next page" → "See the full book" on page 8.
+- `app/preview/book/page.tsx` — 1-second `book-reveal` animation on mount (`translateY`+`scale`+`rotateY`+`blur(8px) → 0`). Left/right flip arrows with 280 ms `rotateY(-8deg)` transition. Page dots (active one widens to 22 px). Three CTAs at bottom: edit (back to review), share (stub alert), order.
+- `app/preview/order/page.tsx` — two `FormatCard`s (hardcover $29 · paperback $22, hardcover is "Most loved" recommended). Live math: subtotal + shipping ($8.95 under $75, free above) + QC tax 14.975%. Gift dedication textarea toggled by a plus button (200-char cap). Primary CTA punches out to `https://petithero.myshopify.com/cart/add?id=${VARIANT_IDS[format]}&quantity=1` — S12 will replace this with Storefront API `cartCreate`, but the variant IDs already match the ones we created via MCP in S2 (hardcover `48774283624699`, paperback `48774283657467`).
+
+**Build**: `npx next build` ✓ compiled, ✓ TypeScript. Eight routes prerender statically; `/` is the only dynamic route (server redirect).
+
+**Known stubs / deferred**:
+- Face detection is a `setTimeout` — S8 will wire a real detection endpoint (likely a tflite-wasm model client-side, or a server call for heavier pipelines).
+- Regeneration does nothing — S10 emits Inngest events.
+- Share link does nothing — S11 persists preview to R2 + Supabase, then this generates a URL.
+- Cart injection punches out instead of using cartCreate — S12.
+- FR/EN is per-page `ternaries` on `data.bookLang`. Will migrate to message catalog alongside Shopify theme translations in a future polish pass.
+
+---
+
 ## S4 + S5 — preview-app scaffold + Welcome/Details UI (2026-04-22)
 
 **Objective**: stand up the Next.js preview app with Livrome tokens, 7 route stubs, and working Step 1 (Welcome) + Step 2 (Child details) UI.

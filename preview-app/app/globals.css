@@ -168,3 +168,28 @@ body {
   color: var(--plum);
   font-weight: 600;
 }
+
+/* Animations (match UI/tokens.css keyframes) */
+@keyframes book-reveal {
+  0% { opacity: 0; transform: translateY(30px) scale(0.92) rotateY(-15deg); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotateY(0); filter: blur(0); }
+}
+@keyframes sparkle-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-8px) scale(1.12); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes dash-pulse {
+  0%, 100% { border-color: var(--plum); }
+  50% { border-color: var(--honey); }
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim-fade-slide { animation: fadeSlide .4s var(--ease-out) both; }
+.anim-fade { animation: fadeSlide .4s var(--ease-out) both; }
