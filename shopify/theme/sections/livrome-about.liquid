@@ -1,0 +1,115 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-about__hero { padding-top: clamp(60px, 8vw, 120px); padding-bottom: clamp(60px, 8vw, 120px); }
+  .ph-about__hero .ph-display { max-width: 18ch; }
+  .ph-about__lede { max-width: 48ch; margin-top: 32px; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.6; color: var(--ph-ink-80); }
+  .ph-about__story { padding: clamp(48px, 6vw, 96px) 0; }
+  .ph-about__story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); }
+  @media (max-width: 900px) { .ph-about__story-grid { grid-template-columns: 1fr; } }
+  .ph-about__story-grid p { color: var(--ph-ink-70); font-size: 16px; line-height: 1.75; margin: 0 0 18px; }
+  .ph-about__values { padding: clamp(48px, 6vw, 96px) 0; }
+  .ph-about__values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 64px; }
+  @media (max-width: 900px) { .ph-about__values-grid { grid-template-columns: 1fr; } }
+  .ph-value__icon { font-family: var(--ph-font-display); font-size: 40px; color: var(--ph-plum); font-style: italic; margin-bottom: 16px; display: block; }
+  .ph-value__title { font-family: var(--ph-font-display); font-size: 22px; font-weight: 500; letter-spacing: -0.005em; margin: 0 0 12px; }
+  .ph-value__text { color: var(--ph-ink-60); font-size: 15px; line-height: 1.65; margin: 0; }
+  .ph-about__studio { padding: clamp(48px, 6vw, 96px) 0; border-top: 1px solid var(--ph-ink-15); }
+  .ph-about__studio-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  @media (max-width: 900px) { .ph-about__studio-grid { grid-template-columns: 1fr; } }
+  .ph-about__studio-aside { font-family: var(--ph-font-script); color: var(--ph-honey-deep); font-size: 22px; margin-top: 16px; }
+</style>
+
+<section class="ph-section ph-section--cream ph-about__hero">
+  <div class="ph-inner">
+    {% if section.settings.eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <h1 class="ph-display">{{ section.settings.heading }}</h1>
+    {% if section.settings.lede != blank %}<p class="ph-about__lede">{{ section.settings.lede }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="ph-section ph-section--paper ph-about__story">
+  <div class="ph-inner ph-about__story-grid">
+    <div>
+      {% if section.settings.story_eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.story_eyebrow }}</p>{% endif %}
+      <h2 class="ph-title">{{ section.settings.story_heading }}</h2>
+    </div>
+    <div>
+      {{ section.settings.story_body }}
+    </div>
+  </div>
+</section>
+
+<section class="ph-section ph-section--cream ph-about__values">
+  <div class="ph-inner">
+    {% if section.settings.values_eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.values_eyebrow }}</p>{% endif %}
+    <h2 class="ph-title">{{ section.settings.values_heading }}</h2>
+
+    <div class="ph-about__values-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'value' %}
+          <div {{ block.shopify_attributes }}>
+            <span class="ph-value__icon">{{ block.settings.glyph }}</span>
+            <h3 class="ph-value__title">{{ block.settings.title }}</h3>
+            <p class="ph-value__text">{{ block.settings.text }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ph-section ph-section--paper ph-about__studio">
+  <div class="ph-inner ph-about__studio-grid">
+    <div>
+      {% if section.settings.studio_eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.studio_eyebrow }}</p>{% endif %}
+      <h2 class="ph-title">{{ section.settings.studio_heading }}</h2>
+      {% if section.settings.studio_aside != blank %}<p class="ph-about__studio-aside">{{ section.settings.studio_aside }}</p>{% endif %}
+    </div>
+    <div>
+      {{ section.settings.studio_body }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · About",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "About Livrome" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "We make books that become <em>keepsakes</em>." },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "Livrome is a small Quebec-based studio building one thing: beautiful, personalized storybooks where the child you love becomes the hero. One book at a time, printed locally, kept for a lifetime." },
+
+    { "type": "header", "content": "Our story" },
+    { "type": "text", "id": "story_eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "story_heading", "label": "Heading", "default": "Started in a Montreal living room." },
+    { "type": "richtext", "id": "story_body", "label": "Story body", "default": "<p>Livrome began the night one of our founders tried to read a picture book with her four-year-old niece — and her niece asked, for the fifth time, why the girl in the story didn't have curly hair like hers.</p><p>There was no good answer. So we built one.</p><p>A few months later, we had a small team of illustrators, authors, and engineers in Montreal working on the same question: what if every child could open a book and see themselves on page one? Not as a novelty, not as a gimmick — as a keepsake. Something they'd keep on their shelf when they were grown.</p><p>We're still a small team. We still care about that same answer.</p>" },
+
+    { "type": "header", "content": "What we believe" },
+    { "type": "text", "id": "values_eyebrow", "label": "Eyebrow", "default": "What we believe" },
+    { "type": "text", "id": "values_heading", "label": "Heading", "default": "Three principles, written down so we don't forget." },
+
+    { "type": "header", "content": "The studio" },
+    { "type": "text", "id": "studio_eyebrow", "label": "Eyebrow", "default": "The studio" },
+    { "type": "text", "id": "studio_heading", "label": "Heading", "default": "Made in Quebec, for parents everywhere." },
+    { "type": "text", "id": "studio_aside", "label": "Handwritten aside", "default": "From one family to another." },
+    { "type": "richtext", "id": "studio_body", "label": "Studio body", "default": "<p>Our office is a corner of Mile-End in Montreal. Our authors write in French and English. Our illustrators draw by hand and use AI-assisted tooling to adapt scenes to each child's features — never to replace the drawing, only to make the child recognizable on the page.</p><p>Our books are printed 20 kilometers away, on FSC-certified paper, on carbon-neutral presses. We ship across Canada, the United States, and Europe.</p><p>We answer every email personally. Our inbox is hello@livrome.com — write to us any time.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        { "type": "text", "id": "glyph", "label": "Glyph (short symbol)", "default": "i." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Value title" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "One short paragraph." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "Livrome · About" }
+  ]
+}
+{% endschema %}

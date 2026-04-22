@@ -1,0 +1,49 @@
+{
+  "sections": {
+    "about": {
+      "type": "livrome-about",
+      "blocks": {
+        "v1": {
+          "type": "value",
+          "settings": {
+            "glyph": "i.",
+            "title": "A book, not a product.",
+            "text": "Every Livrome book is one-of-a-kind, ordered once, and kept for years. No subscription, no recurring charges, no upsells — just a keepsake you ordered for someone you love."
+          }
+        },
+        "v2": {
+          "type": "value",
+          "settings": {
+            "glyph": "ii.",
+            "title": "Children come first.",
+            "text": "We follow Quebec Law 25 and GDPR. Photos are encrypted, used only for your book, deleted within 30 days, and never used for anything else. Parental consent is required for every preview."
+          }
+        },
+        "v3": {
+          "type": "value",
+          "settings": {
+            "glyph": "iii.",
+            "title": "Made, not manufactured.",
+            "text": "Our authors write every story by hand — in French and English. Our illustrators draw every base scene before any AI tool touches it. Our books are printed locally, in Quebec, on paper that will outlast the child who holds them."
+          }
+        }
+      },
+      "block_order": ["v1", "v2", "v3"],
+      "settings": {}
+    },
+    "final_cta": {
+      "type": "livrome-final-cta",
+      "settings": {
+        "script": "Start here —",
+        "heading": "Make their next favorite book.",
+        "lede": "The preview is free. You only pay if you love it.",
+        "cta_primary_label": "Create my preview",
+        "cta_primary_link": "https://preview.livrome.com/preview/start?book=book-01",
+        "cta_secondary_label": "Write to us",
+        "cta_secondary_link": "/pages/contact",
+        "meta": "Printed in Quebec · Shipped across Canada, US, and Europe"
+      }
+    }
+  },
+  "order": ["about", "final_cta"]
+}

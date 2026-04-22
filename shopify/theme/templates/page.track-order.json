@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "track": {
+      "type": "livrome-track-order",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "title": "Preview confirmed", "text": "Your order has been placed and your preview locked in. Printing starts within 48 hours." } },
+        "s2": { "type": "step", "settings": { "title": "Printed in Quebec", "text": "Your book is at our printer in Mile-End, Montreal. Typical print + bind time: 2 business days." } },
+        "s3": { "type": "step", "settings": { "title": "On its way", "text": "You'll receive a tracking number by email as soon as the book ships. 5–8 business days in Canada, 7–12 to the US or Europe." } },
+        "s4": { "type": "step", "settings": { "title": "Delivered", "text": "Open it together. Flip to page one. Send us a photo — we love seeing the first read." } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": {}
+    }
+  },
+  "order": ["track"]
+}

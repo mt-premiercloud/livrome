@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "library": {
+      "type": "livrome-library",
+      "blocks": {
+        "f1": { "type": "filter", "settings": { "label": "All eight" } },
+        "f2": { "type": "filter", "settings": { "label": "Bedtime" } },
+        "f3": { "type": "filter", "settings": { "label": "Adventure" } },
+        "f4": { "type": "filter", "settings": { "label": "Emotions" } },
+        "f5": { "type": "filter", "settings": { "label": "Family" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5"],
+      "settings": {
+        "eyebrow": "The library · Coming soon",
+        "heading": "Eight stories in the making.",
+        "lede": "One is available today. Seven more are being written and illustrated by our authors and illustrators. Join the waitlist and we'll write you the day each one opens.",
+        "products_to_show": 8,
+        "cta_link": "https://preview.livrome.com/preview/start?book=book-01"
+      }
+    },
+    "final_cta": {
+      "type": "livrome-final-cta",
+      "settings": {
+        "script": "Until then —",
+        "heading": "Start with <em>Léo and the Stars</em>.",
+        "lede": "Our first book is ready. The next seven are worth the wait.",
+        "cta_primary_label": "Create my preview",
+        "cta_primary_link": "https://preview.livrome.com/preview/start?book=book-01",
+        "cta_secondary_label": "Read the FAQ",
+        "cta_secondary_link": "/pages/faq",
+        "meta": "Free until you order · Printed in Quebec · Shipped across Canada"
+      }
+    }
+  },
+  "order": ["library", "final_cta"]
+}

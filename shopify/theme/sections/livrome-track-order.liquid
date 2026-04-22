@@ -1,0 +1,116 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-track { padding: clamp(60px, 8vw, 120px) 0; }
+  .ph-track__grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+  @media (max-width: 900px) { .ph-track__grid { grid-template-columns: 1fr; } }
+  .ph-track__lede { margin-top: 24px; color: var(--ph-ink-70); font-size: 16px; line-height: 1.65; max-width: 42ch; }
+
+  .ph-track__card { background: var(--ph-paper); border: 1px solid var(--ph-ink-15); padding: 36px; border-radius: 6px; }
+  .ph-track__card h3 { font-family: var(--ph-font-display); font-size: 20px; font-weight: 500; letter-spacing: -0.005em; margin: 0 0 18px; }
+  .ph-track__field { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .ph-track__field label { font-size: 13px; color: var(--ph-ink-70); letter-spacing: 0.02em; }
+  .ph-track__field input { padding: 12px 14px; border: 1px solid var(--ph-ink-15); border-radius: 4px; background: var(--ph-cream); font-family: var(--ph-font-body); font-size: 15px; color: var(--ph-ink); }
+  .ph-track__field input:focus { outline: 2px solid var(--ph-plum); outline-offset: -1px; }
+  .ph-track__submit { margin-top: 8px; }
+
+  .ph-track__help { margin-top: 48px; }
+  .ph-track__help h3 { font-family: var(--ph-font-display); font-size: 18px; font-weight: 500; margin: 0 0 12px; }
+  .ph-track__help p { color: var(--ph-ink-60); font-size: 14px; line-height: 1.65; margin: 0 0 10px; }
+
+  .ph-track__steps { display: flex; flex-direction: column; gap: 32px; }
+  .ph-track__step { display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
+  .ph-track__step-num { font-family: var(--ph-font-display); font-size: 28px; color: var(--ph-plum); font-style: italic; line-height: 1; }
+  .ph-track__step h4 { font-family: var(--ph-font-display); font-size: 18px; font-weight: 500; margin: 0 0 6px; }
+  .ph-track__step p { color: var(--ph-ink-60); font-size: 14px; line-height: 1.65; margin: 0; }
+</style>
+
+<section class="ph-section ph-section--cream ph-track">
+  <div class="ph-inner ph-track__grid">
+    <div>
+      {% if section.settings.eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h1 class="ph-display">{{ section.settings.heading }}</h1>
+      {% if section.settings.lede != blank %}<p class="ph-track__lede">{{ section.settings.lede }}</p>{% endif %}
+
+      <div class="ph-track__help">
+        <h3>{{ section.settings.help_heading }}</h3>
+        <p>{{ section.settings.help_body }}</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="ph-track__card">
+        <h3>{{ section.settings.form_heading }}</h3>
+        <form action="{{ section.settings.form_action | default: '/account/login' }}" method="get" novalidate>
+          <div class="ph-track__field">
+            <label for="ph-track-order">{{ section.settings.field_order_label }}</label>
+            <input id="ph-track-order" name="order" type="text" placeholder="#1042" autocomplete="off" required>
+          </div>
+          <div class="ph-track__field">
+            <label for="ph-track-email">{{ section.settings.field_email_label }}</label>
+            <input id="ph-track-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <button type="submit" class="ph-btn ph-track__submit">{{ section.settings.submit_label }} →</button>
+        </form>
+      </div>
+
+      <div class="ph-track__steps" style="margin-top: 48px;">
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            <div class="ph-track__step" {{ block.shopify_attributes }}>
+              <div class="ph-track__step-num">{{ forloop.index }}.</div>
+              <div>
+                <h4>{{ block.settings.title }}</h4>
+                <p>{{ block.settings.text }}</p>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · Track Order",
+  "settings": [
+    { "type": "header", "content": "Intro" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Track your order" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Where is <em>our book</em>?" },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "Enter your order number and the email you used at checkout. We'll pull up its status, the latest tracking event, and the estimated arrival window." },
+
+    { "type": "header", "content": "Lookup form" },
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Look up an order" },
+    { "type": "text", "id": "field_order_label", "label": "Order number label", "default": "Order number" },
+    { "type": "text", "id": "field_email_label", "label": "Email label", "default": "Email used at checkout" },
+    { "type": "text", "id": "submit_label", "label": "Submit label", "default": "Track my order" },
+    { "type": "url", "id": "form_action", "label": "Form action (leave blank for /account/login)" },
+
+    { "type": "header", "content": "Help aside" },
+    { "type": "text", "id": "help_heading", "label": "Help heading", "default": "Can't find your order number?" },
+    { "type": "textarea", "id": "help_body", "label": "Help body", "default": "It's in your order confirmation email — subject line starts with 'Order #'. Can't find it? Write to hello@livrome.com with your name and the email you used, and we'll look it up for you." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Status step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Step title" },
+        { "type": "textarea", "id": "text", "label": "Step text" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    { "name": "Livrome · Track Order",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Preview confirmed", "text": "Your order has been placed and your preview locked in. Printing starts within 48 hours." } },
+        { "type": "step", "settings": { "title": "Printed in Quebec", "text": "Your book is at our printer in Mile-End, Montreal. Typical print + bind time: 2 business days." } },
+        { "type": "step", "settings": { "title": "On its way", "text": "You'll receive a tracking number by email as soon as the book ships. 5–8 business days in Canada, 7–12 to the US or Europe." } },
+        { "type": "step", "settings": { "title": "Delivered", "text": "Open it together. Flip to page one. Send us a photo — we love seeing the first read." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "faq": {
+      "type": "livrome-faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "What do you do with my child's photo?", "answer": "The photo is used only to illustrate your book. It's stored encrypted, used by our illustration pipeline to adapt each page to your child's features, then deleted within 30 days — or instantly from your account on request. We never share photos, never train models on them, and never use them for any purpose outside your book." } },
+        "q2": { "type": "qa", "settings": { "question": "How long does delivery take?", "answer": "Printing takes 48 hours once you've confirmed your preview. After that: 5–8 business days in Canada, 7–12 business days to the United States and Europe. We'll email you a tracking number as soon as your book ships." } },
+        "q3": { "type": "qa", "settings": { "question": "Are the books available in French?", "answer": "Yes — every story is hand-written in both French (Quebec variant) and English, by our own authors. You pick the language when you create the book. The illustrations and layout are identical across languages." } },
+        "q4": { "type": "qa", "settings": { "question": "What if I don't love the final book?", "answer": "We'll replace it or refund you — your choice. No fine print, no return shipping fees. We only ship books we'd be proud to keep ourselves. If something's off, write to us at hello@livrome.com within 30 days of delivery and we'll make it right." } },
+        "q5": { "type": "qa", "settings": { "question": "How much does a book cost?", "answer": "Hardcover books start at $29 CAD (24 pages, 21×21 cm, FSC-certified paper, sewn binding). Paperback starts at $22 CAD. No subscription. No recurring charges. One-time purchase, yours to keep. Shipping is free in Canada on orders over $75." } },
+        "q6": { "type": "qa", "settings": { "question": "Can I send a book directly as a gift?", "answer": "Yes. At checkout, tick 'This is a gift' to add a personal dedication page at the front of the book, choose gift packaging, and ship directly to the recipient. The invoice is emailed only to you." } },
+        "q7": { "type": "qa", "settings": { "question": "Do you use AI to make the illustrations?", "answer": "Our illustrators use AI-assisted tools to adapt our hand-drawn base scenes to your child's features — face shape, skin tone, hair. Every scene starts from art drawn by a human illustrator, never from a generic prompt. The result stays faithful, warm, and consistent from page to page." } },
+        "q8": { "type": "qa", "settings": { "question": "Is this safe for children?", "answer": "Yes. We follow Quebec Law 25 and European GDPR standards. We don't sell photos, email addresses, or any personal data. Parental consent is required at the start of every preview — no book is created without an adult's explicit permission." } },
+        "q9": { "type": "qa", "settings": { "question": "What format is the book printed in?", "answer": "24 pages, 21×21 cm (8.25×8.25 in) square format. Hardcover: sewn binding with 170 g FSC-certified paper and a laminated cover. Paperback: glued binding with 150 g paper. Both are printed locally in Quebec on carbon-neutral presses." } },
+        "q10": { "type": "qa", "settings": { "question": "How does the preview work?", "answer": "After you pick a story and upload one clear photo, our pipeline drafts all 24 pages in about 2 minutes. You review each page, pick your favorite variant, and can regenerate any page you don't love. Nothing is charged until you click 'Order the book.' The preview is free, always." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
+      "settings": {
+        "eyebrow": "Frequently asked",
+        "heading": "Everything parents ask us.",
+        "lede": "A long list of the questions we hear the most. Can't find yours? Write to us at hello@livrome.com — we reply within one business day."
+      }
+    },
+    "final_cta": {
+      "type": "livrome-final-cta",
+      "settings": {
+        "script": "Still curious —",
+        "heading": "Create a free preview. Decide later.",
+        "lede": "No card required. No commitment. Just three minutes and a photo.",
+        "cta_primary_label": "Create my preview",
+        "cta_primary_link": "https://preview.livrome.com/preview/start?book=book-01",
+        "cta_secondary_label": "Write to us",
+        "cta_secondary_link": "/pages/contact",
+        "meta": "Free until you order · Printed in Quebec · Shipped across Canada"
+      }
+    }
+  },
+  "order": ["faq", "final_cta"]
+}
