@@ -17,10 +17,11 @@ Running log of each build session. Most recent at top.
 - `docs/API_CONTRACTS.md` — empty shell with section headers for S8/S12/S13/S14 to fill in
 - `README.md` — project overview + dev setup + session model
 
-**Pending in S1 (blocked on user decision)**:
-- Theme choice: Impulse / Prestige / Broadcast / Dawn (free)
-- Shopify handle rename: keep `petithero.myshopify.com` or rename to `livrome.myshopify.com`
-- Once decided: install theme via Shopify MCP, apply brand primitives (colors from `UI/tokens.css`, Fraunces/Inter/Caveat fonts), set email sender to "Livrome"
+**Pending in S1 (blocked on Claude Code restart to load Shopify MCP)**:
+- User answered: rename handle to `livrome.myshopify.com` (execute when MCP loads)
+- Open question raised by user: can we use the Claude Design UI as the Shopify theme?
+  - Answer: partially — tokens.css and i18n can be reused everywhere, but Shopify theme requires Liquid, not React. Three paths offered: (1) port visuals into Dawn Liquid (recommended for V1 speed), (2) full headless Next.js + Shopify backend, (3) Shopify Hydrogen. User to pick on resume.
+- Once MCP loaded + paths chosen: install theme, rename handle, apply brand primitives (colors from `UI/tokens.css`, Fraunces/Inter/Caveat fonts), set email sender to "Livrome"
 
 **Decisions made**:
 - Brand name: PetitsHéros → **Livrome** (rebranded)

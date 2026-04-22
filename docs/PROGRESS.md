@@ -1,8 +1,8 @@
 # Livrome — Progress Tracker
 
-**Last updated**: 2026-04-22 (S1 in progress)
+**Last updated**: 2026-04-22 (S1 partial — non-MCP portion done)
 **Current session**: S1 — Repo foundations & docs
-**Next action**: User to decide (a) premium theme choice and (b) whether to rename Shopify handle `petithero` → `livrome`. Once decided, install theme via MCP + apply brand primitives.
+**Next action**: **User restarts Claude Code** to load the Shopify MCP (installed but not active in current session), then resumes with: (a) pick homepage approach — Liquid port of Claude Design (recommended) vs full headless Next.js vs Shopify Hydrogen, (b) rename handle `petithero` → `livrome` (user already approved), (c) install chosen Shopify theme, (d) apply brand primitives. After that, S1 closes and S2 begins.
 
 > This file is the single source of truth for "where are we?". Read it first every session. Update it last every session.
 
@@ -12,7 +12,7 @@
 
 | # | Name | Status | Notes |
 |---|------|--------|-------|
-| S1 | Repo foundations & docs | 🟡 in_progress | Directory structure + docs seeded. Pending: theme choice + handle rename decision. |
+| S1 | Repo foundations & docs | 🟡 in_progress | Non-MCP portion ✅ (dirs, docs, git init, commit `00d021f`). MCP portion pending: handle rename + theme install. Blocked on Claude Code restart to load Shopify MCP. |
 | S2 | Shopify storefront structure | ⚪ pending | Homepage, product, catalog, FAQ, About, Contact, Track Order, 404, legal stubs. FR-CA + EN. |
 | S3 | Shopify polish & ops | ⚪ pending | Banner, cookie, emails, discounts, SEO, analytics. |
 | S4 | Next.js scaffolding | ⚪ pending | Next.js 15 + TS + Tailwind + Shadcn, tokens import, 7 route stubs. |
@@ -40,8 +40,10 @@ Legend: 🟢 done | 🟡 in_progress | 🔴 blocked | ⚪ pending
 
 | Blocker | Owner | Need by |
 |---|---|---|
-| Theme choice (Impulse / Prestige / Broadcast / Dawn) | User | S1 |
-| Shopify handle rename yes/no | User | S1 |
+| Homepage approach (Liquid port / headless / Hydrogen) | User | S1 resume |
+| Shopify MCP not loaded in current Claude Code session | User (restart) | S1 resume |
+| Theme choice (Dawn free / Impulse / Prestige / etc) | User | S1 resume |
+| Handle rename → livrome.myshopify.com | User approved; execute after restart | S1 resume |
 | Canadian business entity registration | User | S18 (can develop through all intermediate sessions first) |
 | Lulu Direct account | User | S18 |
 | Book #1 script draft | User + Claude | S9 |
