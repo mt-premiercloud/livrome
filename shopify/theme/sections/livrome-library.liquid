@@ -60,7 +60,7 @@
         {% endfor %}
       {% else %}
         {% comment %} Placeholder tiles — 8 canonical Livrome stories from UI/i18n.jsx {% endcomment %}
-        {%- assign placeholder_titles = 'Léo and the Stars|The Whispering Forest|Under the Great Wave|The Red Balloon|The Winter Lantern|Grandma''s Garden|The Flying Alphabet|The Moon''s Sister' | split: '|' -%}
+        {%- assign placeholder_titles = "Léo and the Stars|The Whispering Forest|Under the Great Wave|The Red Balloon|The Winter Lantern|Grandma's Garden|The Flying Alphabet|The Moon's Sister" | split: "|" -%}
         {%- assign placeholder_ages = 'Ages 3–6|Ages 4–7|Ages 5–8|Ages 3–5|Ages 5–8|Ages 4–7|Ages 4–6|Ages 5–8' | split: '|' -%}
         {% for i in (0..7) %}
           <a href="{{ section.settings.cta_link | default: '#' }}" class="ph-book">

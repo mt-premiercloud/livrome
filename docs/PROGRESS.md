@@ -1,8 +1,11 @@
 # Livrome — Progress Tracker
 
-**Last updated**: 2026-04-22 (S1 partial — Liquid homepage done, MCP actions pending)
-**Current session**: S1 — Repo foundations & docs
-**Next action**: **User restarts Claude Code** to load the Shopify MCP, then in next session: (a) rename handle `petithero` → `livrome` via MCP (user already approved), (b) upload the Livrome-modified Dawn theme at `shopify/theme/` to the store as a draft, (c) publish to preview, (d) apply any Theme Editor-level brand settings. Homepage Liquid code is already done (commit `700740c`) — this is now a deploy step.
+**Last updated**: 2026-04-22 (S1 complete — theme uploaded as draft on petithero store)
+**Current session**: S1 — Repo foundations & docs ✅
+**Next action**: Begin **S2** (Shopify storefront structure) — product page, catalog, FAQ, About, Contact, Track Order, 404, legal stubs in FR-CA + EN. First S2 sub-step: build the first product page (Book #1 placeholder) with Livrome section conventions.
+
+**S1 preview URL (draft theme "Livrome V1", theme_id 158897996027)**:
+`https://petithero.myshopify.com/?_ab=0&_fd=0&_sc=1&key=a08cccff4dcfce3c755fbe4c25e3beed18df80781b15c4c8740fb48329670505&preview_theme_id=158897996027`
 
 > This file is the single source of truth for "where are we?". Read it first every session. Update it last every session.
 
@@ -12,7 +15,7 @@
 
 | # | Name | Status | Notes |
 |---|------|--------|-------|
-| S1 | Repo foundations & docs | 🟡 in_progress | Non-MCP portion ✅ (dirs, docs, git init, commits `00d021f`, `bfaaa9c`, `85f55c8`, `9c8bbd5`, `a22fd03`). Homepage Liquid port ✅ (commit `700740c` — 7 livrome-* sections + tokens + index.json + layout). MCP portion pending: handle rename + theme upload. Blocked on Claude Code restart to load Shopify MCP. |
+| S1 | Repo foundations & docs | 🟢 done | Non-MCP portion ✅ (dirs, docs, git init, commits `00d021f`, `bfaaa9c`, `85f55c8`, `9c8bbd5`, `a22fd03`). Homepage Liquid port ✅ (commit `700740c` — 7 livrome-* sections + tokens + index.json + layout). Theme uploaded as draft "Livrome V1" (theme_id `158897996027`) via ZIP upload (Shopify CLI device-code auth failed; ZIP upload via admin UI worked). Handle rename `petithero → livrome` **deferred** — Shopify's `.myshopify.com` rename is one-time-lifetime and forces MCP reinstall; customers will see `livrome.com` via custom domain in S18, so the internal handle stays `petithero` (cosmetic-only). |
 | S2 | Shopify storefront structure | ⚪ pending | Homepage, product, catalog, FAQ, About, Contact, Track Order, 404, legal stubs. FR-CA + EN. |
 | S3 | Shopify polish & ops | ⚪ pending | Banner, cookie, emails, discounts, SEO, analytics. |
 | S4 | Next.js scaffolding | ⚪ pending | Next.js 15 + TS + Tailwind + Shadcn, tokens import, 7 route stubs. |
@@ -40,10 +43,6 @@ Legend: 🟢 done | 🟡 in_progress | 🔴 blocked | ⚪ pending
 
 | Blocker | Owner | Need by |
 |---|---|---|
-| Homepage approach (Liquid port / headless / Hydrogen) | User | S1 resume |
-| Shopify MCP not loaded in current Claude Code session | User (restart) | S1 resume |
-| Theme choice (Dawn free / Impulse / Prestige / etc) | User | S1 resume |
-| Handle rename → livrome.myshopify.com | User approved; execute after restart | S1 resume |
 | Canadian business entity registration | User | S18 (can develop through all intermediate sessions first) |
 | Lulu Direct account | User | S18 |
 | Book #1 script draft | User + Claude | S9 |

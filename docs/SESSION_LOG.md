@@ -4,7 +4,34 @@ Running log of each build session. Most recent at top.
 
 ---
 
-## S1 — Repo foundations & docs (2026-04-22, in progress)
+## S1 — Theme deploy + debug (2026-04-22, session 2, DONE)
+
+**Objective**: deploy the Livrome Dawn fork to the Shopify store; verify homepage renders.
+
+**Outcome**: theme live on `petithero.myshopify.com` (theme_id `158897996027`), homepage renders all 7 Livrome sections + Dawn header/footer. S1 complete.
+
+**Handle rename deferred**. Shopify's `.myshopify.com` rename is a one-time-lifetime action that forces OAuth app reinstall (MCP would need re-auth + session restart). Since customers will see `livrome.com` via custom domain in S18, the internal handle stays `petithero.myshopify.com` — cosmetic-only impact. Saves the rename token for a future emergency.
+
+**Theme upload path**: Shopify CLI `shopify theme push` device-code auth was attempted twice, expired both times before user could click the activation URL (~10 min lag). Fell back to admin UI ZIP upload. Key gotcha: PowerShell `Compress-Archive` writes backslash-separated entries which Shopify rejects ("missing template `layout/theme.liquid`"); rebuilt with Python `zipfile` (forward slashes) and upload went through.
+
+**Post-upload bug: homepage 404 for `/`**:
+- Symptom: `GET /` returned HTTP 404 with Dawn's "Page not found" template. Shopify couldn't resolve `templates/index.json`.
+- Root cause: `sections/livrome-library.liquid:63` used SQL-style double-apostrophe escaping (`Grandma''s Garden`, `Moon''s Sister`) inside a `'...'` Liquid string. Invalid Liquid syntax → `LiquidHTMLSyntaxError` → `livrome-library` section failed to compile → `templates/index.json` (which references it) fell back to 404.
+- Found via `shopify theme check` — the only LiquidHTMLSyntaxError in our sections.
+- Fix: switched string delimiter to `"..."` and removed the doubled quotes (commit `<pending>`). Rebuilt + re-uploaded as `livrome-v1-1.zip` → published → homepage 200 OK.
+
+**Navigation audit (end of S1)** — expected broken links, all deferred to S2:
+- ✓ 200: `/`, `/cart`, `/search`, `/collections/all` (empty but renders), `/pages/contact` (Dawn default template)
+- ✗ 404: `/pages/faq`, `/pages/coming-soon` — S2 will create these pages
+- ✗ DNS not set: `https://preview.livrome.com/preview/start?book=book-01` — S4+ will ship the Next.js preview app + wire domain
+
+**Password protection**: user temporarily removed it during debug to bypass `/password` redirect. Store is currently publicly accessible. **Action needed**: re-enable at Settings → Preferences → Password protection before public search engines index the placeholder content.
+
+**Next session (S2)**: Create pages (FAQ, About, Contact copy, Coming Soon, Track Order, 404 copy, legal stubs), placeholder Book #1 product, collection, main-menu entries. FR-CA + EN copy from `UI/i18n.jsx`.
+
+---
+
+## S1 — Repo foundations & docs (2026-04-22, session 1, DONE via session 2)
 
 **Objective**: Repo skeleton + doc scaffolding + Shopify theme picked & installed.
 
