@@ -4,6 +4,40 @@ Running log of each build session. Most recent at top.
 
 ---
 
+## S4 + S5 — preview-app scaffold + Welcome/Details UI (2026-04-22)
+
+**Objective**: stand up the Next.js preview app with Livrome tokens, 7 route stubs, and working Step 1 (Welcome) + Step 2 (Child details) UI.
+
+**Delivered**:
+- `preview-app/` scaffold: **Next 16.2.4**, React 19, Tailwind 4, TS, App Router, no `src/` dir, `@/*` path alias → repo root. Package list: `react-hook-form`, `zod`, `@hookform/resolvers`, `lucide-react`, `clsx`.
+- `app/globals.css` ports all Livrome token vars (brand, neutral, semantic, radii, shadows, motion) + re-declares `.ph-btn`, `.ph-input`, `.ph-label`, `.ph-card`, `.t-display`, `.t-eyebrow`, `.t-hand`, `.ph-opt` so preview app and Shopify theme share one set of primitives. Tailwind 4 `@theme inline` block exposes tokens as `color-plum`, `color-cream`, etc. for utility classes.
+- `app/layout.tsx`: Fraunces + Inter + Caveat via `next/font/google` bound to `--font-display`, `--font-body`, `--font-hand` (tokens reference these directly, so no double declaration).
+- `lib/books.ts`: 8 canonical Livrome books copied from `UI/i18n.jsx` (id, title_fr/en, age_fr/en, theme_fr/en, tag_fr/en, pair).
+- `lib/preview-state.ts`: client-only `usePreviewState()` hook backed by `sessionStorage` key `livrome.preview.v1`. Provides `data`, `patch`, `reset`, `hydrated`. S8+ will add server-side session on top.
+- `components/preview-top-bar.tsx`: top bar with Livrome wordmark, step rail (desktop) or step counter + progress bar (mobile), close X → home. Reads `usePathname()` for current step highlight.
+- `components/book-cover.tsx`: typography-only SVG cover that takes a Book + lang + width. Gradient from `book.pair[0]` → darker. No external art needed until S9.
+- `components/step-stub.tsx`: shared placeholder layout for steps 3–7.
+- `app/preview/layout.tsx`: server component wrapping the client top bar + centered max-width main.
+- `app/page.tsx` (root): async server component reading `searchParams`, redirects to `/preview/start?book=...`. Aliases `book-01…book-08` → `leo-stars…moon`.
+- `app/preview/start/page.tsx` (Suspense) + `start-inner.tsx` (client): full Step 1 UI — eyebrow + big italic title + lede + rotated book cover + honey radial glow behind + "Let's begin" primary CTA + "Switch book" ghost button that toggles an 8-tile grid switcher. Persists chosen book to state. FR/EN copy switching based on `data.bookLang`.
+- `app/preview/details/page.tsx`: Step 2 form. Zod schema + `useForm` + `Controller`. Inputs: name (text), age (6 pill buttons: 3–8), gender (3 pills), skin tone (5 swatches 44×44 circles), book language (2 pills), parental consent (checkbox). Consent uses `z.literal(true)` so unchecked fails validation. On submit, `patch(...)` → `router.push('/preview/photo')`.
+- 5 route stubs (`photo`, `generating`, `review`, `book`, `order`) each render `<StepStub/>` — preserves URL structure for S6/S7/S10/S12.
+- `next.config.ts`: `turbopack.root = __dirname` to silence the multi-lockfile warning (Turbopack was walking up to `~/package-lock.json`).
+
+**Bug hit + fix**: production build failed with "useSearchParams() should be wrapped in a suspense boundary" because Step 1's client code calls `useSearchParams()` and the route was trying to prerender statically. Split `start/page.tsx` into a server Suspense wrapper + `start-inner.tsx` client component. Build clean after. All 8 routes prerender as static.
+
+**Not done (deferred intentionally)**:
+- Shadcn init — skipped because we already have a coherent `.ph-*` primitive library. Can revisit if we need complex Shadcn components (command palette, combobox, etc.).
+- FR-CA translation completeness — Step 1 + Step 2 both do inline `lang === 'fr' ? … : …` ternaries. Cleaner approach (message catalog or `next-intl`) deferred.
+- Server-side preview session — S8 will pair with the `/generate-page` endpoint.
+- Connecting to Shopify storefront URL — the CTA in Shopify theme points to `preview.livrome.com/preview/start?book=book-01`; domain wiring lands in S18. Locally, the app runs on `localhost:3000`.
+
+**Validation**: `npx next build` → ✓ compiled, ✓ TypeScript passed, all 8 routes generated. `npx tsc --noEmit` → no errors.
+
+**Heads-up**: `preview-app/AGENTS.md` says "This is NOT the Next.js you know" (Next 16 has breaking changes from 15). I sanity-checked layouts/pages docs at `node_modules/next/dist/docs/01-app/01-getting-started/03-layouts-and-pages.md` — core App Router conventions (page.tsx, layout.tsx, "use client") unchanged. Any future work that uses new features (server actions, caching APIs) should re-read the docs.
+
+---
+
 ## S3 — Polish & ops, theme side (2026-04-22, in progress)
 
 **Objective**: cookie banner, SEO structured data, analytics hook, brand-accurate announcement bar, discount spec.

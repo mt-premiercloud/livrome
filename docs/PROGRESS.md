@@ -1,8 +1,8 @@
 # Livrome — Progress Tracker
 
-**Last updated**: 2026-04-22 (S2+S3 theme work committed, waiting on user admin actions)
-**Current session**: S2 + S3 (theme-side complete, admin blockers)
-**Next action**: User admin actions (see below). Once done, I verify all URLs + mark S2 + S3 done.
+**Last updated**: 2026-04-22 (S2+S3 theme side committed, S4+S5 preview-app scaffolded and building)
+**Current session**: autonomous S2/S3/S4/S5 pass
+**Next action**: User finishes S2/S3 admin actions (theme upload, 4 pages, policies, product sales-channel). I'm unblocked on preview-app code.
 **Upload this zip now**: `C:\Users\Titouza\Documents\petit hero\livrome-v1-4.zip` (supersedes v1-3 — includes cookie banner, JSON-LD, GA4 hook).
 
 **S1 complete**: theme live on `petithero.myshopify.com` (theme_id `158897996027`), homepage + 7 livrome-* sections + Dawn header/footer. Handle rename deferred. Password removed (store currently public).
@@ -29,8 +29,8 @@ Optional (S3): configure main-menu (Navigation → Main menu) with "The Library"
 | S1 | Repo foundations & docs | 🟢 done | Non-MCP portion ✅ (dirs, docs, git init, commits `00d021f`, `bfaaa9c`, `85f55c8`, `9c8bbd5`, `a22fd03`). Homepage Liquid port ✅ (commit `700740c` — 7 livrome-* sections + tokens + index.json + layout). Theme uploaded as draft "Livrome V1" (theme_id `158897996027`) via ZIP upload (Shopify CLI device-code auth failed; ZIP upload via admin UI worked). Handle rename `petithero → livrome` **deferred** — Shopify's `.myshopify.com` rename is one-time-lifetime and forces MCP reinstall; customers will see `livrome.com` via custom domain in S18, so the internal handle stays `petithero` (cosmetic-only). |
 | S2 | Shopify storefront structure | 🟡 in_progress | Theme side done (commits `e4256c0`, `da9a6df`): `page.faq`, `page.coming-soon`, `page.about`, `page.track-order` templates + livrome-about/track-order/404 sections. Book #1 "Léo and the Stars" product created via MCP (GID `9294699364603`, ACTIVE, Hardcover $29 / Paperback $22) — needs sales-channel tick. 4 legal-policy HTML drafts in `content/policies/`. EN-only for now; FR-CA pass deferred to S3. Remaining: user uploads v1-3 zip + publishes; ticks product sales channel; creates 4 admin page records; pastes 4 policies. Nav menu deferred to S3. |
 | S3 | Shopify polish & ops | 🟡 in_progress | Theme side done: announcement bar Livrome copy, cookie banner + preferences modal (Law 25/GDPR compliant, consent-gated), JSON-LD structured data (Organization + WebSite + Product + FAQPage + BreadcrumbList), GA4 loader with consent defaults + update hooks. `config/settings_schema.json` adds "Livrome · Analytics & compliance" panel with GA4 ID + cookie-banner string overrides. `docs/DISCOUNTS.md` drafts 3 discount programs (welcome 10%, gift bundle, seasonal). Remaining: user creates discount codes in admin, sets GA4 ID in Theme editor, customizes email notifications (deferred to S15 with Klaviyo). |
-| S4 | Next.js scaffolding | ⚪ pending | Next.js 15 + TS + Tailwind + Shadcn, tokens import, 7 route stubs. |
-| S5 | Steps 1 & 2 UI | ⚪ pending | Welcome + child details. |
+| S4 | Next.js scaffolding | 🟢 done | `preview-app/` scaffolded (Next 16.2.4 + React 19 + Tailwind 4 + TS, App Router, no src dir). `lib/books.ts` (8 books), `lib/preview-state.ts` (sessionStorage-backed client state), `components/{preview-top-bar,book-cover,step-stub}.tsx`, `app/preview/layout.tsx` with step rail. 7 route stubs all compile, build clean (commit `<pending>`). Shadcn deferred — using bespoke `.ph-*` primitives (copied from `UI/tokens.css` into `preview-app/app/globals.css` so Shopify theme and preview app share one CSS vocabulary). |
+| S5 | Steps 1 & 2 UI | 🟢 done | Step 1 `/preview/start` — hero title + SVG `BookCover` + "Let's begin" CTA + in-page book switcher (8 books) + privacy note. Reads `?book=book-XX` alias (wraps useSearchParams in Suspense). Step 2 `/preview/details` — React Hook Form + Zod schema (name 2–24 chars, age 2–12, gender, skin tone idx 0–4, language, parental consent literal-true). All inputs styled with `.ph-opt` pill pattern. Both pages persist to `sessionStorage` via `usePreviewState`. |
 | S6 | Steps 3 & 4 UI | ⚪ pending | Photo upload + face detect + generation loading. |
 | S7 | Steps 5, 6, 7 UI | ⚪ pending | Review + flipbook + cart. |
 | S8 | AI pipeline foundations | ⚪ pending | `/generate-page` endpoint + quality spike. |

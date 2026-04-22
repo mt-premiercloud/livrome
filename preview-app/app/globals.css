@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* Livrome design tokens (mirrors UI/tokens.css, shared with Shopify theme) */
+:root {
+  /* Brand */
+  --plum: #5B2A6F;
+  --plum-deep: #3F1C4F;
+  --plum-soft: #7B4A8E;
+  --cream: #FFF8EC;
+  --cream-deep: #F5ECD9;
+  --honey: #F4B942;
+  --honey-deep: #D99A25;
+  --sage: #8FB996;
+  --sage-deep: #6B9072;
+  --rose: #E8B4B8;
+  --rose-deep: #C98A8F;
+
+  /* Neutrals */
+  --ink: #1E1A17;
+  --charcoal: #2A2A2A;
+  --graphite: #4E453E;
+  --stone: #7A716A;
+  --pebble: #B8AEA5;
+  --bone: #EDE5D6;
+  --paper: #FBF7EE;
+  --white: #FFFFFF;
+
+  /* Semantic */
+  --success: #6BAA75;
+  --error: #C44536;
+  --warn: #D99A25;
+
+  /* Radii */
+  --r-card: 14px;
+  --r-card-lg: 20px;
+  --r-pill: 999px;
+  --r-input: 10px;
+  --r-chip: 8px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(42, 20, 58, 0.06);
+  --shadow-sm: 0 2px 8px rgba(42, 20, 58, 0.06), 0 1px 2px rgba(42, 20, 58, 0.04);
+  --shadow-md: 0 8px 24px rgba(42, 20, 58, 0.08), 0 2px 6px rgba(42, 20, 58, 0.05);
+  --shadow-lg: 0 20px 48px rgba(42, 20, 58, 0.12), 0 8px 16px rgba(42, 20, 58, 0.06);
+  --shadow-honey: 0 8px 20px rgba(244, 185, 66, 0.32);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@theme inline {
+  --color-plum: var(--plum);
+  --color-plum-deep: var(--plum-deep);
+  --color-plum-soft: var(--plum-soft);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-honey: var(--honey);
+  --color-honey-deep: var(--honey-deep);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-rose: var(--rose);
+  --color-rose-deep: var(--rose-deep);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-stone: var(--stone);
+  --color-pebble: var(--pebble);
+  --color-bone: var(--bone);
+  --color-paper: var(--paper);
+
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--plum);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reusable primitives — mirrors Shopify theme's livrome-tokens.css */
+.ph-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 0; cursor: pointer; font-family: var(--font-body);
+  font-weight: 600; letter-spacing: -0.01em;
+  border-radius: var(--r-pill);
+  transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out), background .18s var(--ease-out), color .18s var(--ease-out);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.ph-btn:hover { transform: scale(1.02); }
+.ph-btn:active { transform: scale(0.97); }
+.ph-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.ph-btn--primary {
+  background: var(--honey); color: var(--ink);
+  padding: 14px 28px; font-size: 16px;
+  box-shadow: var(--shadow-honey);
+}
+.ph-btn--primary:hover { background: var(--honey-deep); }
+.ph-btn--secondary {
+  background: transparent; color: var(--plum);
+  padding: 13px 26px; font-size: 15px;
+  box-shadow: inset 0 0 0 1.5px var(--plum);
+}
+.ph-btn--secondary:hover { background: var(--plum); color: var(--cream); }
+.ph-btn--ghost {
+  background: transparent; color: var(--plum);
+  padding: 10px 18px; font-size: 14px;
+}
+.ph-btn--ghost:hover { background: rgba(91, 42, 111, 0.06); }
+.ph-btn--sm { padding: 9px 18px; font-size: 13px; }
+.ph-btn--lg { padding: 16px 34px; font-size: 17px; }
+
+.ph-input {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--r-input);
+  border: 1.5px solid var(--bone);
+  background: var(--white);
+  font-family: var(--font-body); font-size: 15px;
+  color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+}
+.ph-input:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px rgba(91,42,111,0.12); }
+.ph-input::placeholder { color: var(--pebble); }
+.ph-input[aria-invalid="true"] { border-color: var(--error); }
+
+.ph-label { display: block; font-size: 13px; font-weight: 500; color: var(--graphite); margin-bottom: 6px; letter-spacing: 0.01em; }
+
+.ph-card {
+  background: var(--white); border-radius: var(--r-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.t-display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.04; }
+.t-display-italic { font-family: var(--font-display); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.t-hand { font-family: var(--font-hand); font-weight: 500; letter-spacing: 0; }
+.t-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--plum); }
+
+/* Option pill (shared by age, gender, language selectors) */
+.ph-opt {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--bone);
+  background: var(--white);
+  color: var(--graphite);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s var(--ease-out);
+}
+.ph-opt:hover { border-color: var(--plum-soft); color: var(--plum); }
+.ph-opt[aria-pressed="true"] {
+  border-color: var(--plum);
+  background: rgba(91, 42, 111, 0.06);
+  color: var(--plum);
+  font-weight: 600;
+}
