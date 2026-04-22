@@ -34,7 +34,17 @@ Running log of each build session. Most recent at top.
 
 **Next session (S2)**: Create Shopify homepage sections + placeholder product + legal stubs (FR-CA + EN) via MCP. Read `UI/i18n.jsx` for copy, `UI/artboard_homepage.jsx` for layout intent.
 
-**S1 side-quest: Dawn theme handoff to Claude Design** (2026-04-22)
+**S1 side-quest: Dawn theme port — Claude Design misfire + in-house salvage** (2026-04-22, commit `700740c`)
+- Claude Design returned homepage Liquid, but they invented a fictional independent bookshop brand called "**Paperhaven**" with copy about subscription curation, human booksellers, twine packaging, 4221 Rue Saint-Denis, etc. Bore no resemblance to Livrome (personalized children's books, one-off purchase, face-swap AI, Quebec market).
+- Root cause hypothesis: Claude Design saw the `ph-` CSS class prefix in `UI/primitives.jsx` (legacy from "PetitsHéros" working name), misread it as "Paperhaven" (a common design-system placeholder brand), and hallucinated the product around that template.
+- Evidence: 47 Paperhaven-specific mentions in their output (Paperhaven, bookshop, subscription, bookseller, twine, Rue Saint-Denis, independent press) vs 2 incidental Livrome/PetitsHéros mentions.
+- **Resolution**: user chose to salvage Claude Design's Liquid skeleton + rewrite copy ourselves rather than round-trip for another attempt.
+- Output in `shopify/theme/`: 7 new sections (`livrome-hero`, `-library`, `-how`, `-voices`, `-trust`, `-faq`, `-final-cta`), `assets/livrome-tokens.css` (Livrome palette from `UI/tokens.css` — plum #5B2A6F, honey #F4B942), `templates/index.json` rewired, `layout/theme.liquid` loads Google Fonts (Fraunces/Inter/Caveat) + tokens CSS.
+- Kept `.ph-*` CSS class prefix shared with `UI/tokens.css` so Shopify theme and Next.js preview app use the same primitives. Section files and schema names use `livrome-*` / "Livrome · X" for merchant-facing clarity.
+- Skipped Dawn overrides (featured-collection, footer, header, image-banner, multicolumn, card-product, icon-accordion) — Claude Design produced these but they're not needed for homepage-only scope. Defer to S2/S3.
+- `UI/shopify/` and `UI/shopify-theme/` (Claude Design's raw output) left untracked. Reference only — do not use directly.
+
+**Previous S1 side-quest: Dawn theme handoff to Claude Design** (2026-04-22)
 - Cloned Dawn 15.4.1 into `shopify/theme/` (commit `6ec...`, 369 files)
 - Built `livrome-theme-handoff.zip` (1080 KB, forward-slash paths) — initially for file upload
 - Claude Design requested GitHub instead → pushed to public repo **https://github.com/mt-premiercloud/livrome**

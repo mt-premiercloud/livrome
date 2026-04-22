@@ -1,8 +1,8 @@
 # Livrome — Progress Tracker
 
-**Last updated**: 2026-04-22 (S1 partial — non-MCP portion done)
+**Last updated**: 2026-04-22 (S1 partial — Liquid homepage done, MCP actions pending)
 **Current session**: S1 — Repo foundations & docs
-**Next action**: **User restarts Claude Code** to load the Shopify MCP (installed but not active in current session), then resumes with: (a) pick homepage approach — Liquid port of Claude Design (recommended) vs full headless Next.js vs Shopify Hydrogen, (b) rename handle `petithero` → `livrome` (user already approved), (c) install chosen Shopify theme, (d) apply brand primitives. After that, S1 closes and S2 begins.
+**Next action**: **User restarts Claude Code** to load the Shopify MCP, then in next session: (a) rename handle `petithero` → `livrome` via MCP (user already approved), (b) upload the Livrome-modified Dawn theme at `shopify/theme/` to the store as a draft, (c) publish to preview, (d) apply any Theme Editor-level brand settings. Homepage Liquid code is already done (commit `700740c`) — this is now a deploy step.
 
 > This file is the single source of truth for "where are we?". Read it first every session. Update it last every session.
 
@@ -12,7 +12,7 @@
 
 | # | Name | Status | Notes |
 |---|------|--------|-------|
-| S1 | Repo foundations & docs | 🟡 in_progress | Non-MCP portion ✅ (dirs, docs, git init, commit `00d021f`). MCP portion pending: handle rename + theme install. Blocked on Claude Code restart to load Shopify MCP. |
+| S1 | Repo foundations & docs | 🟡 in_progress | Non-MCP portion ✅ (dirs, docs, git init, commits `00d021f`, `bfaaa9c`, `85f55c8`, `9c8bbd5`, `a22fd03`). Homepage Liquid port ✅ (commit `700740c` — 7 livrome-* sections + tokens + index.json + layout). MCP portion pending: handle rename + theme upload. Blocked on Claude Code restart to load Shopify MCP. |
 | S2 | Shopify storefront structure | ⚪ pending | Homepage, product, catalog, FAQ, About, Contact, Track Order, 404, legal stubs. FR-CA + EN. |
 | S3 | Shopify polish & ops | ⚪ pending | Banner, cookie, emails, discounts, SEO, analytics. |
 | S4 | Next.js scaffolding | ⚪ pending | Next.js 15 + TS + Tailwind + Shadcn, tokens import, 7 route stubs. |
