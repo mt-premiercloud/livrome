@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetitsHéros — Design exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter:wght@300..700&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+  <style>
+/* PetitsHéros — design tokens */
+:root {
+  /* Brand */
+  --plum: #5B2A6F;
+  --plum-deep: #3F1C4F;
+  --plum-soft: #7B4A8E;
+  --cream: #FFF8EC;
+  --cream-deep: #F5ECD9;
+  --honey: #F4B942;
+  --honey-deep: #D99A25;
+  --sage: #8FB996;
+  --sage-deep: #6B9072;
+  --rose: #E8B4B8;
+  --rose-deep: #C98A8F;
+
+  /* Neutrals */
+  --ink: #1E1A17;
+  --charcoal: #2A2A2A;
+  --graphite: #4E453E;
+  --stone: #7A716A;
+  --pebble: #B8AEA5;
+  --bone: #EDE5D6;
+  --paper: #FBF7EE;
+  --white: #FFFFFF;
+
+  /* Semantic */
+  --success: #6BAA75;
+  --error: #C44536;
+  --warn: #D99A25;
+
+  /* Radii */
+  --r-card: 14px;
+  --r-card-lg: 20px;
+  --r-pill: 999px;
+  --r-input: 10px;
+  --r-chip: 8px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(42, 20, 58, 0.06);
+  --shadow-sm: 0 2px 8px rgba(42, 20, 58, 0.06), 0 1px 2px rgba(42, 20, 58, 0.04);
+  --shadow-md: 0 8px 24px rgba(42, 20, 58, 0.08), 0 2px 6px rgba(42, 20, 58, 0.05);
+  --shadow-lg: 0 20px 48px rgba(42, 20, 58, 0.12), 0 8px 16px rgba(42, 20, 58, 0.06);
+  --shadow-honey: 0 8px 20px rgba(244, 185, 66, 0.32);
+
+  /* Type */
+  --f-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+  --f-body: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --f-hand: "Caveat", "Bradley Hand", cursive;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--f-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--paper);
+}
+
+/* Scrollbar hide for artboard inner scroll */
+.artboard-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.12) transparent; }
+.artboard-scroll::-webkit-scrollbar { width: 6px; }
+.artboard-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
+
+/* Focus rings (a11y) */
+.focus-ring:focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; border-radius: 4px; }
+
+/* Reusable primitives */
+.ph-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 0; cursor: pointer; font-family: var(--f-body);
+  font-weight: 600; letter-spacing: -0.01em;
+  border-radius: var(--r-pill);
+  transition: transform .18s var(--ease-out), box-shadow .18s var(--ease-out), background .18s var(--ease-out), color .18s var(--ease-out);
+  white-space: nowrap;
+}
+.ph-btn:hover { transform: scale(1.02); }
+.ph-btn:active { transform: scale(0.97); }
+.ph-btn--primary {
+  background: var(--honey); color: var(--ink);
+  padding: 14px 28px; font-size: 16px;
+  box-shadow: var(--shadow-honey);
+}
+.ph-btn--primary:hover { background: var(--honey-deep); }
+.ph-btn--secondary {
+  background: transparent; color: var(--plum);
+  padding: 13px 26px; font-size: 15px;
+  box-shadow: inset 0 0 0 1.5px var(--plum);
+}
+.ph-btn--secondary:hover { background: var(--plum); color: var(--cream); }
+.ph-btn--ghost {
+  background: transparent; color: var(--plum);
+  padding: 10px 18px; font-size: 14px;
+}
+.ph-btn--ghost:hover { background: rgba(91, 42, 111, 0.06); }
+.ph-btn--sage {
+  background: var(--sage); color: var(--cream);
+  padding: 12px 22px; font-size: 14px;
+}
+.ph-btn--sage:hover { background: var(--sage-deep); }
+.ph-btn--sm { padding: 9px 18px; font-size: 13px; }
+.ph-btn--lg { padding: 16px 34px; font-size: 17px; }
+
+.ph-input {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--r-input);
+  border: 1.5px solid var(--bone);
+  background: var(--white);
+  font-family: var(--f-body); font-size: 15px;
+  color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+}
+.ph-input:focus { outline: none; border-color: var(--plum); box-shadow: 0 0 0 3px rgba(91,42,111,0.12); }
+.ph-input::placeholder { color: var(--pebble); }
+
+.ph-label { display: block; font-size: 13px; font-weight: 500; color: var(--graphite); margin-bottom: 6px; letter-spacing: 0.01em; }
+
+.ph-card {
+  background: var(--white); border-radius: var(--r-card);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .22s var(--ease-out), transform .22s var(--ease-out);
+}
+.ph-card--hover:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.ph-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.ph-badge--plum { background: rgba(91,42,111,0.10); color: var(--plum); }
+.ph-badge--honey { background: rgba(244,185,66,0.18); color: var(--honey-deep); }
+.ph-badge--sage { background: rgba(143,185,150,0.22); color: var(--sage-deep); }
+.ph-badge--rose { background: rgba(232,180,184,0.3); color: var(--rose-deep); }
+.ph-badge--cream { background: var(--cream-deep); color: var(--graphite); }
+
+/* Display type utilities */
+.t-display { font-family: var(--f-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.04; }
+.t-display-italic { font-family: var(--f-display); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.t-hand { font-family: var(--f-hand); font-weight: 500; letter-spacing: 0; }
+.t-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--plum); }
+
+/* Decorative sparkle helper */
+.sparkle { display: inline-block; }
+
+/* Reveal animation for step 6 */
+@keyframes book-reveal {
+  0% { opacity: 0; transform: translateY(30px) scale(0.92) rotateY(-15deg); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotateY(0); filter: blur(0); }
+}
+@keyframes sparkle-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-8px) scale(1.12); opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes dash-pulse {
+  0%, 100% { border-color: var(--plum); }
+  50% { border-color: var(--honey); }
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim-fade-slide { animation: fadeSlide .4s var(--ease-out) both; }
+
+</style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" data-presets="react">
+
+// DesignCanvas.jsx — Figma-ish design canvas wrapper
+// Warm gray grid bg + Sections + Artboards + PostIt notes.
+// Artboards are reorderable (grip-drag), labels/titles are inline-editable,
+// and any artboard can be opened in a fullscreen focus overlay (←/→/Esc).
+// State persists to a .design-canvas.state.json sidecar via the host
+// bridge. No assets, no deps.
+//
+// Usage:
+//   <DesignCanvas>
+//     <DCSection id="onboarding" title="Onboarding" subtitle="First-run variants">
+//       <DCArtboard id="a" label="A · Dusk" width={260} height={480}>…</DCArtboard>
+//       <DCArtboard id="b" label="B · Minimal" width={260} height={480}>…</DCArtboard>
+//     </DCSection>
+//   </DesignCanvas>
+
+const DC = {
+  bg: '#f0eee9',
+  grid: 'rgba(0,0,0,0.06)',
+  label: 'rgba(60,50,40,0.7)',
+  title: 'rgba(40,30,20,0.85)',
+  subtitle: 'rgba(60,50,40,0.6)',
+  postitBg: '#fef4a8',
+  postitText: '#5a4a2a',
+  font: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+};
+
+// One-time CSS injection (classes are dc-prefixed so they don't collide with
+// the hosted design's own styles).
+if (typeof document !== 'undefined' && !document.getElementById('dc-styles')) {
+  const s = document.createElement('style');
+  s.id = 'dc-styles';
+  s.textContent = [
+    '.dc-editable{cursor:text;outline:none;white-space:nowrap;border-radius:3px;padding:0 2px;margin:0 -2px}',
+    '.dc-editable:focus{background:#fff;box-shadow:0 0 0 1.5px #c96442}',
+    '[data-dc-slot]{transition:transform .18s cubic-bezier(.2,.7,.3,1)}',
+    '[data-dc-slot].dc-dragging{transition:none;z-index:10;pointer-events:none}',
+    '[data-dc-slot].dc-dragging .dc-card{box-shadow:0 12px 40px rgba(0,0,0,.25),0 0 0 2px #c96442;transform:scale(1.02)}',
+    '.dc-card{transition:box-shadow .15s,transform .15s}',
+    '.dc-card *{scrollbar-width:none}',
+    '.dc-card *::-webkit-scrollbar{display:none}',
+    '.dc-labelrow{display:flex;align-items:center;gap:4px;height:24px}',
+    '.dc-grip{cursor:grab;display:flex;align-items:center;padding:5px 4px;border-radius:4px;transition:background .12s}',
+    '.dc-grip:hover{background:rgba(0,0,0,.08)}',
+    '.dc-grip:active{cursor:grabbing}',
+    '.dc-labeltext{cursor:pointer;border-radius:4px;padding:3px 6px;display:flex;align-items:center;transition:background .12s}',
+    '.dc-labeltext:hover{background:rgba(0,0,0,.05)}',
+    '.dc-expand{position:absolute;bottom:100%;right:0;margin-bottom:5px;z-index:2;opacity:0;transition:opacity .12s,background .12s;',
+    '  width:22px;height:22px;border-radius:5px;border:none;cursor:pointer;padding:0;',
+    '  background:transparent;color:rgba(60,50,40,.7);display:flex;align-items:center;justify-content:center}',
+    '.dc-expand:hover{background:rgba(0,0,0,.06);color:#2a251f}',
+    '[data-dc-slot]:hover .dc-expand{opacity:1}',
+  ].join('\n');
+  document.head.appendChild(s);
+}
+
+const DCCtx = React.createContext(null);
+
+// ─────────────────────────────────────────────────────────────
+// DesignCanvas — stateful wrapper around the pan/zoom viewport.
+// Owns runtime state (per-section order, renamed titles/labels, focused
+// artboard). Order/titles/labels persist to a .design-canvas.state.json
+// sidecar next to the HTML. Reads go via plain fetch() so the saved
+// arrangement is visible anywhere the HTML + sidecar are served together
+// (omelette preview, direct link, downloaded zip). Writes go through the
+// host's window.omelette bridge — editing requires the omelette runtime.
+// Focus is ephemeral.
+// ─────────────────────────────────────────────────────────────
+const DC_STATE_FILE = '.design-canvas.state.json';
+
+function DesignCanvas({ children, minScale, maxScale, style }) {
+  const [state, setState] = React.useState({ sections: {}, focus: null });
+  // Hold rendering until the sidecar read settles so the saved order/titles
+  // appear on first paint (no source-order flash). didRead gates writes until
+  // the read settles so the empty initial state can't clobber a slow read;
+  // skipNextWrite suppresses the one echo-write that would otherwise follow
+  // hydration.
+  const [ready, setReady] = React.useState(false);
+  const didRead = React.useRef(false);
+  const skipNextWrite = React.useRef(false);
+
+  React.useEffect(() => {
+    let off = false;
+    fetch('./' + DC_STATE_FILE)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((saved) => {
+        if (off || !saved || !saved.sections) return;
+        skipNextWrite.current = true;
+        setState((s) => ({ ...s, sections: saved.sections }));
+      })
+      .catch(() => {})
+      .finally(() => { didRead.current = true; if (!off) setReady(true); });
+    const t = setTimeout(() => { if (!off) setReady(true); }, 150);
+    return () => { off = true; clearTimeout(t); };
+  }, []);
+
+  React.useEffect(() => {
+    if (!didRead.current) return;
+    if (skipNextWrite.current) { skipNextWrite.current = false; return; }
+    const t = setTimeout(() => {
+      window.omelette?.writeFile(DC_STATE_FILE, JSON.stringify({ sections: state.sections })).catch(() => {});
+    }, 250);
+    return () => clearTimeout(t);
+  }, [state.sections]);
+
+  // Build registries synchronously from children so FocusOverlay can read
+  // them in the same render. Only direct DCSection > DCArtboard children are
+  // walked — wrapping them in other elements opts out of focus/reorder.
+  const registry = {};     // slotId -> { sectionId, artboard }
+  const sectionMeta = {};  // sectionId -> { title, subtitle, slotIds[] }
+  const sectionOrder = [];
+  React.Children.forEach(children, (sec) => {
+    if (!sec || sec.type !== DCSection) return;
+    const sid = sec.props.id ?? sec.props.title;
+    if (!sid) return;
+    sectionOrder.push(sid);
+    const persisted = state.sections[sid] || {};
+    const srcIds = [];
+    React.Children.forEach(sec.props.children, (ab) => {
+      if (!ab || ab.type !== DCArtboard) return;
+      const aid = ab.props.id ?? ab.props.label;
+      if (!aid) return;
+      registry[`${sid}/${aid}`] = { sectionId: sid, artboard: ab };
+      srcIds.push(aid);
+    });
+    const kept = (persisted.order || []).filter((k) => srcIds.includes(k));
+    sectionMeta[sid] = {
+      title: persisted.title ?? sec.props.title,
+      subtitle: sec.props.subtitle,
+      slotIds: [...kept, ...srcIds.filter((k) => !kept.includes(k))],
+    };
+  });
+
+  const api = React.useMemo(() => ({
+    state,
+    section: (id) => state.sections[id] || {},
+    patchSection: (id, p) => setState((s) => ({
+      ...s,
+      sections: { ...s.sections, [id]: { ...s.sections[id], ...(typeof p === 'function' ? p(s.sections[id] || {}) : p) } },
+    })),
+    setFocus: (slotId) => setState((s) => ({ ...s, focus: slotId })),
+  }), [state]);
+
+  // Esc exits focus; any outside pointerdown commits an in-progress rename.
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') api.setFocus(null); };
+    const onPd = (e) => {
+      const ae = document.activeElement;
+      if (ae && ae.isContentEditable && !ae.contains(e.target)) ae.blur();
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPd, true);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPd, true);
+    };
+  }, [api]);
+
+  return (
+    <DCCtx.Provider value={api}>
+      <DCViewport minScale={minScale} maxScale={maxScale} style={style}>{ready && children}</DCViewport>
+      {state.focus && registry[state.focus] && (
+        <DCFocusOverlay entry={registry[state.focus]} sectionMeta={sectionMeta} sectionOrder={sectionOrder} />
+      )}
+    </DCCtx.Provider>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// DCViewport — transform-based pan/zoom (internal)
+//
+// Input mapping (Figma-style):
+//   • trackpad pinch  → zoom   (ctrlKey wheel; Safari gesture* events)
+//   • trackpad scroll → pan    (two-finger)
+//   • mouse wheel     → zoom   (notched; distinguished from trackpad scroll)
+//   • middle-drag / primary-drag-on-bg → pan
+//
+// Transform state lives in a ref and is written straight to the DOM
+// (translate3d + will-change) so wheel ticks don't go through React —
+// keeps pans at 60fps on dense canvases.
+// ─────────────────────────────────────────────────────────────
+function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
+  const vpRef = React.useRef(null);
+  const worldRef = React.useRef(null);
+  const tf = React.useRef({ x: 0, y: 0, scale: 1 });
+
+  const apply = React.useCallback(() => {
+    const { x, y, scale } = tf.current;
+    const el = worldRef.current;
+    if (el) el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+  }, []);
+
+  React.useEffect(() => {
+    const vp = vpRef.current;
+    if (!vp) return;
+
+    const zoomAt = (cx, cy, factor) => {
+      const r = vp.getBoundingClientRect();
+      const px = cx - r.left, py = cy - r.top;
+      const t = tf.current;
+      const next = Math.min(maxScale, Math.max(minScale, t.scale * factor));
+      const k = next / t.scale;
+      // keep the world point under the cursor fixed
+      t.x = px - (px - t.x) * k;
+      t.y = py - (py - t.y) * k;
+      t.scale = next;
+      apply();
+    };
+
+    // Mouse-wheel vs trackpad-scroll heuristic. A physical wheel sends
+    // line-mode deltas (Firefox) or large integer pixel deltas with no X
+    // component (Chrome/Safari, typically multiples of 100/120). Trackpad
+    // two-finger scroll sends small/fractional pixel deltas, often with
+    // non-zero deltaX. ctrlKey is set by the browser for trackpad pinch.
+    const isMouseWheel = (e) =>
+      e.deltaMode !== 0 ||
+      (e.deltaX === 0 && Number.isInteger(e.deltaY) && Math.abs(e.deltaY) >= 40);
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      if (isGesturing) return; // Safari: gesture* owns the pinch — discard concurrent wheels
+      if (e.ctrlKey) {
+        // trackpad pinch (or explicit ctrl+wheel)
+        zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.01));
+      } else if (isMouseWheel(e)) {
+        // notched mouse wheel — fixed-ratio step per click
+        zoomAt(e.clientX, e.clientY, Math.exp(-Math.sign(e.deltaY) * 0.18));
+      } else {
+        // trackpad two-finger scroll — pan
+        tf.current.x -= e.deltaX;
+        tf.current.y -= e.deltaY;
+        apply();
+      }
+    };
+
+    // Safari sends native gesture* events for trackpad pinch with a smooth
+    // e.scale; preferring these over the ctrl+wheel fallback gives a much
+    // better feel there. No-ops on other browsers. Safari also fires
+    // ctrlKey wheel events during the same pinch — isGesturing makes
+    // onWheel drop those entirely so they neither zoom nor pan.
+    let gsBase = 1;
+    let isGesturing = false;
+    const onGestureStart = (e) => { e.preventDefault(); isGesturing = true; gsBase = tf.current.scale; };
+    const onGestureChange = (e) => {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, (gsBase * e.scale) / tf.current.scale);
+    };
+    const onGestureEnd = (e) => { e.preventDefault(); isGesturing = false; };
+
+    // Drag-pan: middle button anywhere, or primary button on canvas
+    // background (anything that isn't an artboard or an inline editor).
+    let drag = null;
+    const onPointerDown = (e) => {
+      const onBg = !e.target.closest('[data-dc-slot], .dc-editable');
+      if (!(e.button === 1 || (e.button === 0 && onBg))) return;
+      e.preventDefault();
+      vp.setPointerCapture(e.pointerId);
+      drag = { id: e.pointerId, lx: e.clientX, ly: e.clientY };
+      vp.style.cursor = 'grabbing';
+    };
+    const onPointerMove = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      tf.current.x += e.clientX - drag.lx;
+      tf.current.y += e.clientY - drag.ly;
+      drag.lx = e.clientX; drag.ly = e.clientY;
+      apply();
+    };
+    const onPointerUp = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      vp.releasePointerCapture(e.pointerId);
+      drag = null;
+      vp.style.cursor = '';
+    };
+
+    vp.addEventListener('wheel', onWheel, { passive: false });
+    vp.addEventListener('gesturestart', onGestureStart, { passive: false });
+    vp.addEventListener('gesturechange', onGestureChange, { passive: false });
+    vp.addEventListener('gestureend', onGestureEnd, { passive: false });
+    vp.addEventListener('pointerdown', onPointerDown);
+    vp.addEventListener('pointermove', onPointerMove);
+    vp.addEventListener('pointerup', onPointerUp);
+    vp.addEventListener('pointercancel', onPointerUp);
+    return () => {
+      vp.removeEventListener('wheel', onWheel);
+      vp.removeEventListener('gesturestart', onGestureStart);
+      vp.removeEventListener('gesturechange', onGestureChange);
+      vp.removeEventListener('gestureend', onGestureEnd);
+      vp.removeEventListener('pointerdown', onPointerDown);
+      vp.removeEventListener('pointermove', onPointerMove);
+      vp.removeEventListener('pointerup', onPointerUp);
+      vp.removeEventListener('pointercancel', onPointerUp);
+    };
+  }, [apply, minScale, maxScale]);
+
+  const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(DC.grid)}' stroke-width='1'/%3E%3C/svg%3E")`;
+  return (
+    <div
+      ref={vpRef}
+      className="design-canvas"
+      style={{
+        height: '100vh', width: '100vw',
+        background: DC.bg,
+        overflow: 'hidden',
+        overscrollBehavior: 'none',
+        touchAction: 'none',
+        position: 'relative',
+        fontFamily: DC.font,
+        boxSizing: 'border-box',
+        ...style,
+      }}
+    >
+      <div
+        ref={worldRef}
+        style={{
+          position: 'absolute', top: 0, left: 0,
+          transformOrigin: '0 0',
+          willChange: 'transform',
+          width: 'max-content', minWidth: '100%',
+          minHeight: '100%',
+          padding: '60px 0 80px',
+        }}
+      >
+        <div style={{ position: 'absolute', inset: -6000, backgroundImage: gridSvg, backgroundSize: '120px 120px', pointerEvents: 'none', zIndex: -1 }} />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// DCSection — editable title + h-row of artboards in persisted order
+// ─────────────────────────────────────────────────────────────
+function DCSection({ id, title, subtitle, children, gap = 48 }) {
+  const ctx = React.useContext(DCCtx);
+  const sid = id ?? title;
+  const all = React.Children.toArray(children);
+  const artboards = all.filter((c) => c && c.type === DCArtboard);
+  const rest = all.filter((c) => !(c && c.type === DCArtboard));
+  const srcOrder = artboards.map((a) => a.props.id ?? a.props.label);
+  const sec = (ctx && sid && ctx.section(sid)) || {};
+
+  const order = React.useMemo(() => {
+    const kept = (sec.order || []).filter((k) => srcOrder.includes(k));
+    return [...kept, ...srcOrder.filter((k) => !kept.includes(k))];
+  }, [sec.order, srcOrder.join('|')]);
+
+  const byId = Object.fromEntries(artboards.map((a) => [a.props.id ?? a.props.label, a]));
+
+  return (
+    <div data-dc-section={sid} style={{ marginBottom: 80, position: 'relative' }}>
+      <div style={{ padding: '0 60px 56px' }}>
+        <DCEditable tag="div" value={sec.title ?? title}
+          onChange={(v) => ctx && sid && ctx.patchSection(sid, { title: v })}
+          style={{ fontSize: 28, fontWeight: 600, color: DC.title, letterSpacing: -0.4, marginBottom: 6, display: 'inline-block' }} />
+        {subtitle && <div style={{ fontSize: 16, color: DC.subtitle }}>{subtitle}</div>}
+      </div>
+      <div style={{ display: 'flex', gap, padding: '0 60px', alignItems: 'flex-start', width: 'max-content' }}>
+        {order.map((k) => (
+          <DCArtboardFrame key={k} sectionId={sid} artboard={byId[k]} order={order}
+            label={(sec.labels || {})[k] ?? byId[k].props.label}
+            onRename={(v) => ctx && ctx.patchSection(sid, (x) => ({ labels: { ...x.labels, [k]: v } }))}
+            onReorder={(next) => ctx && ctx.patchSection(sid, { order: next })}
+            onFocus={() => ctx && ctx.setFocus(`${sid}/${k}`)} />
+        ))}
+      </div>
+      {rest}
+    </div>
+  );
+}
+
+// DCArtboard — marker; rendered by DCArtboardFrame via DCSection.
+function DCArtboard() { return null; }
+
+function DCArtboardFrame({ sectionId, artboard, label, order, onRename, onReorder, onFocus }) {
+  const { id: rawId, label: rawLabel, width = 260, height = 480, children, style = {} } = artboard.props;
+  const id = rawId ?? rawLabel;
+  const ref = React.useRef(null);
+
+  // Live drag-reorder: dragged card sticks to cursor; siblings slide into
+  // their would-be slots in real time via transforms. DOM order only
+  // changes on drop.
+  const onGripDown = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const me = ref.current;
+    // translateX is applied in local (pre-scale) space but pointer deltas and
+    // getBoundingClientRect().left are screen-space — divide by the viewport's
+    // current scale so the dragged card tracks the cursor at any zoom level.
+    const scale = me.getBoundingClientRect().width / me.offsetWidth || 1;
+    const peers = Array.from(document.querySelectorAll(`[data-dc-section="${sectionId}"] [data-dc-slot]`));
+    const homes = peers.map((el) => ({ el, id: el.dataset.dcSlot, x: el.getBoundingClientRect().left }));
+    const slotXs = homes.map((h) => h.x);
+    const startIdx = order.indexOf(id);
+    const startX = e.clientX;
+    let liveOrder = order.slice();
+    me.classList.add('dc-dragging');
+
+    const layout = () => {
+      for (const h of homes) {
+        if (h.id === id) continue;
+        const slot = liveOrder.indexOf(h.id);
+        h.el.style.transform = `translateX(${(slotXs[slot] - h.x) / scale}px)`;
+      }
+    };
+
+    const move = (ev) => {
+      const dx = ev.clientX - startX;
+      me.style.transform = `translateX(${dx / scale}px)`;
+      const cur = homes[startIdx].x + dx;
+      let nearest = 0, best = Infinity;
+      for (let i = 0; i < slotXs.length; i++) {
+        const d = Math.abs(slotXs[i] - cur);
+        if (d < best) { best = d; nearest = i; }
+      }
+      if (liveOrder.indexOf(id) !== nearest) {
+        liveOrder = order.filter((k) => k !== id);
+        liveOrder.splice(nearest, 0, id);
+        layout();
+      }
+    };
+
+    const up = () => {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', up);
+      const finalSlot = liveOrder.indexOf(id);
+      me.classList.remove('dc-dragging');
+      me.style.transform = `translateX(${(slotXs[finalSlot] - homes[startIdx].x) / scale}px)`;
+      // After the settle transition, kill transitions + clear transforms +
+      // commit the reorder in the same frame so there's no visual snap-back.
+      setTimeout(() => {
+        for (const h of homes) { h.el.style.transition = 'none'; h.el.style.transform = ''; }
+        if (liveOrder.join('|') !== order.join('|')) onReorder(liveOrder);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          for (const h of homes) h.el.style.transition = '';
+        }));
+      }, 180);
+    };
+    document.addEventListener('pointermove', move);
+    document.addEventListener('pointerup', up);
+  };
+
+  return (
+    <div ref={ref} data-dc-slot={id} style={{ position: 'relative', flexShrink: 0 }}>
+      <div className="dc-labelrow" style={{ position: 'absolute', bottom: '100%', left: -4, marginBottom: 4, color: DC.label }}>
+        <div className="dc-grip" onPointerDown={onGripDown} title="Drag to reorder">
+          <svg width="9" height="13" viewBox="0 0 9 13" fill="currentColor"><circle cx="2" cy="2" r="1.1"/><circle cx="7" cy="2" r="1.1"/><circle cx="2" cy="6.5" r="1.1"/><circle cx="7" cy="6.5" r="1.1"/><circle cx="2" cy="11" r="1.1"/><circle cx="7" cy="11" r="1.1"/></svg>
+        </div>
+        <div className="dc-labeltext" onClick={onFocus} title="Click to focus">
+          <DCEditable value={label} onChange={onRename} onClick={(e) => e.stopPropagation()}
+            style={{ fontSize: 15, fontWeight: 500, color: DC.label, lineHeight: 1 }} />
+        </div>
+      </div>
+      <button className="dc-expand" onClick={onFocus} onPointerDown={(e) => e.stopPropagation()} title="Focus">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M7 1h4v4M5 11H1V7M11 1L7.5 4.5M1 11l3.5-3.5"/></svg>
+      </button>
+      <div className="dc-card"
+        style={{ borderRadius: 2, boxShadow: '0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)', overflow: 'hidden', width, height, background: '#fff', ...style }}>
+        {children || <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', fontSize: 13, fontFamily: DC.font }}>{id}</div>}
+      </div>
+    </div>
+  );
+}
+
+// Inline rename — commits on blur or Enter.
+function DCEditable({ value, onChange, style, tag = 'span', onClick }) {
+  const T = tag;
+  return (
+    <T className="dc-editable" contentEditable suppressContentEditableWarning
+      onClick={onClick}
+      onPointerDown={(e) => e.stopPropagation()}
+      onBlur={(e) => onChange && onChange(e.currentTarget.textContent)}
+      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } }}
+      style={style}>{value}</T>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Focus mode — overlay one artboard; ←/→ within section, ↑/↓ across
+// sections, Esc or backdrop click to exit.
+// ─────────────────────────────────────────────────────────────
+function DCFocusOverlay({ entry, sectionMeta, sectionOrder }) {
+  const ctx = React.useContext(DCCtx);
+  const { sectionId, artboard } = entry;
+  const sec = ctx.section(sectionId);
+  const meta = sectionMeta[sectionId];
+  const peers = meta.slotIds;
+  const aid = artboard.props.id ?? artboard.props.label;
+  const idx = peers.indexOf(aid);
+  const secIdx = sectionOrder.indexOf(sectionId);
+
+  const go = (d) => { const n = peers[(idx + d + peers.length) % peers.length]; if (n) ctx.setFocus(`${sectionId}/${n}`); };
+  const goSection = (d) => {
+    const ns = sectionOrder[(secIdx + d + sectionOrder.length) % sectionOrder.length];
+    const first = sectionMeta[ns] && sectionMeta[ns].slotIds[0];
+    if (first) ctx.setFocus(`${ns}/${first}`);
+  };
+
+  React.useEffect(() => {
+    const k = (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); goSection(-1); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); goSection(1); }
+    };
+    document.addEventListener('keydown', k);
+    return () => document.removeEventListener('keydown', k);
+  });
+
+  const { width = 260, height = 480, children } = artboard.props;
+  const [vp, setVp] = React.useState({ w: window.innerWidth, h: window.innerHeight });
+  React.useEffect(() => { const r = () => setVp({ w: window.innerWidth, h: window.innerHeight }); window.addEventListener('resize', r); return () => window.removeEventListener('resize', r); }, []);
+  const scale = Math.max(0.1, Math.min((vp.w - 200) / width, (vp.h - 260) / height, 2));
+
+  const [ddOpen, setDd] = React.useState(false);
+  const Arrow = ({ dir, onClick }) => (
+    <button onClick={(e) => { e.stopPropagation(); onClick(); }}
+      style={{ position: 'absolute', top: '50%', [dir]: 28, transform: 'translateY(-50%)',
+        border: 'none', background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.9)',
+        width: 44, height: 44, borderRadius: 22, fontSize: 18, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.18)')}
+      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.08)')}>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d={dir === 'left' ? 'M11 3L5 9l6 6' : 'M7 3l6 6-6 6'} /></svg>
+    </button>
+  );
+
+  // Portal to body so position:fixed is the real viewport regardless of any
+  // transform on DesignCanvas's ancestors (including the canvas zoom itself).
+  return ReactDOM.createPortal(
+    <div onClick={() => ctx.setFocus(null)}
+      onWheel={(e) => e.preventDefault()}
+      style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(24,20,16,.6)', backdropFilter: 'blur(14px)',
+        fontFamily: DC.font, color: '#fff' }}>
+
+      {/* top bar: section dropdown (left) · close (right) */}
+      <div onClick={(e) => e.stopPropagation()}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 72, display: 'flex', alignItems: 'flex-start', padding: '16px 20px 0', gap: 16 }}>
+        <div style={{ position: 'relative' }}>
+          <button onClick={() => setDd((o) => !o)}
+            style={{ border: 'none', background: 'transparent', color: '#fff', cursor: 'pointer', padding: '6px 8px',
+              borderRadius: 6, textAlign: 'left', fontFamily: 'inherit' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 18, fontWeight: 600, letterSpacing: -0.3 }}>{meta.title}</span>
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ opacity: .7 }}><path d="M2 4l3.5 3.5L9 4"/></svg>
+            </span>
+            {meta.subtitle && <span style={{ display: 'block', fontSize: 13, opacity: .6, fontWeight: 400, marginTop: 2 }}>{meta.subtitle}</span>}
+          </button>
+          {ddOpen && (
+            <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: 4, background: '#2a251f', borderRadius: 8,
+              boxShadow: '0 8px 32px rgba(0,0,0,.4)', padding: 4, minWidth: 200, zIndex: 10 }}>
+              {sectionOrder.map((sid) => (
+                <button key={sid} onClick={() => { setDd(false); const f = sectionMeta[sid].slotIds[0]; if (f) ctx.setFocus(`${sid}/${f}`); }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer',
+                    background: sid === sectionId ? 'rgba(255,255,255,.1)' : 'transparent', color: '#fff',
+                    padding: '8px 12px', borderRadius: 5, fontSize: 14, fontWeight: sid === sectionId ? 600 : 400, fontFamily: 'inherit' }}>
+                  {sectionMeta[sid].title}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ flex: 1 }} />
+        <button onClick={() => ctx.setFocus(null)}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.12)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+          style={{ border: 'none', background: 'transparent', color: 'rgba(255,255,255,.7)', width: 32, height: 32,
+            borderRadius: 16, fontSize: 20, cursor: 'pointer', lineHeight: 1, transition: 'background .12s' }}>×</button>
+      </div>
+
+      {/* card centered, label + index below — only the card itself stops
+          propagation so any backdrop click (including the margins around
+          the card) exits focus */}
+      <div
+        style={{ position: 'absolute', top: 64, bottom: 56, left: 100, right: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+        <div onClick={(e) => e.stopPropagation()} style={{ width: width * scale, height: height * scale, position: 'relative' }}>
+          <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: 'top left', background: '#fff', borderRadius: 2, overflow: 'hidden',
+            boxShadow: '0 20px 80px rgba(0,0,0,.4)' }}>
+            {children || <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb' }}>{aid}</div>}
+          </div>
+        </div>
+        <div onClick={(e) => e.stopPropagation()} style={{ fontSize: 14, fontWeight: 500, opacity: .85, textAlign: 'center' }}>
+          {(sec.labels || {})[aid] ?? artboard.props.label}
+          <span style={{ opacity: .5, marginLeft: 10, fontVariantNumeric: 'tabular-nums' }}>{idx + 1} / {peers.length}</span>
+        </div>
+      </div>
+
+      <Arrow dir="left" onClick={() => go(-1)} />
+      <Arrow dir="right" onClick={() => go(1)} />
+
+      {/* dots */}
+      <div onClick={(e) => e.stopPropagation()}
+        style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 8 }}>
+        {peers.map((p, i) => (
+          <button key={p} onClick={() => ctx.setFocus(`${sectionId}/${p}`)}
+            style={{ border: 'none', padding: 0, cursor: 'pointer', width: 6, height: 6, borderRadius: 3,
+              background: i === idx ? '#fff' : 'rgba(255,255,255,.3)' }} />
+        ))}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Post-it — absolute-positioned sticky note
+// ─────────────────────────────────────────────────────────────
+function DCPostIt({ children, top, left, right, bottom, rotate = -2, width = 180 }) {
+  return (
+    <div style={{
+      position: 'absolute', top, left, right, bottom, width,
+      background: DC.postitBg, padding: '14px 16px',
+      fontFamily: '"Comic Sans MS", "Marker Felt", "Segoe Print", cursive',
+      fontSize: 14, lineHeight: 1.4, color: DC.postitText,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+      transform: `rotate(${rotate}deg)`,
+      zIndex: 5,
+    }}>{children}</div>
+  );
+}
+
+Object.assign(window, { DesignCanvas, DCSection, DCArtboard, DCPostIt });
+
+
+</script>
+  <script type="text/babel" data-presets="react">
+// Bilingual copy + language context for PetitsHéros
+const I18N = {
+  // Shared navigation / global
+  nav: {
+    books_kids: { fr: "Livres pour enfants", en: "Books for Kids" },
+    books_adults: { fr: "Livres pour adultes", en: "Books for Adults" },
+    about: { fr: "À propos", en: "About" },
+    faq: { fr: "FAQ", en: "FAQ" },
+    account: { fr: "Mon compte", en: "Account" },
+    cart: { fr: "Panier", en: "Cart" },
+    announcement: {
+      fr: "Livraison gratuite au Canada dès 75 $ · Imprimé localement",
+      en: "Free shipping in Canada over $75 · Printed locally",
+    },
+  },
+
+  hero: {
+    eyebrow: { fr: "Livres personnalisés, imprimés au Québec", en: "Personalized books, printed in Quebec" },
+    title_a: {
+      fr: ["Rendez votre enfant", "le héros", "de sa propre histoire."],
+      en: ["Make your child", "the hero", "of their own story."],
+    },
+    subtitle: {
+      fr: "Un livre relié, magnifiquement imprimé, où l’enfant que vous aimez devient le personnage principal.",
+      en: "A beautifully bound keepsake where the child you love becomes the main character.",
+    },
+    cta_primary: { fr: "Créer un aperçu gratuit", en: "Create your free preview" },
+    cta_secondary: { fr: "Voir les histoires", en: "Browse the library" },
+    trust_a: { fr: "150 000+ familles", en: "150,000+ families" },
+    trust_b: { fr: "Imprimé au Canada", en: "Printed in Canada" },
+    trust_c: { fr: "4,9/5 sur Trustpilot", en: "4.9/5 on Trustpilot" },
+    caption: { fr: "Trois minutes pour créer. Une vie pour chérir.", en: "Three minutes to make. A lifetime to keep." },
+  },
+
+  section: {
+    library_eyebrow: { fr: "La bibliothèque", en: "The Library" },
+    library_title: { fr: "Choisissez votre histoire", en: "Choose your story" },
+    library_sub: { fr: "Huit récits originaux, imaginés par nos auteurs, pour chaque âge et chaque soir.", en: "Eight original tales, written by our authors, for every age and every night." },
+    how_eyebrow: { fr: "Comment ça marche", en: "How it works" },
+    how_title: { fr: "Trois pas vers le livre.", en: "Three steps to the book." },
+    how_1_t: { fr: "Choisissez une histoire", en: "Choose a story" },
+    how_1_d: { fr: "Parcourez notre bibliothèque et trouvez l’univers qui lui ressemble.", en: "Browse our library and find the world that feels like them." },
+    how_2_t: { fr: "Ajoutez une photo", en: "Add a photo" },
+    how_2_d: { fr: "Une photo claire. Notre illustration s’adapte à son visage et à sa peau.", en: "One clear photo. Our illustration adapts to their face and skin tone." },
+    how_3_t: { fr: "Recevez le livre", en: "Receive the book" },
+    how_3_d: { fr: "Imprimé avec soin au Québec. Livré chez vous en 5 à 8 jours.", en: "Printed with care in Quebec. On your doorstep in 5 to 8 days." },
+
+    voices_eyebrow: { fr: "Témoignages", en: "Voices" },
+    voices_title: { fr: "Ce que les familles nous écrivent.", en: "What families write to us." },
+
+    trust_eyebrow: { fr: "Nos promesses", en: "Our promises" },
+    trust_title: { fr: "Conçu comme un cadeau.", en: "Made like a gift." },
+    trust_1_t: { fr: "Vie privée respectée", en: "Privacy, guaranteed" },
+    trust_1_d: { fr: "Les photos sont chiffrées, utilisées seulement pour votre livre, puis supprimées. Loi 25 + RGPD.", en: "Photos are encrypted, used only for your book, then deleted. Law 25 + GDPR compliant." },
+    trust_2_t: { fr: "Satisfaction ou remboursement", en: "Love it or it's on us" },
+    trust_2_d: { fr: "Si votre livre ne vous émeut pas, nous le remplaçons ou le remboursons. Sans condition.", en: "If the book doesn’t move you, we replace it or refund you. No fine print." },
+    trust_3_t: { fr: "Qualité d’archives", en: "Archive-quality print" },
+    trust_3_d: { fr: "Papier FSC 170 g/m², couverture rigide cousue, conçu pour durer des générations.", en: "FSC paper 170 g/m², sewn hardcover, built to last generations." },
+
+    faq_eyebrow: { fr: "Questions fréquentes", en: "Frequently asked" },
+    faq_title: { fr: "Les parents nous demandent souvent…", en: "Parents often ask…" },
+    faq_1_q: { fr: "Que faites-vous avec la photo de mon enfant ?", en: "What do you do with my child's photo?" },
+    faq_1_a: { fr: "Elle sert uniquement à générer votre livre, reste chiffrée, et est supprimée dans les 30 jours — ou immédiatement sur demande depuis votre compte.", en: "It's used only to create your book, kept encrypted, and deleted within 30 days — or instantly from your account on request." },
+    faq_2_q: { fr: "Quel est le délai de livraison ?", en: "How long does delivery take?" },
+    faq_2_a: { fr: "Entre 5 et 8 jours ouvrables au Canada, 7 à 12 jours aux États-Unis et en Europe. L’impression prend 48 heures.", en: "5–8 business days in Canada, 7–12 days to the US and Europe. Printing takes 48 hours." },
+    faq_3_q: { fr: "Les livres sont-ils disponibles en français ?", en: "Are the books in French?" },
+    faq_3_a: { fr: "Oui — chaque histoire est écrite à la main en français et en anglais. Vous choisissez lors de la création.", en: "Yes — every story is hand-written in both French and English. You choose at creation time." },
+    faq_all: { fr: "Voir toutes les questions", en: "See all questions" },
+
+    final_eyebrow: { fr: "Prêt à commencer ?", en: "Ready to begin?" },
+    final_title: { fr: "Sa prochaine histoire préférée. Celle où il est le héros.", en: "Their next favorite story. The one where they’re the hero." },
+    final_note: { fr: "Gratuit jusqu’à la commande. Aucune carte requise.", en: "Free until you order. No card required." },
+  },
+
+  footer: {
+    tagline: { fr: "Des livres qui deviennent des trésors.", en: "Books that become keepsakes." },
+    col_shop: { fr: "Boutique", en: "Shop" },
+    col_support: { fr: "Aide", en: "Support" },
+    col_company: { fr: "L’entreprise", en: "Company" },
+    col_legal: { fr: "Légal", en: "Legal" },
+    newsletter_t: { fr: "Recevez 10 % sur votre premier livre", en: "Get 10% off your first book" },
+    newsletter_p: { fr: "Votre adresse courriel", en: "Your email address" },
+    newsletter_b: { fr: "S’abonner", en: "Subscribe" },
+    rights: { fr: "© 2026 PetitsHéros inc. Fait avec soin à Montréal.", en: "© 2026 PetitsHéros inc. Crafted with care in Montreal." },
+  },
+
+  // Preview flow
+  flow: {
+    progress: { fr: "Étape", en: "Step" },
+    of: { fr: "sur", en: "of" },
+    back: { fr: "Retour", en: "Back" },
+    continue: { fr: "Continuer", en: "Continue" },
+    cancel: { fr: "Annuler", en: "Cancel" },
+    close: { fr: "Fermer", en: "Close" },
+
+    s1_eyebrow: { fr: "Aperçu gratuit", en: "Free preview" },
+    s1_title: { fr: "Voici “Les étoiles de Léo”.", en: "Meet \"Léo and the Stars.\"" },
+    s1_body: { fr: "Un récit doux sur le courage, le sommeil et les petites lumières qui nous accompagnent. 24 pages, pour les 3 à 6 ans.", en: "A gentle story about courage, bedtime, and the small lights that guide us. 24 pages, for ages 3–6." },
+    s1_cta: { fr: "Commençons", en: "Let’s begin" },
+    s1_changebook: { fr: "Changer d’histoire", en: "Switch book" },
+    s1_promise: { fr: "Aucune carte, aucune obligation.", en: "No card, no commitment." },
+
+    s2_title: { fr: "Parlez-nous un peu de lui.", en: "Tell us about them." },
+    s2_sub: { fr: "Ces détails rendent l’illustration fidèle.", en: "These details make the illustration ring true." },
+    s2_name: { fr: "Son prénom", en: "Their first name" },
+    s2_name_ph: { fr: "Ex. Léo, Mila, Émile…", en: "e.g. Leo, Mila, Emile…" },
+    s2_age: { fr: "Âge", en: "Age" },
+    s2_gender: { fr: "Genre", en: "Gender" },
+    s2_g_boy: { fr: "Garçon", en: "Boy" },
+    s2_g_girl: { fr: "Fille", en: "Girl" },
+    s2_g_neutral: { fr: "Non précisé", en: "Non-specified" },
+    s2_skin: { fr: "Teint de peau", en: "Skin tone" },
+    s2_lang: { fr: "Langue du livre", en: "Language of the book" },
+    s2_consent: { fr: "J’ai l’autorisation de l’adulte responsable pour créer ce livre.", en: "I have permission from the responsible adult to create this book." },
+
+    s3_title: { fr: "Ajoutez une photo.", en: "Add a photo." },
+    s3_sub: { fr: "Notre illustrateur se base sur ses traits pour dessiner un portrait fidèle.", en: "Our illustrator uses their features to draw a faithful portrait." },
+    s3_drop: { fr: "Glissez une photo ici", en: "Drop a photo here" },
+    s3_or: { fr: "ou", en: "or" },
+    s3_browse: { fr: "Parcourir", en: "Browse" },
+    s3_tips_t: { fr: "Pour une meilleure ressemblance", en: "For a better likeness" },
+    s3_tip_1: { fr: "Visage bien éclairé, de face", en: "Well-lit face, straight on" },
+    s3_tip_2: { fr: "Sans lunettes de soleil", en: "No sunglasses" },
+    s3_tip_3: { fr: "Un seul enfant sur la photo", en: "Only one child in frame" },
+    s3_good: { fr: "Bonne photo", en: "Good photo" },
+    s3_bad: { fr: "À éviter", en: "Avoid" },
+    s3_detecting: { fr: "Analyse du visage…", en: "Analyzing the face…" },
+    s3_detected: { fr: "Visage détecté — parfait.", en: "Face detected — looking great." },
+    s3_crop: { fr: "Ajuster le cadrage", en: "Adjust the crop" },
+    s3_cta: { fr: "Générer mon aperçu", en: "Generate my preview" },
+    s3_replace: { fr: "Changer la photo", en: "Replace photo" },
+    s3_privacy: { fr: "Photo chiffrée. Supprimée sous 30 jours. Jamais partagée.", en: "Photo encrypted. Deleted within 30 days. Never shared." },
+
+    s4_title_1: { fr: "On dessine votre héros…", en: "Drawing your hero…" },
+    s4_title_2: { fr: "On ajoute son sourire…", en: "Adding their smile…" },
+    s4_title_3: { fr: "On peaufine chaque page…", en: "Polishing every page…" },
+    s4_title_4: { fr: "Presque prêt.", en: "Almost ready." },
+    s4_sub: { fr: "Vous pouvez fermer cet onglet — on vous écrit dès que c’est prêt.", en: "You can close this tab — we’ll email you when it’s ready." },
+    s4_email_ph: { fr: "Votre courriel", en: "Your email" },
+    s4_email_btn: { fr: "M’avertir", en: "Notify me" },
+    s4_eta: { fr: "Environ 2 minutes", en: "About 2 minutes" },
+
+    s5_eyebrow: { fr: "Révision page par page", en: "Page-by-page review" },
+    s5_title: { fr: "Choisissez votre version préférée.", en: "Pick your favorite version." },
+    s5_sub: { fr: "Tapez une vignette. Vous pourrez toujours revenir en arrière.", en: "Tap a thumbnail. You can always come back." },
+    s5_page: { fr: "Page", en: "Page" },
+    s5_regen: { fr: "Régénérer les options", en: "Regenerate options" },
+    s5_skip: { fr: "Choisir automatiquement la suite", en: "Pick best automatically for the rest" },
+    s5_next: { fr: "Page suivante", en: "Next page" },
+    s5_done: { fr: "Voir le livre complet", en: "See the full book" },
+
+    s6_eyebrow: { fr: "Voici votre livre", en: "Here’s your book" },
+    s6_title: { fr: "Le livre de {name}.", en: "{name}’s book." },
+    s6_sub: { fr: "Feuilletez chaque page. Modifiez ce qui ne vous convient pas encore.", en: "Flip through every page. Edit anything that’s not quite right." },
+    s6_edit: { fr: "Modifier cette page", en: "Edit this page" },
+    s6_share: { fr: "Partager l’aperçu", en: "Share preview" },
+    s6_cta: { fr: "Commander le livre", en: "Order the book" },
+
+    s7_eyebrow: { fr: "Commande", en: "Order" },
+    s7_title: { fr: "Choisissez votre format.", en: "Pick your format." },
+    s7_hard: { fr: "Couverture rigide", en: "Hardcover" },
+    s7_hard_d: { fr: "Reliure cousue · Papier 170 g · 24 pages · 21 × 21 cm", en: "Sewn binding · 170 g paper · 24 pages · 21 × 21 cm" },
+    s7_soft: { fr: "Couverture souple", en: "Paperback" },
+    s7_soft_d: { fr: "Reliure collée · Papier 150 g · 24 pages · 21 × 21 cm", en: "Glued binding · 150 g paper · 24 pages · 21 × 21 cm" },
+    s7_recommended: { fr: "Recommandé", en: "Most loved" },
+    s7_ship_to: { fr: "Livraison estimée à", en: "Shipping to" },
+    s7_ship_free: { fr: "Gratuite au Canada > 75 $", en: "Free in Canada over $75" },
+    s7_eta: { fr: "Reçu entre", en: "Delivered between" },
+    s7_subtotal: { fr: "Sous-total", en: "Subtotal" },
+    s7_shipping: { fr: "Livraison", en: "Shipping" },
+    s7_taxes: { fr: "Taxes estimées", en: "Estimated tax" },
+    s7_total: { fr: "Total", en: "Total" },
+    s7_cta: { fr: "Ajouter au panier", en: "Add to cart" },
+    s7_gift: { fr: "C’est un cadeau — ajouter une dédicace", en: "This is a gift — add a dedication" },
+  },
+
+  books: [
+    { id: "leo-stars", title_fr: "Les étoiles de Léo", title_en: "Léo and the Stars", age_fr: "3–6 ans", age_en: "Ages 3–6", theme_fr: "Coucher", theme_en: "Bedtime", tag_fr: "Un conte pour s’endormir sans peur.", tag_en: "A tale for falling asleep without fear.", pair: ["#5B2A6F", "#F4B942"] },
+    { id: "forest", title_fr: "La forêt qui chuchote", title_en: "The Whispering Forest", age_fr: "4–7 ans", age_en: "Ages 4–7", theme_fr: "Aventure", theme_en: "Adventure", tag_fr: "Un voyage chez les créatures du bois.", tag_en: "A journey among the creatures of the wood.", pair: ["#6B9072", "#FFF8EC"] },
+    { id: "ocean", title_fr: "Sous la grande vague", title_en: "Under the Great Wave", age_fr: "5–8 ans", age_en: "Ages 5–8", theme_fr: "Animaux", theme_en: "Animals", tag_fr: "Une amitié au fond de l’océan.", tag_en: "A friendship at the bottom of the sea.", pair: ["#2E5E7E", "#E8B4B8"] },
+    { id: "balloon", title_fr: "Le ballon rouge", title_en: "The Red Balloon", age_fr: "3–5 ans", age_en: "Ages 3–5", theme_fr: "Émotions", theme_en: "Emotions", tag_fr: "Apprendre à lâcher prise, avec douceur.", tag_en: "Learning to let go, gently.", pair: ["#C44536", "#FFF8EC"] },
+    { id: "lantern", title_fr: "La lanterne d’hiver", title_en: "The Winter Lantern", age_fr: "5–8 ans", age_en: "Ages 5–8", theme_fr: "Courage", theme_en: "Courage", tag_fr: "Un village, une lumière, un héros.", tag_en: "A village, a light, a hero.", pair: ["#3F1C4F", "#F4B942"] },
+    { id: "garden", title_fr: "Le jardin de grand-maman", title_en: "Grandma’s Garden", age_fr: "4–7 ans", age_en: "Ages 4–7", theme_fr: "Famille", theme_en: "Family", tag_fr: "Les saisons, la mémoire, et les confitures.", tag_en: "Seasons, memory, and jam jars.", pair: ["#8FB996", "#F5ECD9"] },
+    { id: "letters", title_fr: "L’alphabet volant", title_en: "The Flying Alphabet", age_fr: "4–6 ans", age_en: "Ages 4–6", theme_fr: "Apprentissage", theme_en: "Learning", tag_fr: "26 lettres, 26 mini-aventures.", tag_en: "26 letters, 26 tiny adventures." , pair: ["#F4B942", "#3F1C4F"] },
+    { id: "moon", title_fr: "La sœur de la lune", title_en: "The Moon’s Sister", age_fr: "5–8 ans", age_en: "Ages 5–8", theme_fr: "Rêve", theme_en: "Dreams", tag_fr: "Une nuit, une promesse, un secret.", tag_en: "A night, a promise, a secret.", pair: ["#1E2B58", "#E8B4B8"] },
+  ],
+
+  testimonials: [
+    {
+      fr: "Ma fille dort avec ce livre. Elle le présente à ses amis comme « son livre à elle ». Je n’avais jamais vu ça.",
+      en: "My daughter sleeps with this book. She introduces it to her friends as \"her own book.\" I've never seen anything like it.",
+      author_fr: "Camille · Maman de Léa, 5 ans",
+      author_en: "Camille · Mom of Léa, 5",
+      city: "Montréal",
+    },
+    {
+      fr: "Reçu avant Noël, emballage soigné, qualité digne d’un éditeur indépendant. Mon petit-fils était sans voix.",
+      en: "Arrived before Christmas, beautifully packaged, quality worthy of an indie publisher. My grandson was speechless.",
+      author_fr: "Jean-Paul · Grand-père, Québec",
+      author_en: "Jean-Paul · Grandfather, Quebec",
+      city: "Québec",
+    },
+    {
+      fr: "En tant que parent, je me méfiais de l’IA. Mais ici c’est fait avec goût. L’illustration est fidèle, pas effrayante.",
+      en: "As a parent I was wary of AI. But this is done with taste. The illustration is faithful, not uncanny.",
+      author_fr: "Sarah · Maman de Noah, 4 ans",
+      author_en: "Sarah · Mom of Noah, 4",
+      city: "Toronto",
+    },
+  ],
+};
+
+// React context + hook
+const LangContext = React.createContext({ lang: "fr", setLang: () => {} });
+
+function useT() {
+  const { lang } = React.useContext(LangContext);
+  const t = React.useCallback((key) => {
+    const parts = key.split(".");
+    let v = I18N;
+    for (const p of parts) v = v && v[p];
+    if (!v) return key;
+    if (typeof v === "object" && (v.fr || v.en)) return v[lang] ?? v.fr ?? key;
+    return v;
+  }, [lang]);
+  return { t, lang };
+}
+
+Object.assign(window, { I18N, LangContext, useT });
+
+</script>
+  <script type="text/babel" data-presets="react">
+// Shared UI primitives for PetitsHéros — icons, book covers, sparkles, logos
+
+// ──────── Logo ────────
+function PHLogo({ size = 22, color = "currentColor" }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 9, color, fontFamily: "var(--f-display)", fontWeight: 500, fontSize: size, letterSpacing: "-0.02em", lineHeight: 1 }}>
+      <svg width={size * 1.1} height={size * 1.1} viewBox="0 0 32 32" fill="none" aria-hidden>
+        {/* Open book with star */}
+        <path d="M4 9C4 8 4.5 7 6 7C10 7 14 8.5 16 11C18 8.5 22 7 26 7C27.5 7 28 8 28 9V24C28 25 27.2 25.7 26 25.5C22.5 25 18.5 26 16 28.5C13.5 26 9.5 25 6 25.5C4.8 25.7 4 25 4 24V9Z" fill="currentColor" opacity="0.12"/>
+        <path d="M4 9C4 8 4.5 7 6 7C10 7 14 8.5 16 11C18 8.5 22 7 26 7C27.5 7 28 8 28 9V24C28 25 27.2 25.7 26 25.5C22.5 25 18.5 26 16 28.5C13.5 26 9.5 25 6 25.5C4.8 25.7 4 25 4 24V9Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+        <path d="M16 11V28" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+        <path d="M16 4.5L16.8 6.2L18.5 7L16.8 7.8L16 9.5L15.2 7.8L13.5 7L15.2 6.2L16 4.5Z" fill="#F4B942" stroke="#D99A25" strokeWidth="0.7" strokeLinejoin="round"/>
+      </svg>
+      <span>Petits<em style={{ fontStyle: "italic", fontWeight: 400 }}>Héros</em></span>
+    </span>
+  );
+}
+
+// ──────── Sparkle / decorative ────────
+function Sparkle({ size = 14, color = "#F4B942", style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" style={style} aria-hidden>
+      <path d="M8 1L9.3 6.2L14.5 7.5L9.3 8.8L8 14L6.7 8.8L1.5 7.5L6.7 6.2L8 1Z" fill={color}/>
+    </svg>
+  );
+}
+
+function StarDot({ size = 6, color = "#F4B942" }) {
+  return <span style={{ display: "inline-block", width: size, height: size, borderRadius: "50%", background: color, verticalAlign: "middle" }} />;
+}
+
+// ──────── Book cover — CSS illustrated, not a real image ────────
+// Each cover uses two brand colors + a stylized silhouette motif.
+function BookCover({ book, lang = "fr", w = 180, showTitle = true, rotate = 0, style = {} }) {
+  const [bg, fg] = book.pair;
+  const title = book[`title_${lang}`];
+  const h = w * 1.38;
+  // Pick a motif per book id
+  const motif = MOTIFS[book.id] || MOTIFS.default;
+
+  return (
+    <div style={{
+      width: w, height: h, background: bg, borderRadius: 3,
+      position: "relative", overflow: "hidden",
+      boxShadow: "0 1px 2px rgba(0,0,0,0.12), 0 18px 36px -12px rgba(30,20,30,0.3), inset 2px 0 0 rgba(0,0,0,0.08), inset -1px 0 0 rgba(255,255,255,0.06)",
+      transform: `rotate(${rotate}deg)`,
+      fontFamily: "var(--f-display)",
+      ...style,
+    }}>
+      {/* Spine highlight */}
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 6, background: "linear-gradient(90deg, rgba(0,0,0,0.22), transparent)" }} />
+      {/* Motif */}
+      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", opacity: 0.95 }}>
+        {motif({ fg, bg, w })}
+      </div>
+      {/* Title */}
+      {showTitle && (
+        <div style={{ position: "absolute", left: w * 0.09, right: w * 0.09, top: w * 0.08, color: fg, fontSize: w * 0.115, lineHeight: 1.05, letterSpacing: "-0.01em", fontWeight: 400, textShadow: "0 1px 0 rgba(0,0,0,0.12)" }}>
+          {title}
+        </div>
+      )}
+      {/* Imprint */}
+      <div style={{ position: "absolute", bottom: w * 0.06, left: 0, right: 0, textAlign: "center", color: fg, opacity: 0.55, fontSize: w * 0.055, letterSpacing: "0.2em", textTransform: "uppercase", fontFamily: "var(--f-body)" }}>
+        PetitsHéros
+      </div>
+    </div>
+  );
+}
+
+// Motif renderers — simple stylized silhouettes per book
+const MOTIFS = {
+  "leo-stars": ({ fg, w }) => (
+    <svg width={w * 0.7} height={w * 0.7} viewBox="0 0 100 100" fill="none" style={{ marginTop: w * 0.25 }}>
+      <circle cx="50" cy="62" r="18" fill={fg} opacity="0.92"/>
+      <path d="M50 40L52 48L60 50L52 52L50 60L48 52L40 50L48 48L50 40Z" fill={fg}/>
+      <circle cx="28" cy="32" r="1.5" fill={fg}/>
+      <circle cx="72" cy="28" r="1.2" fill={fg}/>
+      <circle cx="82" cy="52" r="1.6" fill={fg}/>
+      <circle cx="18" cy="56" r="1.2" fill={fg}/>
+      <path d="M20 80 Q50 72 80 80" stroke={fg} strokeWidth="1.2" fill="none" opacity="0.5"/>
+    </svg>
+  ),
+  forest: ({ fg, w }) => (
+    <svg width={w * 0.72} height={w * 0.72} viewBox="0 0 100 100" fill="none" style={{ marginTop: w * 0.22 }}>
+      <path d="M30 85L20 55L35 55L28 35L40 35L30 15L50 15L40 35L52 35L45 55L60 55L50 85Z" fill={fg} opacity="0.9"/>
+      <path d="M70 85L62 60L74 60L68 42L78 42L70 22L88 22L80 42L90 42L84 60L94 60L86 85Z" fill={fg} opacity="0.7"/>
+      <circle cx="55" cy="20" r="1.3" fill={fg}/>
+      <circle cx="22" cy="30" r="1" fill={fg} opacity="0.6"/>
+    </svg>
+  ),
+  ocean: ({ fg, w }) => (
+    <svg width={w * 0.8} height={w * 0.8} viewBox="0 0 100 100" fill="none" style={{ marginTop: w * 0.2 }}>
+      <path d="M10 50 Q25 38 40 50 T70 50 T100 50" stroke={fg} strokeWidth="1.6" fill="none"/>
+      <path d="M10 62 Q25 50 40 62 T70 62 T100 62" stroke={fg} strokeWidth="1.6" fill="none" opacity="0.7"/>
+      <path d="M10 74 Q25 62 40 74 T70 74 T100 74" stroke={fg} strokeWidth="1.6" fill="none" opacity="0.4"/>
+      <path d="M50 30 C45 30 42 34 42 38 C42 44 50 48 50 48 C50 48 58 44 58 38 C58 34 55 30 50 30Z" fill={fg}/>
+    </svg>
+  ),
+  balloon: ({ fg, w }) => (
+    <svg width={w * 0.6} height={w * 0.75} viewBox="0 0 60 80" fill="none" style={{ marginTop: w * 0.22 }}>
+      <ellipse cx="30" cy="28" rx="22" ry="26" fill={fg}/>
+      <path d="M30 54 L28 58 L32 58 L30 54" fill={fg}/>
+      <path d="M30 58 Q28 66 32 74" stroke={fg} strokeWidth="1.2" fill="none"/>
+      <ellipse cx="22" cy="20" rx="4" ry="6" fill="rgba(255,255,255,0.35)"/>
+    </svg>
+  ),
+  lantern: ({ fg, w }) => (
+    <svg width={w * 0.7} height={w * 0.8} viewBox="0 0 70 80" fill="none" style={{ marginTop: w * 0.15 }}>
+      <rect x="28" y="10" width="14" height="3" fill={fg}/>
+      <path d="M35 13 V20" stroke={fg} strokeWidth="1.2"/>
+      <path d="M22 22 L48 22 L52 56 L18 56 Z" fill={fg} opacity="0.95"/>
+      <path d="M28 26 L42 26 L44 52 L26 52 Z" fill="rgba(0,0,0,0.2)"/>
+      <circle cx="35" cy="40" r="6" fill="rgba(255,255,255,0.4)"/>
+      <circle cx="15" cy="65" r="1.5" fill={fg}/>
+      <circle cx="55" cy="70" r="1.2" fill={fg}/>
+    </svg>
+  ),
+  garden: ({ fg, w }) => (
+    <svg width={w * 0.75} height={w * 0.75} viewBox="0 0 100 100" fill="none" style={{ marginTop: w * 0.2 }}>
+      <path d="M50 30 L52 40 L62 38 L55 46 L62 54 L52 52 L50 62 L48 52 L38 54 L45 46 L38 38 L48 40 Z" fill={fg}/>
+      <path d="M50 62 V85" stroke={fg} strokeWidth="1.5"/>
+      <path d="M50 72 Q40 70 35 78" stroke={fg} strokeWidth="1.2" fill="none"/>
+      <path d="M50 78 Q60 76 65 82" stroke={fg} strokeWidth="1.2" fill="none"/>
+      <circle cx="20" cy="30" r="3" fill={fg}/>
+      <circle cx="80" cy="25" r="2" fill={fg} opacity="0.7"/>
+    </svg>
+  ),
+  letters: ({ fg, w }) => (
+    <div style={{ fontFamily: "var(--f-display)", color: fg, fontSize: w * 0.35, fontStyle: "italic", marginTop: w * 0.28, letterSpacing: "-0.02em" }}>
+      Abc
+    </div>
+  ),
+  moon: ({ fg, w }) => (
+    <svg width={w * 0.75} height={w * 0.75} viewBox="0 0 100 100" fill="none" style={{ marginTop: w * 0.22 }}>
+      <path d="M60 20 C42 20 28 34 28 52 C28 70 42 84 60 84 C48 78 40 66 40 52 C40 38 48 26 60 20Z" fill={fg}/>
+      <circle cx="75" cy="30" r="1.3" fill={fg}/>
+      <circle cx="82" cy="50" r="1.5" fill={fg}/>
+      <circle cx="78" cy="70" r="1" fill={fg} opacity="0.7"/>
+      <circle cx="20" cy="25" r="1" fill={fg} opacity="0.7"/>
+    </svg>
+  ),
+  default: ({ fg, w }) => (
+    <div style={{ fontFamily: "var(--f-display)", color: fg, fontSize: w * 0.4, opacity: 0.6 }}>✦</div>
+  ),
+};
+
+// ──────── Icons (outline, warm) ────────
+const Icon = {
+  chev: ({ size = 16, dir = "right", color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d={dir === "right" ? "M6 4l4 4-4 4" : dir === "left" ? "M10 4l-4 4 4 4" : dir === "down" ? "M4 6l4 4 4-4" : "M4 10l4-4 4 4"}/>
+    </svg>
+  ),
+  close: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+  ),
+  check: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8.5l3.5 3.5L13 5"/></svg>
+  ),
+  upload: ({ size = 22, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3v12M7 8l5-5 5 5M4 16v4a1 1 0 001 1h14a1 1 0 001-1v-4"/>
+    </svg>
+  ),
+  camera: ({ size = 20, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round">
+      <path d="M4 8h3l2-3h6l2 3h3a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  ),
+  heart: ({ size = 16, color = "currentColor", fill = "none" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="1.6" strokeLinejoin="round">
+      <path d="M12 20.5s-7-4.5-9-9.5c-1.3-3.2 1-6 4-6 1.8 0 3.5 1 5 3 1.5-2 3.2-3 5-3 3 0 5.3 2.8 4 6-2 5-9 9.5-9 9.5z"/>
+    </svg>
+  ),
+  cart: ({ size = 20, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M4 5h2l2 12h12l2-8H7"/>
+      <circle cx="9" cy="21" r="1.3"/><circle cx="19" cy="21" r="1.3"/>
+    </svg>
+  ),
+  user: ({ size = 20, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round">
+      <circle cx="12" cy="9" r="4"/>
+      <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
+    </svg>
+  ),
+  search: ({ size = 18, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+  ),
+  shield: ({ size = 22, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+  ),
+  quality: ({ size = 22, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M12 3l2.5 5.5L20 9.5l-4 4 1 5.5L12 16.5 7 19l1-5.5-4-4 5.5-1L12 3z"/>
+    </svg>
+  ),
+  leaf: ({ size = 22, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinejoin="round"><path d="M4 20c0-8 6-14 16-14 0 10-6 16-14 16l-2-2z"/><path d="M4 20c4-4 8-7 12-9"/></svg>
+  ),
+  play: ({ size = 14, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill={color}><path d="M5 3v10l8-5z"/></svg>
+  ),
+  plus: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round"><path d="M8 3v10M3 8h10"/></svg>
+  ),
+  arrow: ({ size = 16, color = "currentColor" }) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+  ),
+};
+
+// Swirl/decorative SVG used as background accents
+function Swirl({ w = 120, color = "#5B2A6F", opacity = 0.15, style }) {
+  return (
+    <svg width={w} height={w * 0.45} viewBox="0 0 120 54" fill="none" style={{ opacity, ...style }}>
+      <path d="M2 40 C 20 20, 40 20, 60 36 C 80 52, 100 52, 118 32" stroke={color} strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+      <circle cx="118" cy="32" r="2" fill={color}/>
+      <path d="M8 48 L12 44 M14 50 L18 46" stroke={color} strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+// Star field decorative — for loading, reveal, hero
+function StarField({ count = 16, size = 1.5, color = "#F4B942", style }) {
+  const pts = React.useMemo(() =>
+    Array.from({ length: count }, (_, i) => ({
+      x: (i * 37.13) % 100,
+      y: (i * 61.7 + 11) % 100,
+      s: (((i * 17) % 10) / 10) * size + size * 0.4,
+      d: (i * 0.4) % 3,
+    })), [count, size]);
+  return (
+    <div style={{ position: "absolute", inset: 0, pointerEvents: "none", ...style }}>
+      {pts.map((p, i) => (
+        <span key={i} style={{
+          position: "absolute", left: `${p.x}%`, top: `${p.y}%`,
+          width: p.s * 2, height: p.s * 2, borderRadius: "50%",
+          background: color, boxShadow: `0 0 ${p.s * 3}px ${color}`,
+          animation: `sparkle-float 3.4s ease-in-out ${p.d}s infinite`,
+        }} />
+      ))}
+    </div>
+  );
+}
+
+// Placeholder avatar — soft circle with initial
+function Avatar({ name = "?", size = 36, color = "var(--plum)", bg = "rgba(91,42,111,0.12)" }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: size, height: size, borderRadius: "50%", background: bg, color,
+      fontFamily: "var(--f-display)", fontSize: size * 0.44, fontWeight: 500,
+      flexShrink: 0,
+    }}>{String(name).trim()[0] || "?"}</span>
+  );
+}
+
+Object.assign(window, { PHLogo, Sparkle, StarDot, BookCover, Icon, Swirl, StarField, Avatar });
+
+</script>
+  <script type="text/babel" data-presets="react">
+// Design System reference artboard — colors, type, components
+function DesignSystemArtboard() {
+  const { t } = useT();
+  const swatches = [
+    { name: "Plum", var: "--plum", hex: "#5B2A6F", text: "#fff" },
+    { name: "Plum deep", var: "--plum-deep", hex: "#3F1C4F", text: "#fff" },
+    { name: "Cream", var: "--cream", hex: "#FFF8EC", text: "#2A2A2A" },
+    { name: "Honey", var: "--honey", hex: "#F4B942", text: "#2A2A2A" },
+    { name: "Sage", var: "--sage", hex: "#8FB996", text: "#fff" },
+    { name: "Rose", var: "--rose", hex: "#E8B4B8", text: "#2A2A2A" },
+    { name: "Ink", var: "--ink", hex: "#1E1A17", text: "#fff" },
+    { name: "Bone", var: "--bone", hex: "#EDE5D6", text: "#2A2A2A" },
+  ];
+
+  const section = (title, sub, children) => (
+    <div style={{ marginBottom: 44 }}>
+      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--plum)", marginBottom: 4 }}>{title}</div>
+      {sub && <div style={{ fontSize: 14, color: "var(--stone)", marginBottom: 18 }}>{sub}</div>}
+      {children}
+    </div>
+  );
+
+  return (
+    <div className="artboard-scroll" style={{ width: "100%", height: "100%", background: "var(--paper)", padding: "56px 64px", fontFamily: "var(--f-body)", color: "var(--ink)" }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 48, paddingBottom: 28, borderBottom: "1px solid var(--bone)" }}>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 10 }}>Design system · v0.1</div>
+          <div className="t-display" style={{ fontSize: 56, color: "var(--plum-deep)" }}>
+            Petits<em style={{ fontStyle: "italic" }}>Héros</em>
+          </div>
+          <div style={{ fontSize: 16, color: "var(--graphite)", marginTop: 10, maxWidth: 560, lineHeight: 1.5 }}>
+            A warm, editorial system for a bilingual children’s book brand. Aesop meets Le Petit Prince — premium restraint, with magical accents reserved for moments that matter.
+          </div>
+        </div>
+        <div style={{ fontFamily: "var(--f-hand)", fontSize: 34, color: "var(--plum-soft)", transform: "rotate(-3deg)" }}>
+          Made with care.
+        </div>
+      </div>
+
+      {/* Colors */}
+      {section("Color", "Warm plum anchors. Honey is the hero CTA. Cream is the page.", (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+          {swatches.map(s => (
+            <div key={s.name} style={{ borderRadius: 10, overflow: "hidden", border: "1px solid var(--bone)" }}>
+              <div style={{ background: s.hex, color: s.text, padding: "28px 16px 20px", height: 120, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div className="t-display" style={{ fontSize: 20, opacity: 0.92 }}>Aa</div>
+                <div style={{ fontSize: 12, opacity: 0.75, letterSpacing: "0.08em", textTransform: "uppercase" }}>{s.name}</div>
+              </div>
+              <div style={{ padding: "10px 14px", fontSize: 12, fontFamily: "monospace", background: "#fff", color: "var(--stone)", display: "flex", justifyContent: "space-between" }}>
+                <span>{s.hex}</span><span style={{ opacity: 0.5 }}>{s.var}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {/* Typography */}
+      {section("Typography", "Fraunces for story. Inter for rails. Caveat for flourishes.", (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 36 }}>
+          <div>
+            <div style={{ fontSize: 11, color: "var(--stone)", marginBottom: 8 }}>Fraunces · Display</div>
+            <div className="t-display" style={{ fontSize: 64, color: "var(--plum-deep)", lineHeight: 0.98 }}>
+              Héros <em style={{ fontStyle: "italic", color: "var(--honey-deep)" }}>minuscule</em>.
+            </div>
+            <div className="t-display" style={{ fontSize: 28, color: "var(--ink)", marginTop: 20 }}>
+              48 / 56 / 64 — Regular, Italic
+            </div>
+            <div style={{ fontFamily: "var(--f-body)", fontSize: 13, color: "var(--stone)", marginTop: 10 }}>-0.02em tracking, 1.04 leading</div>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, color: "var(--stone)", marginBottom: 8 }}>Inter · Body</div>
+            <div style={{ fontSize: 22, fontWeight: 500, color: "var(--ink)", lineHeight: 1.4, marginBottom: 10 }}>Warm, quiet, trustworthy.</div>
+            <div style={{ fontSize: 16, color: "var(--graphite)", lineHeight: 1.55 }}>
+              Body copy is a comfortable 16/1.55 with Inter at 400. Labels step down to 13px medium, small caps at 11/0.18em tracked.
+            </div>
+            <div style={{ marginTop: 18 }}>
+              <div style={{ fontSize: 11, color: "var(--stone)", marginBottom: 6 }}>Caveat · Hand</div>
+              <div className="t-hand" style={{ fontSize: 34, color: "var(--plum)" }}>un livre qui lui ressemble</div>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Type scale */}
+      {section("Scale", null, (
+        <div style={{ background: "#fff", padding: "20px 24px", borderRadius: 12, border: "1px solid var(--bone)" }}>
+          {[
+            ["Display XL", 64, "Fraunces", "var(--plum-deep)"],
+            ["Display L", 44, "Fraunces", "var(--ink)"],
+            ["Display M", 28, "Fraunces", "var(--ink)"],
+            ["Body L", 18, "Inter", "var(--graphite)"],
+            ["Body", 15, "Inter", "var(--graphite)"],
+            ["Label", 13, "Inter", "var(--stone)"],
+            ["Caps", 11, "Inter", "var(--plum)"],
+          ].map(([n, s, f, c]) => (
+            <div key={n} style={{ display: "grid", gridTemplateColumns: "120px 80px 1fr", padding: "10px 0", borderBottom: "1px solid var(--bone)", alignItems: "baseline" }}>
+              <div style={{ fontSize: 12, color: "var(--stone)" }}>{n}</div>
+              <div style={{ fontSize: 12, fontFamily: "monospace", color: "var(--stone)" }}>{s}px</div>
+              <div style={{ fontSize: s, fontFamily: f === "Fraunces" ? "var(--f-display)" : "var(--f-body)", color: c, lineHeight: 1.1, letterSpacing: f === "Fraunces" ? "-0.02em" : "0" }}>
+                {n === "Caps" ? "UN LIVRE POUR ELLE" : "Un livre pour elle"}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {/* Buttons */}
+      {section("Buttons", "Pill buttons throughout. Honey for primary, plum for secondary.", (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center" }}>
+          <button className="ph-btn ph-btn--primary">Créer un aperçu</button>
+          <button className="ph-btn ph-btn--primary ph-btn--lg">Créer un aperçu</button>
+          <button className="ph-btn ph-btn--secondary">Voir les histoires</button>
+          <button className="ph-btn ph-btn--sage">Page suivante</button>
+          <button className="ph-btn ph-btn--ghost">Annuler</button>
+          <button className="ph-btn ph-btn--primary ph-btn--sm">Ajouter au panier</button>
+        </div>
+      ))}
+
+      {/* Inputs */}
+      {section("Fields", null, (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, maxWidth: 620 }}>
+          <div>
+            <label className="ph-label">Prénom</label>
+            <input className="ph-input" placeholder="Ex. Léo, Mila…" defaultValue="Léo" />
+          </div>
+          <div>
+            <label className="ph-label">Courriel</label>
+            <input className="ph-input" placeholder="nom@courriel.ca" />
+          </div>
+        </div>
+      ))}
+
+      {/* Badges */}
+      {section("Badges", null, (
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <span className="ph-badge ph-badge--plum">Nouveau</span>
+          <span className="ph-badge ph-badge--honey">3–6 ans</span>
+          <span className="ph-badge ph-badge--sage">Français</span>
+          <span className="ph-badge ph-badge--rose">Populaire</span>
+          <span className="ph-badge ph-badge--cream">Cadeau</span>
+        </div>
+      ))}
+
+      {/* Card */}
+      {section("Cards", null, (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
+          {I18N.books.slice(0, 3).map(b => (
+            <div key={b.id} className="ph-card ph-card--hover" style={{ padding: 18 }}>
+              <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 18px" }}>
+                <BookCover book={b} lang="fr" w={140} />
+              </div>
+              <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+                <span className="ph-badge ph-badge--cream">{b.age_fr}</span>
+                <span className="ph-badge ph-badge--sage">{b.theme_fr}</span>
+              </div>
+              <div className="t-display" style={{ fontSize: 22, color: "var(--ink)" }}>{b.title_fr}</div>
+              <div style={{ fontSize: 14, color: "var(--stone)", marginTop: 6, lineHeight: 1.45 }}>{b.tag_fr}</div>
+            </div>
+          ))}
+        </div>
+      ))}
+
+      {/* Motifs */}
+      {section("Motifs", "Quiet decorative elements. Used sparingly.", (
+        <div style={{ display: "flex", gap: 28, alignItems: "center", padding: "20px 0" }}>
+          <Sparkle size={28} color="var(--honey)" />
+          <Sparkle size={18} color="var(--plum)" />
+          <StarDot size={10} color="var(--plum)" />
+          <StarDot size={6} color="var(--honey)" />
+          <Swirl w={140} color="var(--plum)" opacity={0.35} />
+          <Swirl w={100} color="var(--honey-deep)" opacity={0.45} />
+        </div>
+      ))}
+
+      <div style={{ fontFamily: "var(--f-hand)", fontSize: 22, color: "var(--stone)", marginTop: 20 }}>— fin de la feuille de style —</div>
+    </div>
+  );
+}
+
+Object.assign(window, { DesignSystemArtboard });
+
+</script>
+  <script type="text/babel" data-presets="react">
+// Homepage artboard — desktop, with 3 hero variations
+function HomepageArtboard({ heroVariant = "editorial", onOpenFlow }) {
+  const { t, lang } = useT();
+  const { setLang } = React.useContext(LangContext);
+
+  return (
+    <div className="artboard-scroll" style={{ width: "100%", height: "100%", background: "var(--paper)", fontFamily: "var(--f-body)", color: "var(--ink)" }}>
+      {/* Announcement bar */}
+      <div style={{ background: "var(--plum-deep)", color: "var(--cream)", textAlign: "center", padding: "9px 16px", fontSize: 13, letterSpacing: "0.01em" }}>
+        <Sparkle size={11} color="#F4B942" style={{ marginRight: 8, verticalAlign: -1 }} />
+        {t("nav.announcement")}
+      </div>
+
+      {/* Header */}
+      <header style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(251, 247, 238, 0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(91,42,111,0.08)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 56px", maxWidth: 1440, margin: "0 auto" }}>
+          <PHLogo size={22} color="var(--plum-deep)" />
+          <nav style={{ display: "flex", gap: 32, fontSize: 14, color: "var(--graphite)" }}>
+            <a style={{ cursor: "pointer", color: "var(--ink)", fontWeight: 500 }}>{t("nav.books_kids")}</a>
+            <a style={{ cursor: "pointer" }}>{t("nav.books_adults")}</a>
+            <a style={{ cursor: "pointer" }}>{t("nav.about")}</a>
+            <a style={{ cursor: "pointer" }}>{t("nav.faq")}</a>
+          </nav>
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <button
+              onClick={() => setLang(lang === "fr" ? "en" : "fr")}
+              style={{ background: "transparent", border: "1px solid var(--bone)", borderRadius: 999, padding: "6px 12px", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: "var(--graphite)", cursor: "pointer", display: "flex", gap: 4, alignItems: "center" }}>
+              <span style={{ color: lang === "fr" ? "var(--plum)" : "var(--pebble)" }}>FR</span>
+              <span style={{ color: "var(--pebble)" }}>·</span>
+              <span style={{ color: lang === "en" ? "var(--plum)" : "var(--pebble)" }}>EN</span>
+            </button>
+            <Icon.user size={20} color="var(--graphite)" />
+            <div style={{ position: "relative", cursor: "pointer" }}>
+              <Icon.cart size={22} color="var(--graphite)" />
+              <span style={{ position: "absolute", top: -4, right: -6, background: "var(--honey)", color: "var(--ink)", fontSize: 10, fontWeight: 700, borderRadius: 999, padding: "0 5px", minWidth: 16, height: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>1</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* HERO variants */}
+      {heroVariant === "editorial" && <HeroEditorial onOpenFlow={onOpenFlow} />}
+      {heroVariant === "storybook" && <HeroStorybook onOpenFlow={onOpenFlow} />}
+      {heroVariant === "collage" && <HeroCollage onOpenFlow={onOpenFlow} />}
+
+      {/* Trust strip */}
+      <div style={{ borderTop: "1px solid var(--bone)", borderBottom: "1px solid var(--bone)", padding: "20px 56px", background: "var(--cream)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-around", alignItems: "center", fontSize: 13, color: "var(--graphite)", gap: 40 }}>
+          <span><b style={{ color: "var(--ink)", fontWeight: 600 }}>150,000+</b> {t("hero.trust_a").replace("150,000+", "").replace("150 000+", "").trim()}</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color: "var(--honey)", letterSpacing: 2 }}>★★★★★</span>
+            {t("hero.trust_c")}
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}><Icon.leaf size={16} color="var(--sage-deep)" /> {t("hero.trust_b")}</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}><Icon.shield size={16} color="var(--plum)" /> Loi 25 · GDPR</span>
+        </div>
+      </div>
+
+      {/* Choose your story */}
+      <section style={{ padding: "112px 56px 96px", maxWidth: 1440, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 56 }}>
+          <div>
+            <div className="t-eyebrow">{t("section.library_eyebrow")}</div>
+            <h2 className="t-display" style={{ fontSize: 52, color: "var(--plum-deep)", margin: "12px 0 14px", maxWidth: 640 }}>
+              {t("section.library_title")}.
+            </h2>
+            <p style={{ fontSize: 17, color: "var(--graphite)", maxWidth: 520, lineHeight: 1.5 }}>{t("section.library_sub")}</p>
+          </div>
+          <button className="ph-btn ph-btn--ghost" style={{ marginBottom: 4 }}>
+            {lang === "fr" ? "Toute la bibliothèque" : "Browse all"} <Icon.arrow size={14} />
+          </button>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32 }}>
+          {I18N.books.map((b, i) => <BookGridCard key={b.id} book={b} index={i} />)}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section style={{ background: "var(--cream)", padding: "112px 56px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 72 }}>
+            <div className="t-eyebrow">{t("section.how_eyebrow")}</div>
+            <h2 className="t-display" style={{ fontSize: 52, color: "var(--plum-deep)", margin: "12px 0 0" }}>
+              {t("section.how_title")}
+            </h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 48, position: "relative" }}>
+            {/* connector line */}
+            <div style={{ position: "absolute", top: 52, left: "16.6%", right: "16.6%", height: 1, borderTop: "1.5px dashed rgba(91,42,111,0.25)", zIndex: 0 }} />
+            {[1, 2, 3].map(n => (
+              <HowStep key={n} n={n}
+                title={t(`section.how_${n}_t`)}
+                desc={t(`section.how_${n}_d`)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Voices / testimonials */}
+      <section style={{ padding: "112px 56px", maxWidth: 1440, margin: "0 auto" }}>
+        <div style={{ marginBottom: 56 }}>
+          <div className="t-eyebrow">{t("section.voices_eyebrow")}</div>
+          <h2 className="t-display" style={{ fontSize: 52, color: "var(--plum-deep)", margin: "12px 0 0", maxWidth: 640 }}>{t("section.voices_title")}</h2>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          {I18N.testimonials.map((tm, i) => (
+            <TestimonialCard key={i} tm={tm} lang={lang} featured={i === 1} />
+          ))}
+        </div>
+      </section>
+
+      {/* Trust promises */}
+      <section style={{ background: "var(--plum-deep)", color: "var(--cream)", padding: "112px 56px", position: "relative", overflow: "hidden" }}>
+        <StarField count={22} color="#F4B942" />
+        <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--honey)", marginBottom: 10 }}>{t("section.trust_eyebrow")}</div>
+            <h2 className="t-display" style={{ fontSize: 52, color: "var(--cream)", margin: "0" }}>{t("section.trust_title")}</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 40 }}>
+            {[
+              { icon: Icon.shield, t: t("section.trust_1_t"), d: t("section.trust_1_d") },
+              { icon: Icon.heart, t: t("section.trust_2_t"), d: t("section.trust_2_d") },
+              { icon: Icon.quality, t: t("section.trust_3_t"), d: t("section.trust_3_d") },
+            ].map((it, i) => (
+              <div key={i} style={{ textAlign: "center" }}>
+                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 56, height: 56, borderRadius: "50%", background: "rgba(244,185,66,0.12)", marginBottom: 20, color: "var(--honey)" }}>
+                  <it.icon size={26} color="var(--honey)" />
+                </div>
+                <div className="t-display" style={{ fontSize: 26, color: "var(--cream)", marginBottom: 10 }}>{it.t}</div>
+                <div style={{ fontSize: 15, color: "rgba(255,248,236,0.75)", lineHeight: 1.55, maxWidth: 320, margin: "0 auto" }}>{it.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section style={{ padding: "112px 56px", maxWidth: 960, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div className="t-eyebrow">{t("section.faq_eyebrow")}</div>
+          <h2 className="t-display" style={{ fontSize: 48, color: "var(--plum-deep)", margin: "12px 0 0" }}>{t("section.faq_title")}</h2>
+        </div>
+        <FAQAccordion />
+        <div style={{ textAlign: "center", marginTop: 36 }}>
+          <button className="ph-btn ph-btn--secondary">{t("section.faq_all")} <Icon.arrow size={13} /></button>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section style={{ padding: "0 56px 112px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", background: "var(--cream-deep)", borderRadius: 24, padding: "96px 72px", position: "relative", overflow: "hidden", textAlign: "center" }}>
+          <Swirl w={200} color="var(--plum)" opacity={0.14} style={{ position: "absolute", top: 40, left: 40 }} />
+          <Swirl w={160} color="var(--honey-deep)" opacity={0.25} style={{ position: "absolute", bottom: 36, right: 60, transform: "rotate(180deg)" }} />
+          <div className="t-eyebrow" style={{ marginBottom: 16 }}>{t("section.final_eyebrow")}</div>
+          <h2 className="t-display" style={{ fontSize: 56, color: "var(--plum-deep)", margin: "0 auto 28px", maxWidth: 760, textWrap: "pretty" }}>{t("section.final_title")}</h2>
+          <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onOpenFlow}>{t("hero.cta_primary")} <Icon.arrow size={14} /></button>
+          <div style={{ fontSize: 13, color: "var(--stone)", marginTop: 16 }}>{t("section.final_note")}</div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+}
+
+// ──────── Hero variants ────────
+function HeroEditorial({ onOpenFlow }) {
+  const { t, lang } = useT();
+  const title = t("hero.title_a");
+  return (
+    <section style={{ padding: "72px 56px 96px", position: "relative", overflow: "hidden" }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 72, alignItems: "center" }}>
+        <div>
+          <div className="t-eyebrow" style={{ marginBottom: 20 }}>{t("hero.eyebrow")}</div>
+          <h1 className="t-display" style={{ fontSize: 88, lineHeight: 0.98, color: "var(--plum-deep)", margin: 0, letterSpacing: "-0.025em" }}>
+            {title[0]}{" "}
+            <em style={{ fontStyle: "italic", color: "var(--honey-deep)", position: "relative", display: "inline-block" }}>
+              {title[1]}
+              <svg viewBox="0 0 200 10" style={{ position: "absolute", left: "-2%", right: "-2%", bottom: -8, width: "104%", height: 10 }} fill="none">
+                <path d="M2 7 C 40 2, 80 2, 120 6 S 190 4, 198 3" stroke="var(--honey)" strokeWidth="2" strokeLinecap="round" fill="none"/>
+              </svg>
+            </em>
+            {" "}{title[2]}
+          </h1>
+          <p style={{ fontSize: 19, color: "var(--graphite)", lineHeight: 1.5, margin: "32px 0 40px", maxWidth: 520, textWrap: "pretty" }}>{t("hero.subtitle")}</p>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+            <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onOpenFlow}>{t("hero.cta_primary")} <Icon.arrow size={14} /></button>
+            <button className="ph-btn ph-btn--ghost">{t("hero.cta_secondary")} <Icon.arrow size={13} /></button>
+          </div>
+          <div style={{ fontFamily: "var(--f-hand)", fontSize: 22, color: "var(--plum-soft)", marginTop: 28, transform: "rotate(-1.5deg)", display: "inline-block" }}>
+            {t("hero.caption")}
+          </div>
+        </div>
+        {/* Right: book on stage with photograph */}
+        <div style={{ position: "relative", aspectRatio: "1 / 1", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", inset: "10% 6%", background: "radial-gradient(ellipse at center, rgba(244,185,66,0.28), rgba(244,185,66,0) 65%)" }} />
+          <Sparkle size={20} color="var(--honey)" style={{ position: "absolute", top: "8%", left: "12%", animation: "sparkle-float 3s ease-in-out infinite" }} />
+          <Sparkle size={14} color="var(--plum)" style={{ position: "absolute", top: "18%", right: "18%", animation: "sparkle-float 4s ease-in-out 0.5s infinite" }} />
+          <Sparkle size={12} color="var(--honey)" style={{ position: "absolute", bottom: "22%", left: "14%", animation: "sparkle-float 3.5s ease-in-out 1.2s infinite" }} />
+          <div style={{ position: "relative", width: 360, height: 496, transform: "rotate(-3deg) perspective(800px) rotateY(-8deg)", transformOrigin: "center" }}>
+            <BookCover book={I18N.books[4]} lang={lang} w={360} />
+          </div>
+          <div style={{ position: "absolute", right: "4%", bottom: "8%", width: 180, height: 200, borderRadius: 8, overflow: "hidden", boxShadow: "0 20px 40px rgba(30,20,30,0.25)", transform: "rotate(4deg)", border: "6px solid white" }}>
+            <img src="https://images.unsplash.com/photo-1544776193-0dd1c1c8cb4e?w=400&q=80" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroStorybook({ onOpenFlow }) {
+  const { t, lang } = useT();
+  const title = t("hero.title_a");
+  return (
+    <section style={{ padding: "120px 56px 120px", background: "linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%)", position: "relative", overflow: "hidden", textAlign: "center" }}>
+      <StarField count={18} color="var(--honey)" style={{ opacity: 0.5 }} />
+      <div style={{ maxWidth: 900, margin: "0 auto", position: "relative" }}>
+        <div className="t-eyebrow" style={{ marginBottom: 24 }}>{t("hero.eyebrow")}</div>
+        <h1 className="t-display" style={{ fontSize: 104, lineHeight: 0.98, color: "var(--plum-deep)", margin: 0, letterSpacing: "-0.025em" }}>
+          {title[0]} <em style={{ fontStyle: "italic", color: "var(--honey-deep)" }}>{title[1]}</em> {title[2]}
+        </h1>
+        <p style={{ fontSize: 20, color: "var(--graphite)", lineHeight: 1.5, margin: "36px auto 40px", maxWidth: 580, textWrap: "pretty" }}>{t("hero.subtitle")}</p>
+        <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onOpenFlow}>{t("hero.cta_primary")} <Icon.arrow size={14} /></button>
+        <div style={{ display: "flex", justifyContent: "center", gap: 44, marginTop: 72, flexWrap: "wrap" }}>
+          {[0, 4, 2, 5].map((i, idx) => (
+            <div key={i} style={{ transform: `rotate(${[-6, -2, 3, 7][idx]}deg) translateY(${[12, 0, 6, 18][idx]}px)` }}>
+              <BookCover book={I18N.books[i]} lang={lang} w={150} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroCollage({ onOpenFlow }) {
+  const { t, lang } = useT();
+  const title = t("hero.title_a");
+  return (
+    <section style={{ padding: "56px 56px 88px", position: "relative" }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
+        {/* Left: collage */}
+        <div style={{ position: "relative", aspectRatio: "1 / 1" }}>
+          <div style={{ position: "absolute", top: "4%", left: "6%", width: "46%", aspectRatio: "3/4", borderRadius: 8, overflow: "hidden", boxShadow: "0 16px 32px rgba(30,20,30,0.18)", border: "6px solid white", transform: "rotate(-4deg)" }}>
+            <img src="https://images.unsplash.com/photo-1503919005314-30d93d07d823?w=500&q=80" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+          <div style={{ position: "absolute", top: "20%", right: "4%", width: 180 }}>
+            <BookCover book={I18N.books[0]} lang={lang} w={180} rotate={6} />
+          </div>
+          <div style={{ position: "absolute", bottom: "8%", left: "18%", width: "50%", aspectRatio: "1/1", borderRadius: 8, overflow: "hidden", boxShadow: "0 16px 32px rgba(30,20,30,0.18)", border: "6px solid white", transform: "rotate(3deg)" }}>
+            <img src="https://images.unsplash.com/photo-1604881991720-f91add269bed?w=500&q=80" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+          <div style={{ position: "absolute", top: "12%", left: "38%", fontFamily: "var(--f-hand)", fontSize: 26, color: "var(--plum)", transform: "rotate(-8deg)" }}>le héros, c'est toi</div>
+          <Sparkle size={18} color="var(--honey)" style={{ position: "absolute", top: "2%", right: "32%" }} />
+          <Sparkle size={12} color="var(--plum)" style={{ position: "absolute", bottom: "2%", right: "12%" }} />
+        </div>
+        {/* Right: copy */}
+        <div>
+          <div className="t-eyebrow" style={{ marginBottom: 18 }}>{t("hero.eyebrow")}</div>
+          <h1 className="t-display" style={{ fontSize: 76, lineHeight: 1, color: "var(--plum-deep)", margin: 0, letterSpacing: "-0.02em" }}>
+            {title[0]} <em style={{ fontStyle: "italic", color: "var(--honey-deep)" }}>{title[1]}</em> {title[2]}
+          </h1>
+          <p style={{ fontSize: 18, color: "var(--graphite)", lineHeight: 1.55, margin: "28px 0 36px", maxWidth: 480 }}>{t("hero.subtitle")}</p>
+          <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+            <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onOpenFlow}>{t("hero.cta_primary")}</button>
+            <button className="ph-btn ph-btn--ghost">{t("hero.cta_secondary")} <Icon.arrow size={13} /></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ──────── Small components ────────
+function BookGridCard({ book, index }) {
+  const { lang } = useT();
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      style={{ cursor: "pointer", transition: "transform .3s var(--ease-out)", transform: hover ? "translateY(-4px)" : "none" }}>
+      <div style={{ position: "relative", aspectRatio: "3/4", background: book.pair[0], borderRadius: 8, overflow: "hidden", boxShadow: "0 6px 24px rgba(30,20,30,0.10)" }}>
+        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <BookCover book={book} lang={lang} w={220} style={{ boxShadow: "none" }} />
+        </div>
+        {hover && (
+          <div className="anim-fade-slide" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.78) 100%)", display: "flex", alignItems: "flex-end", padding: 20 }}>
+            <div style={{ color: "var(--cream)" }}>
+              <div style={{ fontSize: 13, opacity: 0.8, marginBottom: 6 }}>{book[`tag_${lang}`]}</div>
+              <span style={{ background: "var(--honey)", color: "var(--ink)", fontSize: 12, fontWeight: 600, padding: "5px 12px", borderRadius: 999 }}>{lang === "fr" ? "Aperçu" : "Preview"} →</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div style={{ display: "flex", gap: 6, marginTop: 14, marginBottom: 6 }}>
+        <span className="ph-badge ph-badge--cream">{book[`age_${lang}`]}</span>
+        <span className="ph-badge ph-badge--sage">{book[`theme_${lang}`]}</span>
+      </div>
+      <div className="t-display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.15 }}>{book[`title_${lang}`]}</div>
+    </div>
+  );
+}
+
+function HowStep({ n, title, desc }) {
+  const illos = {
+    1: <svg viewBox="0 0 80 80" width="48" height="48" fill="none" stroke="var(--plum)" strokeWidth="1.4"><rect x="18" y="14" width="44" height="54" rx="2"/><path d="M18 14c8 2 14 6 22 6s14-4 22-6v54c-8 2-14 6-22 6s-14-4-22-6"/><path d="M40 20v54" strokeWidth="1"/></svg>,
+    2: <svg viewBox="0 0 80 80" width="48" height="48" fill="none" stroke="var(--plum)" strokeWidth="1.4"><rect x="14" y="20" width="52" height="40" rx="3"/><circle cx="28" cy="36" r="4"/><path d="M14 56l14-14 10 10 10-8 18 16"/></svg>,
+    3: <svg viewBox="0 0 80 80" width="48" height="48" fill="none" stroke="var(--plum)" strokeWidth="1.4"><path d="M16 22h40l8 8v32a2 2 0 01-2 2H16a2 2 0 01-2-2V24a2 2 0 012-2z"/><path d="M56 22v8h8"/><path d="M26 40h28M26 48h22"/></svg>,
+  };
+  return (
+    <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+      <div style={{ width: 104, height: 104, borderRadius: "50%", background: "var(--paper)", border: "1.5px solid var(--bone)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", position: "relative" }}>
+        {illos[n]}
+        <div style={{ position: "absolute", top: -8, right: -6, width: 32, height: 32, borderRadius: "50%", background: "var(--plum-deep)", color: "var(--honey)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--f-display)", fontSize: 17, fontStyle: "italic" }}>{n}</div>
+      </div>
+      <div className="t-display" style={{ fontSize: 28, color: "var(--ink)", marginBottom: 10 }}>{title}</div>
+      <div style={{ fontSize: 15, color: "var(--stone)", lineHeight: 1.55, maxWidth: 300, margin: "0 auto" }}>{desc}</div>
+    </div>
+  );
+}
+
+function TestimonialCard({ tm, lang, featured }) {
+  return (
+    <div className="ph-card" style={{ padding: 32, background: featured ? "var(--cream)" : "#fff", position: "relative", overflow: "hidden" }}>
+      <div className="t-display" style={{ fontSize: 52, color: "var(--honey)", lineHeight: 0.6, marginBottom: 12 }}>“</div>
+      <p className="t-display" style={{ fontSize: 22, color: "var(--ink)", lineHeight: 1.35, margin: 0, textWrap: "pretty" }}>{tm[lang]}</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--bone)" }}>
+        <Avatar name={tm[`author_${lang}`]} size={36} />
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{tm[`author_${lang}`]}</div>
+          <div style={{ fontSize: 12, color: "var(--stone)" }}>{tm.city}</div>
+        </div>
+        <div style={{ marginLeft: "auto", color: "var(--honey)", letterSpacing: 1, fontSize: 13 }}>★★★★★</div>
+      </div>
+    </div>
+  );
+}
+
+function FAQAccordion() {
+  const { t } = useT();
+  const [open, setOpen] = React.useState(0);
+  const items = [1, 2, 3];
+  return (
+    <div>
+      {items.map(n => {
+        const isOpen = open === n;
+        return (
+          <div key={n} style={{ borderBottom: "1px solid var(--bone)" }}>
+            <button
+              onClick={() => setOpen(isOpen ? -1 : n)}
+              style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0", background: "transparent", border: 0, cursor: "pointer", fontFamily: "var(--f-body)", textAlign: "left" }}>
+              <span className="t-display" style={{ fontSize: 24, color: "var(--ink)" }}>{t(`section.faq_${n}_q`)}</span>
+              <span style={{ color: "var(--plum)", transition: "transform .25s var(--ease-out)", transform: isOpen ? "rotate(45deg)" : "none" }}>
+                <Icon.plus size={20} color="var(--plum)" />
+              </span>
+            </button>
+            {isOpen && (
+              <div className="anim-fade-slide" style={{ paddingBottom: 24, paddingRight: 40, fontSize: 16, color: "var(--graphite)", lineHeight: 1.55, maxWidth: 720 }}>
+                {t(`section.faq_${n}_a`)}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Footer() {
+  const { t, lang } = useT();
+  const col = (title, items) => (
+    <div>
+      <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--cream)", opacity: 0.7, marginBottom: 16 }}>{title}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {items.map(x => <a key={x} style={{ color: "var(--cream)", opacity: 0.85, fontSize: 14, cursor: "pointer" }}>{x}</a>)}
+      </div>
+    </div>
+  );
+  return (
+    <footer style={{ background: "var(--ink)", color: "var(--cream)", padding: "72px 56px 32px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr 1fr", gap: 48, paddingBottom: 48, borderBottom: "1px solid rgba(255,248,236,0.12)" }}>
+          <div>
+            <PHLogo color="var(--cream)" size={22} />
+            <div style={{ fontSize: 15, opacity: 0.75, marginTop: 16, lineHeight: 1.5, maxWidth: 280 }}>{t("footer.tagline")}</div>
+            <div style={{ marginTop: 24, display: "flex", gap: 10, alignItems: "center" }}>
+              <input className="ph-input" placeholder={t("footer.newsletter_p")} style={{ background: "rgba(255,248,236,0.08)", border: "1px solid rgba(255,248,236,0.18)", color: "var(--cream)", fontSize: 13, padding: "10px 14px" }} />
+              <button className="ph-btn ph-btn--primary ph-btn--sm">{t("footer.newsletter_b")}</button>
+            </div>
+            <div style={{ fontSize: 12, opacity: 0.6, marginTop: 8 }}>{t("footer.newsletter_t")}</div>
+          </div>
+          {col(t("footer.col_shop"), lang === "fr" ? ["Livres 3-5 ans", "Livres 5-8 ans", "Livres pour adultes", "Cartes-cadeaux"] : ["Books 3-5", "Books 5-8", "Adult books", "Gift cards"])}
+          {col(t("footer.col_support"), lang === "fr" ? ["FAQ", "Contact", "Suivi de commande", "Retours"] : ["FAQ", "Contact", "Track order", "Returns"])}
+          {col(t("footer.col_company"), lang === "fr" ? ["À propos", "Notre atelier", "Presse", "Carrières"] : ["About", "Our workshop", "Press", "Careers"])}
+          {col(t("footer.col_legal"), lang === "fr" ? ["Confidentialité", "Conditions", "Politique de retour", "Loi 25"] : ["Privacy", "Terms", "Refund policy", "Law 25"])}
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 28, fontSize: 13, opacity: 0.65 }}>
+          <span>{t("footer.rights")}</span>
+          <span style={{ display: "flex", gap: 14 }}>
+            <span>Visa · Mastercard · Amex · Apple Pay · PayPal</span>
+          </span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+Object.assign(window, { HomepageArtboard });
+
+</script>
+  <script type="text/babel" data-presets="react">
+// Preview Flow — 7 steps. Fully interactive with real state.
+function PreviewFlow({ onClose, mobile = false, initialStep = 1 }) {
+  const { t, lang } = useT();
+  const { setLang } = React.useContext(LangContext);
+  const [step, setStep] = React.useState(initialStep);
+  const [data, setData] = React.useState({
+    book: I18N.books[4], // Lantern
+    name: "Léo",
+    age: 5,
+    gender: "boy",
+    skin: 2,
+    bookLang: lang,
+    photo: null,
+    generated: false,
+    pageChoices: {}, // { pageNum: variantIdx }
+    format: "hard",
+  });
+  const set = (patch) => setData(d => ({ ...d, ...patch }));
+
+  const totalSteps = 7;
+  const next = () => setStep(s => Math.min(totalSteps, s + 1));
+  const back = () => setStep(s => Math.max(1, s - 1));
+
+  return (
+    <div style={{ width: "100%", height: "100%", background: "var(--paper)", display: "flex", flexDirection: "column", fontFamily: "var(--f-body)", color: "var(--ink)", overflow: "hidden" }}>
+      {/* Top bar */}
+      <div style={{ borderBottom: "1px solid var(--bone)", padding: mobile ? "14px 16px" : "18px 40px", display: "flex", alignItems: "center", gap: 16, background: "var(--paper)", flexShrink: 0 }}>
+        <PHLogo size={mobile ? 18 : 20} color="var(--plum-deep)" />
+        <div style={{ flex: 1, marginLeft: mobile ? 12 : 40 }}>
+          <StepRail step={step} total={totalSteps} mobile={mobile} />
+        </div>
+        <button onClick={() => setLang(lang === "fr" ? "en" : "fr")} style={{ background: "transparent", border: "1px solid var(--bone)", borderRadius: 999, padding: "5px 10px", fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", color: "var(--graphite)", cursor: "pointer" }}>
+          {lang === "fr" ? "EN" : "FR"}
+        </button>
+        <button onClick={onClose} style={{ background: "transparent", border: 0, cursor: "pointer", color: "var(--stone)", padding: 6, display: "flex" }}>
+          <Icon.close size={18} />
+        </button>
+      </div>
+
+      {/* Step content */}
+      <div className="artboard-scroll" style={{ flex: 1, overflowY: "auto" }}>
+        <div key={step} className="anim-fade-slide" style={{ padding: mobile ? "24px 16px 32px" : "48px 40px 56px", maxWidth: mobile ? "100%" : 880, margin: "0 auto" }}>
+          {step === 1 && <Step1 data={data} onNext={next} mobile={mobile} />}
+          {step === 2 && <Step2 data={data} set={set} onNext={next} mobile={mobile} />}
+          {step === 3 && <Step3 data={data} set={set} onNext={next} mobile={mobile} />}
+          {step === 4 && <Step4 data={data} set={set} onNext={next} mobile={mobile} />}
+          {step === 5 && <Step5 data={data} set={set} onNext={next} mobile={mobile} />}
+          {step === 6 && <Step6 data={data} onNext={next} onEdit={() => setStep(5)} mobile={mobile} />}
+          {step === 7 && <Step7 data={data} set={set} onClose={onClose} mobile={mobile} />}
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      {step > 1 && step !== 4 && (
+        <div style={{ borderTop: "1px solid var(--bone)", padding: mobile ? "12px 16px" : "16px 40px", display: "flex", justifyContent: "space-between", background: "var(--paper)", flexShrink: 0 }}>
+          <button className="ph-btn ph-btn--ghost" onClick={back}>
+            <Icon.chev dir="left" size={14} /> {t("flow.back")}
+          </button>
+          <div style={{ fontSize: 12, color: "var(--stone)", alignSelf: "center", display: mobile ? "none" : "block" }}>
+            {t("flow.progress")} {step} {t("flow.of")} {totalSteps}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Step rail — pill progress with step labels
+function StepRail({ step, total, mobile }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      {Array.from({ length: total }, (_, i) => {
+        const n = i + 1;
+        const active = n === step;
+        const done = n < step;
+        return (
+          <React.Fragment key={n}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: mobile ? 0 : (active ? "6px 14px 6px 8px" : "6px 8px"),
+              background: active ? "rgba(91,42,111,0.08)" : "transparent",
+              borderRadius: 999,
+              transition: "all .25s var(--ease-out)",
+            }}>
+              <span style={{
+                width: mobile ? 22 : 24, height: mobile ? 22 : 24, borderRadius: "50%",
+                background: done ? "var(--plum)" : active ? "var(--honey)" : "transparent",
+                border: !done && !active ? "1.5px solid var(--pebble)" : "none",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: done ? "var(--cream)" : active ? "var(--ink)" : "var(--stone)",
+                fontSize: 12, fontWeight: 600, flexShrink: 0,
+              }}>
+                {done ? <Icon.check size={11} color="var(--cream)" /> : n}
+              </span>
+              {active && !mobile && <span style={{ fontSize: 13, fontWeight: 500, color: "var(--plum)" }}>{stepName(n)}</span>}
+            </div>
+            {n < total && <div style={{ width: mobile ? 4 : 14, height: 1, background: "var(--pebble)", opacity: 0.5 }} />}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
+function stepName(n) {
+  const names = { 1: "Histoire", 2: "Enfant", 3: "Photo", 4: "Magie", 5: "Pages", 6: "Aperçu", 7: "Commande" };
+  return names[n];
+}
+
+// ──────── Step 1 — Welcome ────────
+function Step1({ data, onNext, mobile }) {
+  const { t, lang } = useT();
+  return (
+    <div style={{ textAlign: "center", paddingTop: mobile ? 16 : 40 }}>
+      <div className="t-eyebrow">{t("flow.s1_eyebrow")}</div>
+      <h1 className="t-display" style={{ fontSize: mobile ? 36 : 56, color: "var(--plum-deep)", margin: "14px 0 20px", letterSpacing: "-0.02em" }}>
+        {t("flow.s1_title")}
+      </h1>
+      <p style={{ fontSize: mobile ? 15 : 18, color: "var(--graphite)", lineHeight: 1.5, maxWidth: 520, margin: "0 auto 40px", textWrap: "pretty" }}>
+        {t("flow.s1_body")}
+      </p>
+      <div style={{ display: "flex", justifyContent: "center", margin: "20px 0 32px", position: "relative" }}>
+        <div style={{ position: "absolute", inset: "10% 30%", background: "radial-gradient(ellipse, rgba(244,185,66,0.35), transparent 70%)" }} />
+        <div style={{ transform: "rotate(-2deg)", position: "relative" }}>
+          <BookCover book={data.book} lang={lang} w={mobile ? 180 : 220} />
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
+        <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onNext}>
+          {t("flow.s1_cta")} <Icon.arrow size={14} />
+        </button>
+        <button className="ph-btn ph-btn--ghost">{t("flow.s1_changebook")}</button>
+      </div>
+      <div style={{ fontSize: 13, color: "var(--stone)", marginTop: 20, display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
+        <Icon.shield size={14} color="var(--sage-deep)" /> {t("flow.s1_promise")}
+      </div>
+    </div>
+  );
+}
+
+// ──────── Step 2 — Child details ────────
+function Step2({ data, set, onNext, mobile }) {
+  const { t } = useT();
+  const [touched, setTouched] = React.useState({});
+  const nameError = touched.name && (!data.name || data.name.trim().length < 2);
+
+  const skinTones = ["#F5DCC7", "#E8C0A6", "#C9936B", "#8E5A3B", "#5A3922"];
+  const ages = [3, 4, 5, 6, 7, 8];
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 36 }}>
+        <h1 className="t-display" style={{ fontSize: mobile ? 32 : 44, color: "var(--plum-deep)", margin: "0 0 10px" }}>{t("flow.s2_title")}</h1>
+        <p style={{ fontSize: 16, color: "var(--stone)" }}>{t("flow.s2_sub")}</p>
+      </div>
+
+      <div style={{ background: "#fff", borderRadius: 16, padding: mobile ? 20 : 32, boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column", gap: 24 }}>
+        {/* Name */}
+        <div>
+          <label className="ph-label">{t("flow.s2_name")}</label>
+          <input className="ph-input" placeholder={t("flow.s2_name_ph")} value={data.name}
+            onChange={(e) => set({ name: e.target.value })}
+            onBlur={() => setTouched(x => ({ ...x, name: true }))}
+            style={nameError ? { borderColor: "var(--error)" } : {}} />
+          {nameError && <div style={{ fontSize: 12, color: "var(--error)", marginTop: 6 }}>
+            {t("flow.s2_name_ph") && "Merci d'entrer un prénom"}
+          </div>}
+        </div>
+
+        {/* Age + Gender */}
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1.3fr", gap: 20 }}>
+          <div>
+            <label className="ph-label">{t("flow.s2_age")}</label>
+            <div style={{ display: "flex", gap: 6 }}>
+              {ages.map(a => (
+                <button key={a} onClick={() => set({ age: a })}
+                  className="focus-ring"
+                  style={{
+                    flex: 1, padding: "10px 0", borderRadius: 10,
+                    border: data.age === a ? "1.5px solid var(--plum)" : "1.5px solid var(--bone)",
+                    background: data.age === a ? "rgba(91,42,111,0.06)" : "#fff",
+                    color: data.age === a ? "var(--plum)" : "var(--graphite)",
+                    fontWeight: 600, fontSize: 14, cursor: "pointer", fontFamily: "var(--f-body)",
+                    transition: "all .15s",
+                  }}>{a}</button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="ph-label">{t("flow.s2_gender")}</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              {[["boy", t("flow.s2_g_boy")], ["girl", t("flow.s2_g_girl")], ["neutral", t("flow.s2_g_neutral")]].map(([v, label]) => (
+                <button key={v} onClick={() => set({ gender: v })}
+                  style={{
+                    flex: 1, padding: "10px 6px", borderRadius: 10,
+                    border: data.gender === v ? "1.5px solid var(--plum)" : "1.5px solid var(--bone)",
+                    background: data.gender === v ? "rgba(91,42,111,0.06)" : "#fff",
+                    color: data.gender === v ? "var(--plum)" : "var(--graphite)",
+                    fontWeight: data.gender === v ? 600 : 500, fontSize: 13, cursor: "pointer", fontFamily: "var(--f-body)",
+                  }}>{label}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Skin */}
+        <div>
+          <label className="ph-label">{t("flow.s2_skin")}</label>
+          <div style={{ display: "flex", gap: 10 }}>
+            {skinTones.map((c, i) => (
+              <button key={i} onClick={() => set({ skin: i })}
+                aria-label={`Skin tone ${i + 1}`}
+                style={{
+                  width: 44, height: 44, borderRadius: "50%", background: c,
+                  border: data.skin === i ? "3px solid var(--plum)" : "3px solid transparent",
+                  boxShadow: data.skin === i ? "0 0 0 1.5px #fff inset" : "inset 0 0 0 1px rgba(0,0,0,0.1)",
+                  cursor: "pointer", transition: "transform .15s",
+                  transform: data.skin === i ? "scale(1.08)" : "scale(1)",
+                }} />
+            ))}
+          </div>
+        </div>
+
+        {/* Language */}
+        <div>
+          <label className="ph-label">{t("flow.s2_lang")}</label>
+          <div style={{ display: "flex", gap: 8, maxWidth: 280 }}>
+            {[["fr", "Français"], ["en", "English"]].map(([v, label]) => (
+              <button key={v} onClick={() => set({ bookLang: v })}
+                style={{
+                  flex: 1, padding: "12px 16px", borderRadius: 10,
+                  border: data.bookLang === v ? "1.5px solid var(--plum)" : "1.5px solid var(--bone)",
+                  background: data.bookLang === v ? "rgba(91,42,111,0.06)" : "#fff",
+                  color: data.bookLang === v ? "var(--plum)" : "var(--graphite)",
+                  fontWeight: 600, fontSize: 14, cursor: "pointer", fontFamily: "var(--f-body)",
+                }}>{label}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 28 }}>
+        <button
+          className="ph-btn ph-btn--primary ph-btn--lg"
+          onClick={() => { if (data.name && data.name.trim().length >= 2) onNext(); else setTouched({ name: true }); }}>
+          {t("flow.continue")} <Icon.arrow size={14} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ──────── Step 3 — Photo upload ────────
+function Step3({ data, set, onNext, mobile }) {
+  const { t } = useT();
+  const [dragOver, setDragOver] = React.useState(false);
+  const [analyzing, setAnalyzing] = React.useState(false);
+  const [detected, setDetected] = React.useState(false);
+  const inputRef = React.useRef(null);
+
+  const demoPhotos = [
+    "https://images.unsplash.com/photo-1503919005314-30d93d07d823?w=400&q=80",
+    "https://images.unsplash.com/photo-1544776193-0dd1c1c8cb4e?w=400&q=80",
+    "https://images.unsplash.com/photo-1511424400163-1c66a2d5b3ee?w=400&q=80",
+  ];
+
+  const loadPhoto = (src) => {
+    set({ photo: src });
+    setAnalyzing(true);
+    setDetected(false);
+    setTimeout(() => { setAnalyzing(false); setDetected(true); }, 1400);
+  };
+
+  const onFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => loadPhoto(e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <h1 className="t-display" style={{ fontSize: mobile ? 32 : 44, color: "var(--plum-deep)", margin: "0 0 10px" }}>{t("flow.s3_title")}</h1>
+        <p style={{ fontSize: 16, color: "var(--stone)", maxWidth: 520, margin: "0 auto" }}>{t("flow.s3_sub")}</p>
+      </div>
+
+      {!data.photo ? (
+        <>
+          {/* Drop zone */}
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={(e) => { e.preventDefault(); setDragOver(false); onFile(e.dataTransfer.files[0]); }}
+            onClick={() => inputRef.current?.click()}
+            style={{
+              background: dragOver ? "rgba(244,185,66,0.12)" : "rgba(91,42,111,0.03)",
+              border: `2px dashed ${dragOver ? "var(--honey)" : "var(--plum-soft)"}`,
+              borderRadius: 20, padding: mobile ? "44px 20px" : "64px 40px",
+              textAlign: "center", cursor: "pointer", transition: "all .2s",
+            }}>
+            <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => onFile(e.target.files[0])} />
+            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 64, height: 64, borderRadius: "50%", background: "rgba(91,42,111,0.08)", marginBottom: 20 }}>
+              <Icon.upload size={28} color="var(--plum)" />
+            </div>
+            <div className="t-display" style={{ fontSize: 24, color: "var(--ink)", marginBottom: 6 }}>{t("flow.s3_drop")}</div>
+            <div style={{ fontSize: 14, color: "var(--stone)", marginBottom: 16 }}>{t("flow.s3_or")}</div>
+            <span className="ph-btn ph-btn--secondary">{t("flow.s3_browse")}</span>
+          </div>
+
+          {/* Demo photos */}
+          <div style={{ marginTop: 20, textAlign: "center" }}>
+            <div style={{ fontSize: 12, color: "var(--stone)", marginBottom: 10 }}>{mobile ? "Essayer avec une photo de démo" : "Or try a demo photo for this prototype"}</div>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              {demoPhotos.map((p, i) => (
+                <button key={i} onClick={() => loadPhoto(p)}
+                  style={{ width: 56, height: 56, borderRadius: "50%", overflow: "hidden", border: "2px solid var(--bone)", padding: 0, cursor: "pointer", background: "transparent" }}>
+                  <img src={p} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tips */}
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 20, marginTop: 32 }}>
+            <div style={{ background: "#fff", borderRadius: 12, padding: 20, border: "1px solid var(--bone)" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--sage-deep)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                <Icon.check size={14} color="var(--sage-deep)" /> {t("flow.s3_good")}
+              </div>
+              <ul style={{ margin: 0, paddingLeft: 0, listStyle: "none", fontSize: 14, color: "var(--graphite)", display: "flex", flexDirection: "column", gap: 8 }}>
+                {[1, 2, 3].map(n => (
+                  <li key={n} style={{ display: "flex", gap: 8 }}>
+                    <span style={{ color: "var(--sage-deep)" }}>·</span>{t(`flow.s3_tip_${n}`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div style={{ background: "#fff", borderRadius: 12, padding: 20, border: "1px solid var(--bone)" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--error)", marginBottom: 12 }}>
+                × {t("flow.s3_bad")}
+              </div>
+              <ul style={{ margin: 0, paddingLeft: 0, listStyle: "none", fontSize: 14, color: "var(--graphite)", display: "flex", flexDirection: "column", gap: 8 }}>
+                <li style={{ display: "flex", gap: 8 }}><span style={{ color: "var(--error)" }}>·</span>Plusieurs personnes</li>
+                <li style={{ display: "flex", gap: 8 }}><span style={{ color: "var(--error)" }}>·</span>Visage flou ou caché</li>
+                <li style={{ display: "flex", gap: 8 }}><span style={{ color: "var(--error)" }}>·</span>Photo très sombre</li>
+              </ul>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Preview with face detection */}
+          <div style={{ background: "#fff", borderRadius: 16, padding: mobile ? 20 : 32, boxShadow: "var(--shadow-sm)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "240px 1fr", gap: 24, alignItems: "center" }}>
+              <div style={{ aspectRatio: "1", borderRadius: 12, overflow: "hidden", position: "relative", background: "var(--bone)" }}>
+                <img src={data.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                {detected && (
+                  <svg viewBox="0 0 240 240" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+                    <rect x="72" y="56" width="96" height="120" rx="48" fill="none" stroke="#6BAA75" strokeWidth="2.5" strokeDasharray="4 4" className="anim-fade-slide" />
+                  </svg>
+                )}
+              </div>
+              <div>
+                {analyzing ? (
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ width: 22, height: 22, border: "2.5px solid var(--bone)", borderTopColor: "var(--plum)", borderRadius: "50%", animation: "spin-slow .8s linear infinite" }} />
+                    <span style={{ fontSize: 15, color: "var(--graphite)" }}>{t("flow.s3_detecting")}</span>
+                  </div>
+                ) : detected ? (
+                  <>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--success)", fontSize: 13, fontWeight: 600, padding: "5px 11px", background: "rgba(107,170,117,0.15)", borderRadius: 999, marginBottom: 12 }}>
+                      <Icon.check size={13} color="var(--success)" /> {t("flow.s3_detected")}
+                    </div>
+                    <div className="t-display" style={{ fontSize: 22, color: "var(--ink)", margin: "0 0 6px" }}>
+                      {data.name || "Votre enfant"}, {data.age} ans
+                    </div>
+                    <div style={{ fontSize: 14, color: "var(--stone)", lineHeight: 1.5 }}>
+                      {t("flow.s3_crop")} · <span style={{ color: "var(--plum)", cursor: "pointer", fontWeight: 500 }} onClick={() => set({ photo: null })}>{t("flow.s3_replace")}</span>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ fontSize: 12, color: "var(--stone)", textAlign: "center", margin: "20px 0 24px", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+            <Icon.shield size={14} color="var(--sage-deep)" /> {t("flow.s3_privacy")}
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <button className="ph-btn ph-btn--primary ph-btn--lg" disabled={!detected} onClick={onNext}
+              style={!detected ? { opacity: 0.5, cursor: "not-allowed" } : {}}>
+              {t("flow.s3_cta")} <Icon.arrow size={14} />
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ──────── Step 4 — Generation ────────
+function Step4({ data, set, onNext, mobile }) {
+  const { t } = useT();
+  const [progress, setProgress] = React.useState(0);
+  const [phase, setPhase] = React.useState(1);
+  const [email, setEmail] = React.useState("");
+  const [emailSent, setEmailSent] = React.useState(false);
+
+  React.useEffect(() => {
+    const iv = setInterval(() => {
+      setProgress(p => {
+        const np = Math.min(100, p + 1.2);
+        setPhase(np < 30 ? 1 : np < 65 ? 2 : np < 95 ? 3 : 4);
+        if (np >= 100) { clearInterval(iv); setTimeout(() => { set({ generated: true }); onNext(); }, 600); }
+        return np;
+      });
+    }, 60);
+    return () => clearInterval(iv);
+  }, []);
+
+  const phaseKey = `flow.s4_title_${phase}`;
+
+  return (
+    <div style={{ textAlign: "center", padding: mobile ? "20px 0" : "40px 0" }}>
+      {/* Magical illustration */}
+      <div style={{ position: "relative", width: mobile ? 220 : 280, height: mobile ? 220 : 280, margin: "0 auto 32px" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, rgba(244,185,66,0.3), transparent 60%)", animation: "sparkle-float 2.4s ease-in-out infinite" }} />
+        <StarField count={14} color="var(--honey)" />
+        {/* Rotating book */}
+        <div style={{ position: "absolute", inset: "18%", background: "var(--plum-deep)", borderRadius: 4, boxShadow: "0 12px 32px rgba(30,20,30,0.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin-slow 8s linear infinite" }}>
+          <Sparkle size={32} color="var(--honey)" />
+        </div>
+      </div>
+
+      <h1 key={phase} className="t-display anim-fade-slide" style={{ fontSize: mobile ? 28 : 40, color: "var(--plum-deep)", margin: "0 0 10px" }}>
+        {t(phaseKey)}
+      </h1>
+      <p style={{ fontSize: 15, color: "var(--stone)", margin: "0 0 28px" }}>{t("flow.s4_eta")}</p>
+
+      {/* Progress bar */}
+      <div style={{ maxWidth: 420, margin: "0 auto 36px" }}>
+        <div style={{ height: 8, background: "var(--bone)", borderRadius: 999, overflow: "hidden", position: "relative" }}>
+          <div style={{
+            height: "100%", width: `${progress}%`,
+            background: "linear-gradient(90deg, var(--plum) 0%, var(--honey) 50%, var(--plum) 100%)",
+            backgroundSize: "200% 100%",
+            animation: "shimmer 2s linear infinite",
+            borderRadius: 999, transition: "width .2s linear",
+          }} />
+        </div>
+        <div style={{ fontSize: 12, color: "var(--stone)", marginTop: 8, fontVariantNumeric: "tabular-nums" }}>{Math.round(progress)}%</div>
+      </div>
+
+      {/* Email capture */}
+      <div style={{ background: "var(--cream-deep)", borderRadius: 14, padding: mobile ? "20px 16px" : "24px 28px", maxWidth: 480, margin: "0 auto", textAlign: "left" }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--plum-deep)", marginBottom: 4 }}>{t("flow.s4_sub")}</div>
+        {emailSent ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--success)", fontSize: 14, marginTop: 10 }}>
+            <Icon.check size={14} color="var(--success)" /> {email}
+          </div>
+        ) : (
+          <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+            <input className="ph-input" placeholder={t("flow.s4_email_ph")} value={email} onChange={e => setEmail(e.target.value)} style={{ flex: 1 }} />
+            <button className="ph-btn ph-btn--primary ph-btn--sm" onClick={() => email.includes("@") && setEmailSent(true)}>{t("flow.s4_email_btn")}</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ──────── Step 5 — Page-by-page review ────────
+function Step5({ data, set, onNext, mobile }) {
+  const { t, lang } = useT();
+  const totalPages = 8; // reduced for demo
+  const [page, setPage] = React.useState(1);
+
+  const variantsForPage = (p) => {
+    // Generate 4 variants using different palettes
+    const palettes = [
+      ["#5B2A6F", "#F4B942", "#FFF8EC"],
+      ["#3F1C4F", "#E8B4B8", "#FFF8EC"],
+      ["#2E5E7E", "#F4B942", "#FFF8EC"],
+      ["#8FB996", "#F4B942", "#FFF8EC"],
+    ];
+    return palettes.map((p, i) => ({ id: i, palette: p }));
+  };
+
+  const variants = variantsForPage(page);
+  const chosen = data.pageChoices[page] ?? 0;
+
+  const choose = (v) => set({ pageChoices: { ...data.pageChoices, [page]: v } });
+
+  const goNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+    else onNext();
+  };
+
+  const skipRest = () => {
+    const choices = { ...data.pageChoices };
+    for (let p = page; p <= totalPages; p++) if (choices[p] === undefined) choices[p] = 0;
+    set({ pageChoices: choices });
+    onNext();
+  };
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div className="t-eyebrow">{t("flow.s5_eyebrow")}</div>
+        <h1 className="t-display" style={{ fontSize: mobile ? 28 : 38, color: "var(--plum-deep)", margin: "12px 0 8px" }}>{t("flow.s5_title")}</h1>
+        <div style={{ fontSize: 14, color: "var(--stone)" }}>{t("flow.s5_page")} {page} {t("flow.of")} {totalPages}</div>
+      </div>
+
+      {/* Main selected page */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+        <BookPageSpread palette={variants[chosen].palette} name={data.name} pageNum={page} lang={lang} size={mobile ? 280 : 420} />
+      </div>
+
+      {/* Variant thumbnails */}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 28, flexWrap: "wrap" }}>
+        {variants.map(v => (
+          <button key={v.id} onClick={() => choose(v.id)}
+            style={{
+              padding: 0, border: v.id === chosen ? "3px solid var(--plum)" : "3px solid transparent",
+              borderRadius: 8, cursor: "pointer", background: "transparent", transition: "transform .15s",
+              transform: v.id === chosen ? "scale(1.04)" : "scale(1)",
+            }}>
+            <BookPageSpread palette={v.palette} name={data.name} pageNum={page} lang={lang} size={mobile ? 92 : 120} />
+          </button>
+        ))}
+      </div>
+
+      {/* Nav */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+        <button className="ph-btn ph-btn--ghost">{t("flow.s5_regen")}</button>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button className="ph-btn ph-btn--ghost" onClick={skipRest}>{t("flow.s5_skip")}</button>
+          <button className="ph-btn ph-btn--primary" onClick={goNextPage}>
+            {page < totalPages ? t("flow.s5_next") : t("flow.s5_done")} <Icon.arrow size={13} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// A stylized book page spread rendered in SVG
+function BookPageSpread({ palette, name, pageNum, lang, size = 420 }) {
+  const [primary, accent, bg] = palette;
+  const h = size * 0.72;
+  // Different scene per page
+  const scene = pageNum % 4;
+  const copy = lang === "fr"
+    ? ["Un soir,", `${name} entendit`, "un chuchotement", "dans le jardin…"]
+    : ["One evening,", `${name} heard`, "a whisper", "from the garden…"];
+  return (
+    <div style={{ width: size, height: h, borderRadius: 4, overflow: "hidden", boxShadow: "0 10px 28px rgba(30,20,30,0.18)", background: bg, position: "relative", display: "flex" }}>
+      {/* left page (illustration) */}
+      <div style={{ width: "50%", height: "100%", background: primary, position: "relative", overflow: "hidden" }}>
+        {scene === 0 && (
+          <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <circle cx="78" cy="22" r="10" fill={accent} opacity="0.95"/>
+            <path d="M0 80 Q25 60 50 75 T100 70 V100 H0Z" fill={accent} opacity="0.25"/>
+            <circle cx="50" cy="65" r="8" fill={accent}/>
+            <rect x="46" y="70" width="8" height="14" fill={accent}/>
+            <path d="M20 40l2 2 2-2M72 48l2 2 2-2M10 20l1 1 1-1" stroke={accent} strokeWidth="1"/>
+          </svg>
+        )}
+        {scene === 1 && (
+          <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <path d="M0 70 Q30 55 60 62 T100 58 V100 H0Z" fill={accent} opacity="0.35"/>
+            <path d="M15 85L10 60L18 60L14 48L22 48L17 36L28 36L22 24L40 24L32 36L42 36L38 48L48 48L42 60L52 60L46 85Z" fill={accent} opacity="0.85"/>
+            <path d="M70 85L64 65L72 65L68 52L76 52L72 40L82 40L76 28L90 28L84 40L92 40L88 52L94 52L90 65L98 65L92 85Z" fill={accent} opacity="0.7"/>
+          </svg>
+        )}
+        {scene === 2 && (
+          <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <path d="M0 50 Q25 40 50 48 T100 46" stroke={accent} strokeWidth="1.6" fill="none" opacity="0.6"/>
+            <path d="M0 62 Q25 52 50 60 T100 58" stroke={accent} strokeWidth="1.6" fill="none" opacity="0.5"/>
+            <path d="M0 74 Q25 64 50 72 T100 70" stroke={accent} strokeWidth="1.6" fill="none" opacity="0.4"/>
+            <path d="M50 24 C44 24 40 28 40 34 C40 42 50 48 50 48 C50 48 60 42 60 34 C60 28 56 24 50 24Z" fill={accent}/>
+          </svg>
+        )}
+        {scene === 3 && (
+          <svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+            <rect x="20" y="20" width="60" height="70" rx="3" fill={accent} opacity="0.2"/>
+            <path d="M30 35 Q50 30 70 35 V80 Q50 75 30 80Z" fill={accent} opacity="0.85"/>
+            <circle cx="50" cy="20" r="3" fill={accent}/>
+            <path d="M18 15l2 2-2 2M82 18l-2 2 2 2" stroke={accent} strokeWidth="1"/>
+          </svg>
+        )}
+      </div>
+      {/* right page (text) */}
+      <div style={{ width: "50%", height: "100%", position: "relative", padding: size * 0.05, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div style={{ fontFamily: "var(--f-display)", fontSize: size * 0.045, lineHeight: 1.4, color: primary, letterSpacing: "-0.01em", textWrap: "balance" }}>
+          {copy.map((c, i) => <div key={i}>{c}</div>)}
+        </div>
+        <div style={{ position: "absolute", bottom: size * 0.03, right: size * 0.05, fontSize: size * 0.024, color: primary, opacity: 0.5, fontFamily: "var(--f-body)", fontVariantNumeric: "tabular-nums" }}>
+          {pageNum}
+        </div>
+      </div>
+      {/* center spine shadow */}
+      <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 8, transform: "translateX(-50%)", background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent)", pointerEvents: "none" }} />
+    </div>
+  );
+}
+
+// ──────── Step 6 — Reveal ────────
+function Step6({ data, onNext, onEdit, mobile }) {
+  const { t, lang } = useT();
+  const [revealed, setRevealed] = React.useState(false);
+  const [pageIdx, setPageIdx] = React.useState(0);
+  const [flipping, setFlipping] = React.useState(false);
+  const totalPages = 8;
+
+  React.useEffect(() => {
+    setTimeout(() => setRevealed(true), 200);
+  }, []);
+
+  const palettes = [
+    ["#5B2A6F", "#F4B942", "#FFF8EC"],
+    ["#3F1C4F", "#E8B4B8", "#FFF8EC"],
+    ["#2E5E7E", "#F4B942", "#FFF8EC"],
+    ["#8FB996", "#F4B942", "#FFF8EC"],
+  ];
+  const paletteFor = (p) => palettes[(data.pageChoices[p] ?? 0) % palettes.length];
+
+  const flip = (dir) => {
+    if (flipping) return;
+    const next = pageIdx + dir;
+    if (next < 0 || next >= totalPages) return;
+    setFlipping(true);
+    setTimeout(() => { setPageIdx(next); setFlipping(false); }, 280);
+  };
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ marginBottom: 20 }}>
+        <div className="t-eyebrow">{t("flow.s6_eyebrow")}</div>
+        <h1 className="t-display" style={{ fontSize: mobile ? 30 : 44, color: "var(--plum-deep)", margin: "12px 0 8px", letterSpacing: "-0.02em" }}>
+          {t("flow.s6_title").replace("{name}", data.name)}
+        </h1>
+        <p style={{ fontSize: 15, color: "var(--stone)", margin: 0 }}>{t("flow.s6_sub")}</p>
+      </div>
+
+      {/* Flipbook */}
+      <div style={{ position: "relative", padding: "40px 0 20px", display: "flex", justifyContent: "center", perspective: 1800 }}>
+        {revealed && <StarField count={14} color="var(--honey)" style={{ opacity: 0.6 }} />}
+        <div style={{
+          position: "relative",
+          animation: revealed ? "book-reveal 1s cubic-bezier(0.2,0.7,0.3,1) both" : "none",
+          transformStyle: "preserve-3d",
+        }}>
+          <div style={{ transform: flipping ? "rotateY(-8deg)" : "rotateY(0)", transition: "transform .28s var(--ease-out)" }}>
+            <BookPageSpread palette={paletteFor(pageIdx + 1)} name={data.name} pageNum={pageIdx + 1} lang={lang} size={mobile ? 320 : 560} />
+          </div>
+          {/* Flip arrows */}
+          <button onClick={() => flip(-1)} disabled={pageIdx === 0} style={arrowBtn("left", pageIdx === 0)}><Icon.chev dir="left" color="var(--plum)" /></button>
+          <button onClick={() => flip(1)} disabled={pageIdx === totalPages - 1} style={arrowBtn("right", pageIdx === totalPages - 1)}><Icon.chev dir="right" color="var(--plum)" /></button>
+        </div>
+      </div>
+
+      {/* Page dots */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, margin: "12px 0 24px" }}>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button key={i} onClick={() => setPageIdx(i)} aria-label={`Page ${i + 1}`}
+            style={{ width: i === pageIdx ? 22 : 7, height: 7, borderRadius: 999, background: i === pageIdx ? "var(--plum)" : "var(--pebble)", border: 0, padding: 0, cursor: "pointer", transition: "width .2s" }} />
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+        <button className="ph-btn ph-btn--ghost" onClick={onEdit}>
+          <Icon.camera size={14} color="var(--plum)" /> {t("flow.s6_edit")}
+        </button>
+        <button className="ph-btn ph-btn--secondary">{t("flow.s6_share")}</button>
+        <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onNext}>{t("flow.s6_cta")} <Icon.arrow size={14} /></button>
+      </div>
+    </div>
+  );
+}
+function arrowBtn(dir, disabled) {
+  return {
+    position: "absolute",
+    top: "50%", [dir]: -24, transform: "translateY(-50%)",
+    width: 44, height: 44, borderRadius: "50%",
+    border: "1px solid var(--bone)", background: "#fff", boxShadow: "var(--shadow-sm)",
+    cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.4 : 1,
+    display: "flex", alignItems: "center", justifyContent: "center",
+  };
+}
+
+// ──────── Step 7 — Order ────────
+function Step7({ data, set, onClose, mobile }) {
+  const { t, lang } = useT();
+  const prices = { hard: 54.99, soft: 39.99 };
+  const shipping = 0;
+  const subtotal = prices[data.format];
+  const tax = subtotal * 0.14975;
+  const total = subtotal + shipping + tax;
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div className="t-eyebrow">{t("flow.s7_eyebrow")}</div>
+        <h1 className="t-display" style={{ fontSize: mobile ? 32 : 44, color: "var(--plum-deep)", margin: "12px 0 0" }}>{t("flow.s7_title")}</h1>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 16, marginBottom: 28 }}>
+        {[
+          { id: "hard", price: 54.99, t: t("flow.s7_hard"), d: t("flow.s7_hard_d"), recommended: true },
+          { id: "soft", price: 39.99, t: t("flow.s7_soft"), d: t("flow.s7_soft_d"), recommended: false },
+        ].map(f => {
+          const sel = data.format === f.id;
+          return (
+            <button key={f.id} onClick={() => set({ format: f.id })}
+              style={{
+                textAlign: "left", padding: 24, borderRadius: 16,
+                border: sel ? "2px solid var(--plum)" : "2px solid var(--bone)",
+                background: sel ? "rgba(91,42,111,0.03)" : "#fff",
+                cursor: "pointer", fontFamily: "var(--f-body)", color: "var(--ink)", position: "relative",
+              }}>
+              {f.recommended && <span style={{ position: "absolute", top: -10, left: 20, background: "var(--honey)", color: "var(--ink)", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "3px 10px", borderRadius: 999 }}>{t("flow.s7_recommended")}</span>}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                <div className="t-display" style={{ fontSize: 22, color: "var(--ink)" }}>{f.t}</div>
+                <div style={{ fontFamily: "var(--f-display)", fontSize: 26, color: "var(--plum-deep)" }}>${f.price}</div>
+              </div>
+              <div style={{ fontSize: 13, color: "var(--stone)", lineHeight: 1.5 }}>{f.d}</div>
+              <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ width: 18, height: 18, borderRadius: "50%", border: sel ? "5px solid var(--plum)" : "1.5px solid var(--pebble)", background: sel ? "#fff" : "transparent", transition: "all .15s" }} />
+                <span style={{ fontSize: 13, color: sel ? "var(--plum)" : "var(--stone)", fontWeight: sel ? 600 : 400 }}>{sel ? (lang === "fr" ? "Sélectionné" : "Selected") : (lang === "fr" ? "Choisir" : "Choose")}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Summary */}
+      <div style={{ background: "var(--cream)", borderRadius: 14, padding: 24 }}>
+        <div style={{ fontSize: 13, color: "var(--stone)", marginBottom: 4 }}>{t("flow.s7_ship_to")} Montréal, QC · <b style={{ color: "var(--sage-deep)", fontWeight: 600 }}>{t("flow.s7_ship_free")}</b></div>
+        <div style={{ fontSize: 13, color: "var(--stone)", marginBottom: 16 }}>{t("flow.s7_eta")} <b style={{ color: "var(--ink)", fontWeight: 600 }}>28 avril — 2 mai</b></div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, borderTop: "1px solid var(--bone)", paddingTop: 14 }}>
+          {[
+            [t("flow.s7_subtotal"), `${subtotal.toFixed(2)}`],
+            [t("flow.s7_shipping"), lang === "fr" ? "Gratuite" : "Free"],
+            [t("flow.s7_taxes"), `${tax.toFixed(2)}`],
+          ].map(([l, v]) => (
+            <div key={l} style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "var(--graphite)" }}>
+              <span>{l}</span><span style={{ fontVariantNumeric: "tabular-nums" }}>{v}</span>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, color: "var(--ink)", fontWeight: 600, marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--bone)" }}>
+            <span>{t("flow.s7_total")}</span><span style={{ fontVariantNumeric: "tabular-nums" }}>${total.toFixed(2)}</span>
+          </div>
+        </div>
+        <div style={{ marginTop: 16, fontSize: 13, color: "var(--plum)", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
+          <Icon.plus size={13} color="var(--plum)" /> {t("flow.s7_gift")}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 24, textAlign: "center" }}>
+        <button className="ph-btn ph-btn--primary ph-btn--lg" onClick={onClose}>
+          <Icon.cart size={16} color="var(--ink)" /> {t("flow.s7_cta")} · ${total.toFixed(2)}
+        </button>
+        <div style={{ fontSize: 12, color: "var(--stone)", marginTop: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+          <Icon.shield size={13} color="var(--sage-deep)" /> {lang === "fr" ? "Paiement sécurisé · Visa, Mastercard, Apple Pay, PayPal" : "Secure checkout · Visa, Mastercard, Apple Pay, PayPal"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { PreviewFlow });
+
+</script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const TWEAKS_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "heroVariant": "editorial",
+      "defaultLang": "fr",
+      "showFlowOverlay": false,
+      "initialFlowStep": 1
+    }/*EDITMODE-END*/;
+
+    function PetitsHerosApp() {
+      const { LangContext, I18N } = window;
+      const [tweaks, setTweaks] = React.useState(TWEAKS_DEFAULTS);
+      const [lang, setLang] = React.useState(() => localStorage.getItem("ph-lang") || TWEAKS_DEFAULTS.defaultLang);
+      const [tweaksOpen, setTweaksOpen] = React.useState(false);
+      const [flow, setFlow] = React.useState({ open: false, mobile: false, step: 1 });
+
+      React.useEffect(() => { localStorage.setItem("ph-lang", lang); document.documentElement.lang = lang; }, [lang]);
+
+      // Tweaks protocol
+      React.useEffect(() => {
+        const onMsg = (e) => {
+          const d = e.data || {};
+          if (d.type === "__activate_edit_mode") setTweaksOpen(true);
+          if (d.type === "__deactivate_edit_mode") setTweaksOpen(false);
+        };
+        window.addEventListener("message", onMsg);
+        window.parent.postMessage({ type: "__edit_mode_available" }, "*");
+        return () => window.removeEventListener("message", onMsg);
+      }, []);
+
+      const setTweak = (k, v) => {
+        setTweaks(t => {
+          const next = { ...t, [k]: v };
+          window.parent.postMessage({ type: "__edit_mode_set_keys", edits: { [k]: v } }, "*");
+          return next;
+        });
+      };
+
+      const openFlow = (mobile = false, step = 1) => setFlow({ open: true, mobile, step });
+      const closeFlow = () => setFlow(f => ({ ...f, open: false }));
+
+      return (
+        <LangContext.Provider value={{ lang, setLang }}>
+          <DesignCanvas>
+            <DCSection id="system" title="Design System" subtitle="Colors, typography, components — the ingredients for everything else.">
+              <DCArtboard id="tokens" label="Tokens · v0.1" width={1200} height={1680}>
+                <DesignSystemArtboard />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="home" title="Homepage" subtitle="Desktop · 1440 · Toggle hero variants in Tweaks.">
+              <DCArtboard id="hp-desktop" label="Homepage · Desktop" width={1440} height={3600}>
+                <HomepageArtboard heroVariant={tweaks.heroVariant} onOpenFlow={() => openFlow(false, 1)} />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="flow-desktop" title="Preview Flow · Desktop" subtitle="7 steps. Fully interactive — click any card to open fullscreen and drive the flow.">
+              <DCArtboard id="fd-1" label="1 · Welcome" width={900} height={640}>
+                <FlowStage step={1} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-2" label="2 · Child details" width={900} height={640}>
+                <FlowStage step={2} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-3" label="3 · Photo upload" width={900} height={640}>
+                <FlowStage step={3} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-4" label="4 · Generation" width={900} height={640}>
+                <FlowStage step={4} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-5" label="5 · Page review" width={900} height={640}>
+                <FlowStage step={5} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-6" label="6 · Reveal ✨" width={900} height={640}>
+                <FlowStage step={6} mobile={false} />
+              </DCArtboard>
+              <DCArtboard id="fd-7" label="7 · Order" width={900} height={640}>
+                <FlowStage step={7} mobile={false} />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="flow-mobile" title="Preview Flow · Mobile" subtitle="iPhone · 390 · Same flow, responsive layout.">
+              {[1,2,3,4,5,6,7].map(n => (
+                <DCArtboard key={n} id={`fm-${n}`} label={`${n} · ${["Welcome","Child","Photo","Magic","Pages","Reveal","Order"][n-1]}`} width={390} height={780}>
+                  <PhoneFrame><FlowStage step={n} mobile={true} /></PhoneFrame>
+                </DCArtboard>
+              ))}
+            </DCSection>
+          </DesignCanvas>
+
+          {/* Full-bleed flow overlay */}
+          {flow.open && (
+            <div style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(30,20,30,0.72)", backdropFilter: "blur(16px)", display: "flex", alignItems: "center", justifyContent: "center", padding: flow.mobile ? 0 : 40, animation: "fadeSlide .3s" }}>
+              <div style={{
+                width: flow.mobile ? "100%" : "min(1100px, 100%)",
+                height: flow.mobile ? "100%" : "min(760px, 100%)",
+                borderRadius: flow.mobile ? 0 : 24,
+                overflow: "hidden", boxShadow: "0 40px 120px rgba(0,0,0,0.5)", background: "var(--paper)",
+              }}>
+                <PreviewFlow onClose={closeFlow} mobile={flow.mobile} initialStep={flow.step} />
+              </div>
+            </div>
+          )}
+
+          {/* Tweaks panel */}
+          {tweaksOpen && <TweaksPanel tweaks={tweaks} setTweak={setTweak} openFlow={openFlow} />}
+        </LangContext.Provider>
+      );
+    }
+
+    // Render a single step of the flow isolated — used in canvas artboards
+    function FlowStage({ step, mobile }) {
+      const [localStep, setLocalStep] = React.useState(step);
+      React.useEffect(() => { setLocalStep(step); }, [step]);
+      return <PreviewFlow onClose={() => {}} mobile={mobile} initialStep={localStep} key={step} />;
+    }
+
+    // Phone frame for mobile artboards
+    function PhoneFrame({ children }) {
+      return (
+        <div style={{ width: "100%", height: "100%", background: "#1a1510", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
+          <div style={{ width: 362, height: 752, borderRadius: 42, background: "#000", padding: 8, boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)" }}>
+            <div style={{ width: "100%", height: "100%", borderRadius: 34, overflow: "hidden", background: "var(--paper)", position: "relative" }}>
+              {/* Notch */}
+              <div style={{ position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)", width: 110, height: 28, background: "#000", borderRadius: 20, zIndex: 100 }} />
+              <div style={{ width: "100%", height: "100%" }}>{children}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Tweaks panel — floating bottom-right
+    function TweaksPanel({ tweaks, setTweak, openFlow }) {
+      const { lang, setLang } = React.useContext(LangContext);
+      const row = (label, children) => (
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--stone)", marginBottom: 6 }}>{label}</div>
+          {children}
+        </div>
+      );
+      const seg = (value, options, onChange) => (
+        <div style={{ display: "flex", background: "var(--bone)", borderRadius: 999, padding: 3 }}>
+          {options.map(o => (
+            <button key={o.v} onClick={() => onChange(o.v)}
+              style={{
+                flex: 1, padding: "7px 10px", borderRadius: 999, border: 0,
+                background: value === o.v ? "#fff" : "transparent",
+                color: value === o.v ? "var(--plum-deep)" : "var(--graphite)",
+                fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "var(--f-body)",
+                boxShadow: value === o.v ? "var(--shadow-xs)" : "none",
+              }}>{o.l}</button>
+          ))}
+        </div>
+      );
+
+      return (
+        <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 300, background: "#fff", borderRadius: 16, padding: 20, width: 280, boxShadow: "var(--shadow-lg)", fontFamily: "var(--f-body)", color: "var(--ink)", border: "1px solid var(--bone)" }}>
+          <div className="t-display" style={{ fontSize: 20, color: "var(--plum-deep)", marginBottom: 4 }}>Tweaks</div>
+          <div style={{ fontSize: 12, color: "var(--stone)", marginBottom: 18 }}>Adjust the design in place.</div>
+
+          {row("Hero variant", seg(tweaks.heroVariant, [
+            { v: "editorial", l: "Editorial" },
+            { v: "storybook", l: "Storybook" },
+            { v: "collage", l: "Collage" },
+          ], v => setTweak("heroVariant", v)))}
+
+          {row("Language", seg(lang, [
+            { v: "fr", l: "Français" },
+            { v: "en", l: "English" },
+          ], v => setLang(v)))}
+
+          {row("Open preview flow", (
+            <div style={{ display: "flex", gap: 6 }}>
+              <button onClick={() => openFlow(false, 1)} className="ph-btn ph-btn--secondary" style={{ flex: 1, fontSize: 12, padding: "9px 10px" }}>Desktop</button>
+              <button onClick={() => openFlow(true, 1)} className="ph-btn ph-btn--secondary" style={{ flex: 1, fontSize: 12, padding: "9px 10px" }}>Mobile</button>
+            </div>
+          ))}
+
+          <div style={{ fontSize: 11, color: "var(--stone)", marginTop: 6, lineHeight: 1.5 }}>
+            Tip: click the <b style={{ color: "var(--plum)" }}>↗</b> on any artboard to open it fullscreen.
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<PetitsHerosApp />);
+  </script>
+</body>
+</html>

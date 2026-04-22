@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Build outputs
+.next/
+dist/
+build/
+*.egg-info/
+
+# Environment + secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+*.key
+*.pem
+secrets.json
+service-account*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Test outputs
+coverage/
+playwright-report/
+test-results/
+
+# PDF/image outputs (gen artifacts, keep source only)
+**/generated-output/
+**/tmp-pdf/
+*.tmp.pdf
+
+# Claude Code
+.claude/.session*
+.design-canvas.state.json
+
+# Lulu / print artifacts
+print-jobs-debug/
