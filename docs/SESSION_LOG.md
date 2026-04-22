@@ -42,7 +42,7 @@ Running log of each build session. Most recent at top.
 - Output in `shopify/theme/`: 7 new sections (`livrome-hero`, `-library`, `-how`, `-voices`, `-trust`, `-faq`, `-final-cta`), `assets/livrome-tokens.css` (Livrome palette from `UI/tokens.css` — plum #5B2A6F, honey #F4B942), `templates/index.json` rewired, `layout/theme.liquid` loads Google Fonts (Fraunces/Inter/Caveat) + tokens CSS.
 - Kept `.ph-*` CSS class prefix shared with `UI/tokens.css` so Shopify theme and Next.js preview app use the same primitives. Section files and schema names use `livrome-*` / "Livrome · X" for merchant-facing clarity.
 - Skipped Dawn overrides (featured-collection, footer, header, image-banner, multicolumn, card-product, icon-accordion) — Claude Design produced these but they're not needed for homepage-only scope. Defer to S2/S3.
-- `UI/shopify/` and `UI/shopify-theme/` (Claude Design's raw output) left untracked. Reference only — do not use directly.
+- `UI/shopify/` and `UI/shopify-theme/` (Claude Design's raw output) deleted after port completed (2026-04-22). Never committed. If you see references to them elsewhere, they're gone.
 
 **Previous S1 side-quest: Dawn theme handoff to Claude Design** (2026-04-22)
 - Cloned Dawn 15.4.1 into `shopify/theme/` (commit `6ec...`, 369 files)
