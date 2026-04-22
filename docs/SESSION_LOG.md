@@ -34,4 +34,12 @@ Running log of each build session. Most recent at top.
 
 **Next session (S2)**: Create Shopify homepage sections + placeholder product + legal stubs (FR-CA + EN) via MCP. Read `UI/i18n.jsx` for copy, `UI/artboard_homepage.jsx` for layout intent.
 
+**S1 side-quest: Dawn theme handoff to Claude Design** (2026-04-22)
+- Cloned Dawn 15.4.1 into `shopify/theme/` (commit `6ec...`, 369 files)
+- Built `livrome-theme-handoff.zip` (1080 KB, forward-slash paths) — initially for file upload
+- Claude Design requested GitHub instead → pushed to public repo **https://github.com/mt-premiercloud/livrome**
+- README updated with explicit copyright + public-repo intent (Dawn's BSD-3 separately ack'd)
+- Claude Design will: (1) port `UI/artboard_homepage.jsx` layout to `theme/sections/livrome-*.liquid` sections, (2) create `theme/snippets/livrome-book-cover.liquid` SVG fallback, (3) emit `shopify/metaobjects/book.schema.json` + `.md`, (4) editorial hero variant only, (5) fonts via `<link>` not font_picker
+- Blocks S2 execution by ~a few hours of Claude Design turnaround, not on critical path — user can start S4 (Next.js scaffolding) in parallel if desired
+
 ---
