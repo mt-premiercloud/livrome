@@ -1,0 +1,70 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-trust { position: relative; overflow: hidden; }
+  .ph-trust__stars { position: absolute; inset: 0; opacity: 0.3; background-image:
+    radial-gradient(1px 1px at 10% 20%, var(--ph-honey), transparent),
+    radial-gradient(1px 1px at 30% 70%, var(--ph-cream), transparent),
+    radial-gradient(1px 1px at 55% 40%, var(--ph-honey), transparent),
+    radial-gradient(1px 1px at 75% 85%, var(--ph-cream), transparent),
+    radial-gradient(1px 1px at 90% 15%, var(--ph-honey), transparent); }
+  .ph-trust__inner { position: relative; }
+  .ph-trust__head { max-width: 720px; margin-bottom: 72px; }
+  .ph-trust__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  @media (max-width: 900px) { .ph-trust__grid { grid-template-columns: 1fr; gap: 40px; } }
+  .ph-trust__item { border-top: 1px solid rgba(244, 185, 66, 0.3); padding-top: 28px; }
+  .ph-trust__item h3 { font-family: var(--ph-font-display); font-size: 26px; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.005em; color: var(--ph-cream); }
+  .ph-trust__item p { color: rgba(255, 248, 236, 0.72); font-size: 15px; line-height: 1.6; margin: 0; }
+  .ph-trust__item em { color: var(--ph-honey); font-style: italic; }
+</style>
+
+<section class="ph-section ph-section--plum ph-trust">
+  <div class="ph-trust__stars"></div>
+  <div class="ph-inner ph-trust__inner">
+    <div class="ph-trust__head">
+      {% if section.settings.eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h2 class="ph-display" style="font-size: clamp(36px, 5vw, 64px);">{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="ph-trust__grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'promise' %}
+          <div class="ph-trust__item" {{ block.shopify_attributes }}>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · Trust",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our promises" },
+    { "type": "textarea", "id": "heading", "label": "Heading (supports <em>)", "default": "Made <em>like a gift</em>. Built to be kept." }
+  ],
+  "blocks": [
+    {
+      "type": "promise",
+      "name": "Promise",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "text", "label": "Text (supports <em>)" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "Livrome · Trust",
+      "blocks": [
+        { "type": "promise", "settings": { "title": "Privacy, guaranteed", "text": "Photos are <em>encrypted</em>, used only for your book, then deleted within 30 days. Fully compliant with Quebec Law 25 and GDPR." } },
+        { "type": "promise", "settings": { "title": "Love it or it's on us", "text": "If the book doesn't move you, we'll <em>replace it or refund you</em>. No fine print, no return shipping fees." } },
+        { "type": "promise", "settings": { "title": "Archive-quality print", "text": "FSC paper 170 g/m², sewn hardcover, printed locally in Quebec. <em>Built to last generations.</em>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

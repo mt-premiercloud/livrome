@@ -1,210 +1,119 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero": {
+      "type": "livrome-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Image banner",
-            "heading_size": "h0"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "Give customers details about the banner image(s) or content on the template.",
-            "text_style": "body"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
+        "s1": { "type": "stat", "settings": { "number": "3 min", "label": "to create a preview" } },
+        "s2": { "type": "stat", "settings": { "number": "24 pages", "label": "hand-written story" } },
+        "s3": { "type": "stat", "settings": { "number": "5–8 days", "label": "printed & delivered in Canada" } }
       },
-      "block_order": [
-        "heading",
-        "text",
-        "button"
-      ],
+      "block_order": ["s1", "s2", "s3"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "eyebrow": "Personalized books, printed in Quebec",
+        "heading": "Make your child <em>the hero</em> of their own story.",
+        "lede": "A beautifully bound keepsake where the child you love becomes the main character — no subscription, no recurring charge, just one book made for them.",
+        "cta_primary_label": "Create your free preview",
+        "cta_primary_link": "https://preview.livrome.com/preview/start?book=book-01",
+        "cta_secondary_label": "Browse the library",
+        "cta_secondary_link": "/collections/all",
+        "caption": "Three minutes to make. A lifetime to keep.",
+        "tag_label": "This month's story",
+        "note": "Printed in Quebec. Free shipping over $75 CAD."
       }
     },
-    "rich_text": {
-      "type": "rich-text",
+    "library": {
+      "type": "livrome-library",
       "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h1"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
-          }
-        }
+        "f1": { "type": "filter", "settings": { "label": "All" } },
+        "f2": { "type": "filter", "settings": { "label": "Bedtime" } },
+        "f3": { "type": "filter", "settings": { "label": "Adventure" } },
+        "f4": { "type": "filter", "settings": { "label": "Emotions" } },
+        "f5": { "type": "filter", "settings": { "label": "Family" } }
       },
-      "block_order": [
-        "heading",
-        "text"
-      ],
+      "block_order": ["f1", "f2", "f3", "f4", "f5"],
       "settings": {
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 0
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "collection": "all",
+        "eyebrow": "The library",
+        "heading": "Choose your story",
+        "lede": "Eight original tales, written by our authors, for every age and every night.",
         "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "show_view_all": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "columns_mobile": "2",
-        "padding_top": 28,
-        "padding_bottom": 36
+        "cta_link": "/pages/coming-soon"
       }
     },
-    "collage": {
-      "type": "collage",
+    "how": {
+      "type": "livrome-how",
       "blocks": {
-        "collection-0": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "product": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "second_image": false
-          }
-        },
-        "collection-1": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        }
+        "step1": { "type": "step", "settings": { "title": "Choose a story", "text": "Browse our library and find the world that feels like them — bedtime, adventure, emotions, courage, family." } },
+        "step2": { "type": "step", "settings": { "title": "Add a photo", "text": "One clear photo of your child. Our illustrator adapts each page to their face and skin tone — never uncanny, always faithful." } },
+        "step3": { "type": "step", "settings": { "title": "Receive the book", "text": "Printed with care in Quebec on FSC-certified paper. On your doorstep in 5 to 8 business days." } }
       },
-      "block_order": [
-        "collection-0",
-        "product",
-        "collection-1"
-      ],
+      "block_order": ["step1", "step2", "step3"],
       "settings": {
-        "heading": "Multimedia collage",
-        "heading_size": "h2",
-        "desktop_layout": "left",
-        "mobile_layout": "collage",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "eyebrow": "How it works",
+        "heading": "Three steps to the book.",
+        "lede": "A few minutes to create. Delivered in days. Kept for a lifetime.",
+        "aside_eyebrow": "Starts at",
+        "aside_heading": "$29 CAD",
+        "aside_text": "Hardcover, 24 pages, 21×21 cm. Free shipping in Canada over $75. One-time purchase — no subscription.",
+        "aside_cta_label": "Start your book",
+        "aside_cta_link": "https://preview.livrome.com/preview/start?book=book-01"
       }
     },
-    "video": {
-      "type": "video",
-      "settings": {
-        "heading": "",
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "heading_size": "h1",
-        "description": "",
-        "full_width": false,
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "multicolumn": {
-      "type": "multicolumn",
+    "voices": {
+      "type": "livrome-voices",
       "blocks": {
-        "column1": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column2": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column3": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
+        "v1": { "type": "voice", "settings": { "quote": "My daughter sleeps with this book. She introduces it to her friends as 'her own book.' I've never seen anything like it.", "name": "Camille", "role": "Mom of Léa, 5 · Montréal" } },
+        "v2": { "type": "voice", "settings": { "quote": "Arrived before Christmas, beautifully packaged, quality worthy of an indie publisher. My grandson was speechless.", "name": "Jean-Paul", "role": "Grandfather · Québec City" } },
+        "v3": { "type": "voice", "settings": { "quote": "As a parent I was wary of AI. But this is done with taste. The illustration is faithful, not uncanny.", "name": "Sarah", "role": "Mom of Noah, 4 · Toronto" } }
       },
-      "block_order": [
-        "column1",
-        "column2",
-        "column3"
-      ],
+      "block_order": ["v1", "v2", "v3"],
       "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_mobile": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "eyebrow": "Voices",
+        "heading": "What families write to us."
+      }
+    },
+    "trust": {
+      "type": "livrome-trust",
+      "blocks": {
+        "p1": { "type": "promise", "settings": { "title": "Privacy, guaranteed", "text": "Photos are <em>encrypted</em>, used only for your book, then deleted within 30 days. Fully compliant with Quebec Law 25 and GDPR." } },
+        "p2": { "type": "promise", "settings": { "title": "Love it or it's on us", "text": "If the book doesn't move you, we'll <em>replace it or refund you</em>. No fine print, no return shipping fees." } },
+        "p3": { "type": "promise", "settings": { "title": "Archive-quality print", "text": "FSC paper 170 g/m², sewn hardcover, printed locally in Quebec. <em>Built to last generations.</em>" } }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {
+        "eyebrow": "Our promises",
+        "heading": "Made <em>like a gift</em>. Built to be kept."
+      }
+    },
+    "faq": {
+      "type": "livrome-faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "What do you do with my child's photo?", "answer": "It's used only to create your book, kept encrypted, and deleted within 30 days — or instantly on request from your account. We never share photos, never train models on them, never use them for anything else." } },
+        "q2": { "type": "qa", "settings": { "question": "How long does delivery take?", "answer": "5–8 business days in Canada, 7–12 days to the US and Europe. Printing takes 48 hours once you've confirmed your preview." } },
+        "q3": { "type": "qa", "settings": { "question": "Are the books available in French?", "answer": "Yes — every story is hand-written in both French (Quebec variant) and English. You choose the language when you create the book." } },
+        "q4": { "type": "qa", "settings": { "question": "What if I don't love the final book?", "answer": "We'll replace it or refund you. No fine print, no return shipping fees. We only ship books we'd be proud to keep ourselves." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": {
+        "eyebrow": "Frequently asked",
+        "heading": "Parents often ask…",
+        "lede": "A short list of the questions we hear most. Can't find yours? Email us directly.",
+        "cta_label": "See all questions",
+        "cta_link": "/pages/faq"
+      }
+    },
+    "final_cta": {
+      "type": "livrome-final-cta",
+      "settings": {
+        "script": "P.S. —",
+        "heading": "Their next favorite story. The one where <em>they're the hero</em>.",
+        "lede": "No card required. No commitment. Just three minutes and a photo.",
+        "cta_primary_label": "Create my preview",
+        "cta_primary_link": "https://preview.livrome.com/preview/start?book=book-01",
+        "cta_secondary_label": "Browse the library",
+        "cta_secondary_link": "/collections/all",
+        "meta": "Free until you order · Printed in Quebec · Shipped across <em>Canada</em>"
       }
     }
   },
-  "order": [
-    "image_banner",
-    "rich_text",
-    "featured_collection",
-    "collage",
-    "video",
-    "multicolumn"
-  ]
+  "order": ["hero", "library", "how", "voices", "trust", "faq", "final_cta"]
 }

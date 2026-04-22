@@ -1,0 +1,87 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-how__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+  @media (max-width: 900px) { .ph-how__grid { grid-template-columns: 1fr; } }
+  .ph-how__steps { list-style: none; padding: 0; margin: 40px 0 0; display: flex; flex-direction: column; gap: 32px; }
+  .ph-how__step { display: grid; grid-template-columns: 56px 1fr; gap: 24px; align-items: start; }
+  .ph-how__num { width: 56px; height: 56px; border-radius: 999px; background: var(--ph-plum); color: var(--ph-cream); display: flex; align-items: center; justify-content: center; font-family: var(--ph-font-display); font-size: 22px; font-style: italic; }
+  .ph-how__step h3 { font-family: var(--ph-font-display); font-size: 22px; font-weight: 500; margin: 10px 0 8px; letter-spacing: -0.01em; }
+  .ph-how__step p { margin: 0; color: var(--ph-ink-60); font-size: 15px; line-height: 1.55; }
+  .ph-how__aside { background: var(--ph-plum-deep); color: var(--ph-cream); padding: 48px; border-radius: 8px; position: sticky; top: 24px; }
+  .ph-how__aside .ph-eyebrow { color: var(--ph-honey); margin-bottom: 20px; }
+  .ph-how__aside h3 { font-family: var(--ph-font-display); font-size: 32px; font-weight: 400; margin: 0 0 16px; line-height: 1.1; letter-spacing: -0.01em; }
+  .ph-how__aside p { color: rgba(255, 248, 236, 0.75); font-size: 15px; line-height: 1.6; margin: 0 0 28px; }
+</style>
+
+<section class="ph-section ph-section--cream">
+  <div class="ph-inner">
+    <div style="max-width: 640px; margin-bottom: 56px;">
+      {% if section.settings.eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h2 class="ph-title">{{ section.settings.heading }}</h2>
+      {% if section.settings.lede != blank %}<p class="ph-lede">{{ section.settings.lede }}</p>{% endif %}
+    </div>
+
+    <div class="ph-how__grid">
+      <ol class="ph-how__steps">
+        {% for block in section.blocks %}
+          {% if block.type == 'step' %}
+            <li class="ph-how__step" {{ block.shopify_attributes }}>
+              <span class="ph-how__num">{{ forloop.index }}</span>
+              <div>
+                <h3>{{ block.settings.title }}</h3>
+                <p>{{ block.settings.text }}</p>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+
+      <aside class="ph-how__aside">
+        {% if section.settings.aside_eyebrow != blank %}<p class="ph-eyebrow">{{ section.settings.aside_eyebrow }}</p>{% endif %}
+        <h3>{{ section.settings.aside_heading }}</h3>
+        <p>{{ section.settings.aside_text }}</p>
+        {% if section.settings.aside_cta_label != blank %}
+          <a href="{{ section.settings.aside_cta_link | default: '#' }}" class="ph-btn">{{ section.settings.aside_cta_label }} →</a>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · How it works",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it works" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Three steps to the book." },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "A few minutes to create. Delivered in days. Kept for a lifetime." },
+    { "type": "header", "content": "Aside card" },
+    { "type": "text", "id": "aside_eyebrow", "label": "Aside eyebrow", "default": "Starts at" },
+    { "type": "text", "id": "aside_heading", "label": "Aside heading", "default": "$29 CAD" },
+    { "type": "textarea", "id": "aside_text", "label": "Aside text", "default": "Hardcover, 24 pages, 21×21 cm. Free shipping in Canada over $75. One-time purchase — no subscription." },
+    { "type": "text", "id": "aside_cta_label", "label": "Aside CTA label", "default": "Start your book" },
+    { "type": "url", "id": "aside_cta_link", "label": "Aside CTA link", "info": "Point to https://preview.livrome.com/preview/start?book=book-01" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "text", "label": "Description" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    { "name": "Livrome · How it works",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Choose a story", "text": "Browse our library and find the world that feels like them — bedtime, adventure, emotions, courage, family." } },
+        { "type": "step", "settings": { "title": "Add a photo", "text": "One clear photo of your child. Our illustrator adapts each page to their face and skin tone — never uncanny, always faithful." } },
+        { "type": "step", "settings": { "title": "Receive the book", "text": "Printed with care in Quebec on FSC-certified paper. On your doorstep in 5 to 8 business days." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

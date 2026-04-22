@@ -1,0 +1,131 @@
+/* Livrome design tokens
+ * Palette matches UI/tokens.css (source of truth for the Next.js preview app).
+ * CSS classes use the .ph-* prefix (legacy from "PetitsHeros" working name) so
+ * the Shopify theme and the Next.js app share primitives without divergence.
+ * Scoped to .ph-* so Dawn's default styles are untouched.
+ */
+
+:root {
+  /* Brand */
+  --ph-plum: #5B2A6F;
+  --ph-plum-deep: #3F1C4F;
+  --ph-plum-soft: #7B4A8E;
+  --ph-cream: #FFF8EC;
+  --ph-cream-deep: #F5ECD9;
+  --ph-paper: #FBF7EE;
+  --ph-honey: #F4B942;
+  --ph-honey-deep: #D99A25;
+  --ph-sage: #8FB996;
+  --ph-sage-deep: #6B9072;
+  --ph-rose: #E8B4B8;
+  --ph-rose-deep: #C98A8F;
+
+  /* Neutrals */
+  --ph-ink: #1E1A17;
+  --ph-ink-60: rgba(30, 26, 23, 0.6);
+  --ph-ink-40: rgba(30, 26, 23, 0.4);
+  --ph-ink-15: rgba(30, 26, 23, 0.15);
+  --ph-ink-08: rgba(30, 26, 23, 0.08);
+  --ph-graphite: #4E453E;
+
+  /* Typography */
+  --ph-font-display: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
+  --ph-font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --ph-font-script: 'Caveat', 'Bradley Hand', cursive;
+
+  /* Layout */
+  --ph-max: 1280px;
+  --ph-gutter: clamp(20px, 4vw, 48px);
+}
+
+.ph-section {
+  font-family: var(--ph-font-body);
+  color: var(--ph-ink);
+  padding: clamp(64px, 9vw, 120px) var(--ph-gutter);
+  box-sizing: border-box;
+}
+.ph-section--cream { background: var(--ph-cream); }
+.ph-section--cream-deep { background: var(--ph-cream-deep); }
+.ph-section--paper { background: var(--ph-paper); }
+.ph-section--plum { background: var(--ph-plum-deep); color: var(--ph-cream); }
+
+.ph-inner { max-width: var(--ph-max); margin: 0 auto; }
+
+.ph-eyebrow {
+  font-family: var(--ph-font-body);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ph-honey-deep);
+  margin: 0 0 16px;
+}
+.ph-section--plum .ph-eyebrow { color: var(--ph-honey); }
+
+.ph-display {
+  font-family: var(--ph-font-display);
+  font-weight: 400;
+  font-size: clamp(40px, 6.2vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.ph-display em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ph-plum);
+}
+.ph-section--plum .ph-display em { color: var(--ph-honey); }
+
+.ph-title {
+  font-family: var(--ph-font-display);
+  font-weight: 400;
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  margin: 0 0 24px;
+  text-wrap: balance;
+}
+.ph-title em { font-style: italic; color: var(--ph-plum); }
+
+.ph-lede {
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.55;
+  color: var(--ph-ink-60);
+  max-width: 54ch;
+  margin: 0 0 32px;
+}
+.ph-section--plum .ph-lede { color: rgba(255, 248, 236, 0.75); }
+
+.ph-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  font-family: var(--ph-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 999px;
+  border: 0;
+  background: var(--ph-honey);
+  color: var(--ph-ink);
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(244, 185, 66, 0.32);
+}
+.ph-btn:hover { transform: translateY(-1px); background: var(--ph-honey-deep); }
+.ph-btn--ghost { background: transparent; color: var(--ph-plum); box-shadow: inset 0 0 0 1.5px var(--ph-plum); }
+.ph-btn--ghost:hover { background: var(--ph-plum); color: var(--ph-cream); }
+.ph-section--plum .ph-btn { background: var(--ph-honey); color: var(--ph-plum-deep); }
+.ph-section--plum .ph-btn:hover { background: var(--ph-cream); color: var(--ph-plum-deep); }
+.ph-section--plum .ph-btn--ghost { background: transparent; color: var(--ph-cream); box-shadow: inset 0 0 0 1.5px var(--ph-cream); }
+.ph-section--plum .ph-btn--ghost:hover { background: var(--ph-cream); color: var(--ph-plum-deep); }
+
+.ph-script {
+  font-family: var(--ph-font-script);
+  font-weight: 500;
+  color: var(--ph-honey-deep);
+  font-size: 1.15em;
+}

@@ -1,0 +1,48 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-final { text-align: center; }
+  .ph-final__card { background: var(--ph-cream-deep); padding: clamp(56px, 9vw, 112px) clamp(32px, 6vw, 96px); border-radius: 8px; max-width: 960px; margin: 0 auto; position: relative; }
+  .ph-final__script { display: block; font-family: var(--ph-font-script); font-size: clamp(24px, 3vw, 36px); color: var(--ph-honey-deep); margin-bottom: 20px; }
+  .ph-final__card .ph-display { font-size: clamp(36px, 5.5vw, 72px); margin-bottom: 20px; }
+  .ph-final__card .ph-lede { margin: 0 auto 36px; }
+  .ph-final__ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .ph-final__meta { margin-top: 28px; font-size: 13px; color: var(--ph-ink-60); letter-spacing: 0.02em; }
+  .ph-final__meta em { color: var(--ph-plum); font-style: italic; }
+</style>
+
+<section class="ph-section ph-section--cream ph-final">
+  <div class="ph-inner">
+    <div class="ph-final__card">
+      {% if section.settings.script != blank %}<span class="ph-final__script">{{ section.settings.script }}</span>{% endif %}
+      <h2 class="ph-display">{{ section.settings.heading }}</h2>
+      {% if section.settings.lede != blank %}<p class="ph-lede">{{ section.settings.lede }}</p>{% endif %}
+      <div class="ph-final__ctas">
+        {% if section.settings.cta_primary_label != blank %}
+          <a href="{{ section.settings.cta_primary_link | default: '#' }}" class="ph-btn">{{ section.settings.cta_primary_label }} →</a>
+        {% endif %}
+        {% if section.settings.cta_secondary_label != blank %}
+          <a href="{{ section.settings.cta_secondary_link | default: '/collections/all' }}" class="ph-btn ph-btn--ghost">{{ section.settings.cta_secondary_label }}</a>
+        {% endif %}
+      </div>
+      {% if section.settings.meta != blank %}<p class="ph-final__meta">{{ section.settings.meta }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · Final CTA",
+  "settings": [
+    { "type": "text", "id": "script", "label": "Script accent", "default": "P.S. —" },
+    { "type": "textarea", "id": "heading", "label": "Heading (supports <em>)", "default": "Their next favorite story. The one where <em>they're the hero</em>." },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "No card required. No commitment. Just three minutes and a photo." },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary CTA", "default": "Create my preview" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary CTA link", "info": "Point to https://preview.livrome.com/preview/start?book=book-01" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA", "default": "Browse the library" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary CTA link" },
+    { "type": "text", "id": "meta", "label": "Meta line", "default": "Free until you order · Printed in Quebec · Shipped across <em>Canada</em>" }
+  ],
+  "presets": [{ "name": "Livrome · Final CTA" }]
+}
+{% endschema %}

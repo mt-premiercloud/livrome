@@ -1,0 +1,107 @@
+{{ 'livrome-tokens.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .ph-hero { position: relative; overflow: hidden; padding-top: clamp(80px, 10vw, 140px); padding-bottom: clamp(80px, 10vw, 140px); }
+  .ph-hero__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  @media (max-width: 900px) { .ph-hero__grid { grid-template-columns: 1fr; } }
+  .ph-hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .ph-hero__caption { margin-top: 24px; font-family: var(--ph-font-script); color: var(--ph-honey-deep); font-size: 22px; }
+  .ph-hero__meta { display: flex; gap: 32px; margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--ph-ink-15); flex-wrap: wrap; }
+  .ph-hero__stat { font-size: 13px; color: var(--ph-ink-60); letter-spacing: 0.04em; }
+  .ph-hero__stat strong { display: block; font-family: var(--ph-font-display); font-size: 28px; color: var(--ph-ink); font-weight: 400; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .ph-hero__media { position: relative; aspect-ratio: 4/5; border-radius: 4px; overflow: hidden; background: var(--ph-cream-deep); box-shadow: 0 20px 48px rgba(42, 20, 58, 0.12); }
+  .ph-hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph-hero__placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--ph-ink-40); font-family: var(--ph-font-display); font-style: italic; padding: 32px; text-align: center; }
+  .ph-hero__tag { position: absolute; top: 24px; left: 24px; background: var(--ph-paper); padding: 8px 16px; border-radius: 999px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-plum); font-weight: 600; }
+  .ph-hero__note { position: absolute; bottom: 24px; right: 24px; max-width: 220px; background: var(--ph-ink); color: var(--ph-cream); padding: 14px 18px; border-radius: 4px; font-size: 13px; line-height: 1.4; font-family: var(--ph-font-script); font-size: 17px; }
+</style>
+
+<section class="ph-section ph-section--cream ph-hero">
+  <div class="ph-inner ph-hero__grid">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="ph-eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h1 class="ph-display">{{ section.settings.heading }}</h1>
+      {% if section.settings.lede != blank %}
+        <p class="ph-lede" style="margin-top: 32px;">{{ section.settings.lede }}</p>
+      {% endif %}
+      <div class="ph-hero__ctas">
+        {% if section.settings.cta_primary_label != blank %}
+          <a href="{{ section.settings.cta_primary_link | default: '#' }}" class="ph-btn">{{ section.settings.cta_primary_label }} →</a>
+        {% endif %}
+        {% if section.settings.cta_secondary_label != blank %}
+          <a href="{{ section.settings.cta_secondary_link | default: '/collections/all' }}" class="ph-btn ph-btn--ghost">{{ section.settings.cta_secondary_label }}</a>
+        {% endif %}
+      </div>
+      {% if section.settings.caption != blank %}
+        <p class="ph-hero__caption">{{ section.settings.caption }}</p>
+      {% endif %}
+
+      <div class="ph-hero__meta">
+        {% for block in section.blocks %}
+          {% if block.type == 'stat' %}
+            <div class="ph-hero__stat" {{ block.shopify_attributes }}>
+              <strong>{{ block.settings.number }}</strong>
+              {{ block.settings.label }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="ph-hero__media">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '600, 900, 1200' }}
+      {% else %}
+        <div class="ph-hero__placeholder">Upload a hero image of an opened personalized book</div>
+      {% endif %}
+      {% if section.settings.tag_label != blank %}
+        <span class="ph-hero__tag">{{ section.settings.tag_label }}</span>
+      {% endif %}
+      {% if section.settings.note != blank %}
+        <div class="ph-hero__note">{{ section.settings.note }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Livrome · Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Personalized books, printed in Quebec" },
+    { "type": "textarea", "id": "heading", "label": "Heading (use <em>word</em> for accent)", "default": "Make your child <em>the hero</em> of their own story." },
+    { "type": "textarea", "id": "lede", "label": "Supporting text", "default": "A beautifully bound keepsake where the child you love becomes the main character." },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary CTA label", "default": "Create your free preview" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary CTA link", "info": "Point to https://preview.livrome.com/preview/start?book=book-01" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary CTA label", "default": "Browse the library" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary CTA link" },
+    { "type": "text", "id": "caption", "label": "Handwritten caption", "default": "Three minutes to make. A lifetime to keep." },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "tag_label", "label": "Image tag", "default": "This month's story" },
+    { "type": "textarea", "id": "note", "label": "Image note", "default": "Printed in Quebec. Free shipping over $75 CAD." }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "3 min" },
+        { "type": "text", "id": "label", "label": "Label", "default": "to create a preview" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    { "name": "Livrome · Hero",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "3 min", "label": "to create a preview" } },
+        { "type": "stat", "settings": { "number": "24 pages", "label": "hand-written story" } },
+        { "type": "stat", "settings": { "number": "5–8 days", "label": "printed & delivered in Canada" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
