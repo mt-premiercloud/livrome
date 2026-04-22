@@ -1,8 +1,9 @@
 # Livrome — Progress Tracker
 
-**Last updated**: 2026-04-22 (S2 in progress — Phase 1+2 theme work committed, waiting on user admin actions)
-**Current session**: S2 — Shopify storefront structure (in progress)
-**Next action**: User admin actions (see "S2 pending admin actions" below). Once done, I verify all URLs + advance S2 → done.
+**Last updated**: 2026-04-22 (S2+S3 theme work committed, waiting on user admin actions)
+**Current session**: S2 + S3 (theme-side complete, admin blockers)
+**Next action**: User admin actions (see below). Once done, I verify all URLs + mark S2 + S3 done.
+**Upload this zip now**: `C:\Users\Titouza\Documents\petit hero\livrome-v1-4.zip` (supersedes v1-3 — includes cookie banner, JSON-LD, GA4 hook).
 
 **S1 complete**: theme live on `petithero.myshopify.com` (theme_id `158897996027`), homepage + 7 livrome-* sections + Dawn header/footer. Handle rename deferred. Password removed (store currently public).
 
@@ -10,7 +11,7 @@
 
 All at https://admin.shopify.com/store/petithero. Estimated 10 minutes total.
 
-1. **Themes** → Add theme → Upload zip `C:\Users\Titouza\Documents\petit hero\livrome-v1-3.zip` → Rename "Livrome V1.3" → **Publish**.
+1. **Themes** → Add theme → Upload zip `C:\Users\Titouza\Documents\petit hero\livrome-v1-4.zip` → Rename "Livrome V1.4" → **Publish**.
 2. **Products** → "Léo and the Stars" (ACTIVE, GID `9294699364603`, variants Hardcover $29 / Paperback $22) → right panel **Sales channels and apps** → tick **Online Store** → Save. (Fixes `/products/leo-and-the-stars` 404.)
 3. **Pages** → Add 4 pages (title / handle / template / content): FAQ — `faq` — `page.faq` — empty · Coming Soon — `coming-soon` — `page.coming-soon` — empty · About — `about` — `page.about` — empty · Track Order — `track-order` — `page.track-order` — empty. Save all as Visible.
 4. **Settings → Policies** → paste each HTML file from `content/policies/` into its policy: `privacy-policy.html` → Privacy Policy · `terms-of-service.html` → Terms of Service · `refund-policy.html` → Refund Policy · `shipping-policy.html` → Shipping Policy. Save.
@@ -27,7 +28,7 @@ Optional (S3): configure main-menu (Navigation → Main menu) with "The Library"
 |---|------|--------|-------|
 | S1 | Repo foundations & docs | 🟢 done | Non-MCP portion ✅ (dirs, docs, git init, commits `00d021f`, `bfaaa9c`, `85f55c8`, `9c8bbd5`, `a22fd03`). Homepage Liquid port ✅ (commit `700740c` — 7 livrome-* sections + tokens + index.json + layout). Theme uploaded as draft "Livrome V1" (theme_id `158897996027`) via ZIP upload (Shopify CLI device-code auth failed; ZIP upload via admin UI worked). Handle rename `petithero → livrome` **deferred** — Shopify's `.myshopify.com` rename is one-time-lifetime and forces MCP reinstall; customers will see `livrome.com` via custom domain in S18, so the internal handle stays `petithero` (cosmetic-only). |
 | S2 | Shopify storefront structure | 🟡 in_progress | Theme side done (commits `e4256c0`, `da9a6df`): `page.faq`, `page.coming-soon`, `page.about`, `page.track-order` templates + livrome-about/track-order/404 sections. Book #1 "Léo and the Stars" product created via MCP (GID `9294699364603`, ACTIVE, Hardcover $29 / Paperback $22) — needs sales-channel tick. 4 legal-policy HTML drafts in `content/policies/`. EN-only for now; FR-CA pass deferred to S3. Remaining: user uploads v1-3 zip + publishes; ticks product sales channel; creates 4 admin page records; pastes 4 policies. Nav menu deferred to S3. |
-| S3 | Shopify polish & ops | ⚪ pending | Banner, cookie, emails, discounts, SEO, analytics. |
+| S3 | Shopify polish & ops | 🟡 in_progress | Theme side done: announcement bar Livrome copy, cookie banner + preferences modal (Law 25/GDPR compliant, consent-gated), JSON-LD structured data (Organization + WebSite + Product + FAQPage + BreadcrumbList), GA4 loader with consent defaults + update hooks. `config/settings_schema.json` adds "Livrome · Analytics & compliance" panel with GA4 ID + cookie-banner string overrides. `docs/DISCOUNTS.md` drafts 3 discount programs (welcome 10%, gift bundle, seasonal). Remaining: user creates discount codes in admin, sets GA4 ID in Theme editor, customizes email notifications (deferred to S15 with Klaviyo). |
 | S4 | Next.js scaffolding | ⚪ pending | Next.js 15 + TS + Tailwind + Shadcn, tokens import, 7 route stubs. |
 | S5 | Steps 1 & 2 UI | ⚪ pending | Welcome + child details. |
 | S6 | Steps 3 & 4 UI | ⚪ pending | Photo upload + face detect + generation loading. |

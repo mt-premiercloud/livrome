@@ -27,6 +27,8 @@
     {% endif %}
 
     {% render 'meta-tags' %}
+    {% render 'livrome-json-ld' %}
+    {% render 'livrome-analytics' %}
 
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
@@ -376,5 +378,7 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {% render 'livrome-cookie-banner' %}
   </body>
 </html>

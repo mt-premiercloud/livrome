@@ -1451,5 +1451,78 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Livrome · Analytics & compliance",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Google Analytics 4"
+      },
+      {
+        "type": "text",
+        "id": "ga4_measurement_id",
+        "label": "GA4 Measurement ID",
+        "info": "e.g. G-XXXXXXXXXX. Leave blank to skip GA4. Consent-gated via the cookie banner."
+      },
+      {
+        "type": "header",
+        "content": "Cookie banner"
+      },
+      {
+        "type": "textarea",
+        "id": "cookie_banner_text",
+        "label": "Banner text",
+        "default": "We use a few cookies to keep your cart working, and — with your permission — to see how parents use the site. You decide what's on."
+      },
+      {
+        "type": "text",
+        "id": "cookie_banner_link_label",
+        "label": "Privacy link label",
+        "default": "Read our privacy policy"
+      },
+      {
+        "type": "text",
+        "id": "cookie_btn_accept",
+        "label": "Accept all button",
+        "default": "Accept all"
+      },
+      {
+        "type": "text",
+        "id": "cookie_btn_essential",
+        "label": "Essential-only button",
+        "default": "Essential only"
+      },
+      {
+        "type": "text",
+        "id": "cookie_btn_customize",
+        "label": "Customize button",
+        "default": "Customize"
+      },
+      {
+        "type": "text",
+        "id": "cookie_modal_title",
+        "label": "Modal title",
+        "default": "Your cookie preferences"
+      },
+      {
+        "type": "textarea",
+        "id": "cookie_modal_lede",
+        "label": "Modal supporting text",
+        "default": "Three categories, honestly named. You can change your mind any time from the footer."
+      },
+      {
+        "type": "text",
+        "id": "cookie_modal_save",
+        "label": "Modal save label",
+        "default": "Save preferences"
+      },
+      {
+        "type": "text",
+        "id": "cookie_modal_cancel",
+        "label": "Modal cancel label",
+        "default": "Cancel"
+      }
+    ]
   }
 ]

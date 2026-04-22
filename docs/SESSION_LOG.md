@@ -4,6 +4,28 @@ Running log of each build session. Most recent at top.
 
 ---
 
+## S3 — Polish & ops, theme side (2026-04-22, in progress)
+
+**Objective**: cookie banner, SEO structured data, analytics hook, brand-accurate announcement bar, discount spec.
+
+**Delivered this turn**:
+- `snippets/livrome-cookie-banner.liquid` + `assets/livrome-cookie-consent.js`: fixed-bottom banner (3 buttons: Accept all / Essential only / Customize) + accessible modal with Essential/Analytics/Marketing toggles. Persists to `ph_consent` cookie (365-day TTL). Exposes `window.phConsent.get('analytics')` and fires `ph:consent` CustomEvent on save. Dark plum-on-cream banner, honey CTA, follows Livrome tokens.
+- `snippets/livrome-json-ld.liquid`: emits Organization + WebSite (with SearchAction) on every page, Product on PDPs, FAQPage on `/pages/faq`, BreadcrumbList on product/collection/article/page. Rendered in `<head>` right after `meta-tags`.
+- `snippets/livrome-analytics.liquid`: GA4 loader with `gtag('consent','default', …all denied)` up front, then reads `ph_consent` cookie and calls `gtag('consent','update', …)` if user opted in. No-op when `settings.ga4_measurement_id` is blank.
+- `sections/header-group.json`: announcement bar default text now "Free shipping in Canada over $75 CAD · Printed locally in Quebec" (was Dawn's "Welcome to our store").
+- `config/settings_schema.json`: new "Livrome · Analytics & compliance" panel with GA4 ID + 10 cookie-banner string overrides so the copy is editable from Theme editor.
+- `docs/DISCOUNTS.md`: spec for `WELCOME10` (10% newsletter), gift bundle (buy 2 save $10), referral (deferred), seasonal campaigns. Includes stacking rules and metrics targets.
+
+**Not delivered / deferred**:
+- Email notification styling (order confirmation, shipping, refund, abandoned checkout) — ~25 templates in Shopify admin. Deferred to S15 when Klaviyo is wired.
+- Actual discount codes in admin — user creates from `DISCOUNTS.md` spec.
+- GA4 Measurement ID — user pastes into Theme editor after creating the GA4 property.
+- Robots.txt — Shopify's default is fine at this stage; revisit at S18 launch.
+
+**Build artifact**: `livrome-v1-4.zip` (370 entries, 1.04 MB). Supersedes v1-3.
+
+---
+
 ## S2 — Storefront structure, Phase 1+2 theme side (2026-04-22, in progress)
 
 **Objective**: create FAQ, About, Coming Soon, Track Order pages; refresh 404; add Book #1 product; draft legal policies.

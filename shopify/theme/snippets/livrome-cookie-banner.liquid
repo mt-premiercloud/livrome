@@ -1,0 +1,91 @@
+{% comment %}
+  Livrome cookie consent banner + preferences modal.
+  Toggle via settings.cookie_banner_enabled. Strings via settings.cookie_* keys.
+{% endcomment %}
+
+<style>
+  .ph-cookie { position: fixed; left: 24px; right: 24px; bottom: 24px; z-index: 9998; background: var(--ph-ink); color: var(--ph-cream); padding: 20px 24px; border-radius: 6px; box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25); display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; max-width: 1100px; margin: 0 auto; font-family: var(--ph-font-body); }
+  @media (max-width: 720px) { .ph-cookie { grid-template-columns: 1fr; padding: 18px 20px; left: 12px; right: 12px; bottom: 12px; } }
+  .ph-cookie[hidden] { display: none; }
+  .ph-cookie__body p { margin: 0; font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.85); }
+  .ph-cookie__body a { color: var(--ph-honey); text-decoration: underline; }
+  .ph-cookie__actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .ph-cookie__btn { font-family: inherit; font-size: 13px; padding: 10px 16px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; background: transparent; color: inherit; letter-spacing: 0.02em; transition: all 0.15s; }
+  .ph-cookie__btn:hover { background: rgba(255, 255, 255, 0.1); }
+  .ph-cookie__btn--primary { background: var(--ph-honey); color: var(--ph-plum-deep); font-weight: 600; border-color: var(--ph-honey); }
+  .ph-cookie__btn--primary:hover { background: var(--ph-honey-deep); color: var(--ph-cream); border-color: var(--ph-honey-deep); }
+  .ph-cookie__btn--ghost { border-color: rgba(255, 255, 255, 0.3); }
+
+  .ph-cookie-modal { position: fixed; inset: 0; z-index: 9999; background: rgba(42, 20, 58, 0.7); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .ph-cookie-modal[hidden] { display: none; }
+  .ph-cookie-modal__card { background: var(--ph-paper); color: var(--ph-ink); max-width: 540px; width: 100%; border-radius: 8px; padding: 32px; box-shadow: 0 40px 80px rgba(42, 20, 58, 0.35); font-family: var(--ph-font-body); max-height: calc(100vh - 48px); overflow-y: auto; }
+  .ph-cookie-modal__title { font-family: var(--ph-font-display); font-size: 28px; font-weight: 500; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .ph-cookie-modal__lede { font-size: 14px; line-height: 1.6; color: var(--ph-ink-70); margin: 0 0 24px; }
+  .ph-cookie-modal__option { padding: 18px 0; border-top: 1px solid var(--ph-ink-15); display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: start; }
+  .ph-cookie-modal__option:first-of-type { border-top: 0; }
+  .ph-cookie-modal__option-title { font-family: var(--ph-font-display); font-size: 17px; font-weight: 500; margin: 0 0 6px; }
+  .ph-cookie-modal__option-text { font-size: 13px; color: var(--ph-ink-60); line-height: 1.55; margin: 0; }
+  .ph-cookie-modal__pill { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-ink-60); padding: 3px 8px; border: 1px solid var(--ph-ink-15); border-radius: 99px; }
+  .ph-cookie-modal__switch { display: inline-flex; align-items: center; gap: 0; cursor: pointer; user-select: none; position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .ph-cookie-modal__switch input { position: absolute; opacity: 0; pointer-events: none; }
+  .ph-cookie-modal__track { position: absolute; inset: 0; background: var(--ph-ink-15); border-radius: 99px; transition: background 0.2s; }
+  .ph-cookie-modal__track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; background: var(--ph-paper); border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+  .ph-cookie-modal__switch input:checked + .ph-cookie-modal__track { background: var(--ph-plum); }
+  .ph-cookie-modal__switch input:checked + .ph-cookie-modal__track::after { transform: translateX(20px); }
+  .ph-cookie-modal__actions { margin-top: 28px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+</style>
+
+<div id="ph-cookie-banner" class="ph-cookie" role="region" aria-label="Cookie preferences"{% if request.design_mode %}{% else %} hidden{% endif %}>
+  <div class="ph-cookie__body">
+    <p>{{ settings.cookie_banner_text | default: "We use a few cookies to keep your cart working, and — with your permission — to see how parents use the site. You decide what's on." }} <a href="/policies/privacy-policy">{{ settings.cookie_banner_link_label | default: "Read our privacy policy" }} →</a></p>
+  </div>
+  <div class="ph-cookie__actions">
+    <button type="button" class="ph-cookie__btn" data-ph-consent-action="essential">{{ settings.cookie_btn_essential | default: "Essential only" }}</button>
+    <button type="button" class="ph-cookie__btn ph-cookie__btn--ghost" data-ph-consent-action="customize">{{ settings.cookie_btn_customize | default: "Customize" }}</button>
+    <button type="button" class="ph-cookie__btn ph-cookie__btn--primary" data-ph-consent-action="accept-all">{{ settings.cookie_btn_accept | default: "Accept all" }}</button>
+  </div>
+</div>
+
+<div id="ph-cookie-modal" class="ph-cookie-modal" role="dialog" aria-modal="true" aria-labelledby="ph-cookie-modal-title" aria-hidden="true" hidden>
+  <div class="ph-cookie-modal__card">
+    <h2 class="ph-cookie-modal__title" id="ph-cookie-modal-title">{{ settings.cookie_modal_title | default: "Your cookie preferences" }}</h2>
+    <p class="ph-cookie-modal__lede">{{ settings.cookie_modal_lede | default: "Three categories, honestly named. You can change your mind any time from the footer." }}</p>
+
+    <div class="ph-cookie-modal__option">
+      <div>
+        <h3 class="ph-cookie-modal__option-title">Essential</h3>
+        <p class="ph-cookie-modal__option-text">Cart, session, checkout. These must stay on for the site to work.</p>
+      </div>
+      <span class="ph-cookie-modal__pill">Always on</span>
+    </div>
+
+    <div class="ph-cookie-modal__option">
+      <div>
+        <h3 class="ph-cookie-modal__option-title">Analytics</h3>
+        <p class="ph-cookie-modal__option-text">Aggregated traffic patterns so we learn what's broken and what works. No individual tracking, no ads.</p>
+      </div>
+      <label class="ph-cookie-modal__switch" aria-label="Toggle analytics cookies">
+        <input type="checkbox" data-ph-consent-toggle="analytics">
+        <span class="ph-cookie-modal__track"></span>
+      </label>
+    </div>
+
+    <div class="ph-cookie-modal__option">
+      <div>
+        <h3 class="ph-cookie-modal__option-title">Marketing</h3>
+        <p class="ph-cookie-modal__option-text">Currently unused. Reserved in case we ever add retargeting ads — we'd ask again before activating.</p>
+      </div>
+      <label class="ph-cookie-modal__switch" aria-label="Toggle marketing cookies">
+        <input type="checkbox" data-ph-consent-toggle="marketing">
+        <span class="ph-cookie-modal__track"></span>
+      </label>
+    </div>
+
+    <div class="ph-cookie-modal__actions">
+      <button type="button" class="ph-cookie__btn" data-ph-consent-action="close-modal">{{ settings.cookie_modal_cancel | default: "Cancel" }}</button>
+      <button type="button" class="ph-cookie__btn ph-cookie__btn--primary" data-ph-consent-action="save-custom" style="color: var(--ph-plum-deep); background: var(--ph-honey); border-color: var(--ph-honey);">{{ settings.cookie_modal_save | default: "Save preferences" }}</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'livrome-cookie-consent.js' | asset_url }}" defer></script>

@@ -8,7 +8,7 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping in Canada over $75 CAD · Printed locally in Quebec",
             "text_alignment": "center",
             "color_scheme": "scheme-1",
             "link": ""

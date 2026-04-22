@@ -1,0 +1,126 @@
+{% comment %}
+  Livrome structured data (schema.org JSON-LD).
+
+  Emits:
+    • Organization on every page
+    • WebSite with SearchAction on every page
+    • Product on product pages (via product object)
+    • FAQPage on the /pages/faq template
+    • BreadcrumbList on product, collection, blog, article, page (non-home)
+{% endcomment %}
+
+{%- liquid
+  assign brand_name = 'Livrome'
+  assign brand_url = shop.url
+  assign brand_logo = settings.logo | default: shop.brand.logo | image_url: width: 512
+  assign brand_email = 'hello@livrome.com'
+-%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{ brand_name }}",
+  "url": "{{ brand_url }}",
+  {%- if brand_logo != blank %}
+  "logo": "{{ brand_logo | prepend: 'https:' }}",
+  {%- endif %}
+  "email": "{{ brand_email }}",
+  "areaServed": ["CA", "US", "GB", "FR", "DE", "BE", "NL", "CH", "AT", "IT", "ES"],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "email": "{{ brand_email }}",
+    "availableLanguage": ["English", "French"]
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ brand_name }}",
+  "url": "{{ brand_url }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ brand_url }}/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+{%- if request.page_type == 'product' and product != blank -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 320 | json }},
+  "sku": {{ product.selected_or_first_available_variant.sku | default: product.handle | json }},
+  "brand": { "@type": "Brand", "name": "{{ brand_name }}" },
+  "url": "{{ shop.url }}{{ product.url }}",
+  {%- if product.featured_image %}
+  "image": "https:{{ product.featured_image | image_url: width: 1200 }}",
+  {%- endif %}
+  "offers": [
+    {%- for variant in product.variants -%}
+    {
+      "@type": "Offer",
+      "name": {{ variant.title | json }},
+      "sku": {{ variant.sku | default: variant.id | json }},
+      "price": "{{ variant.price | money_without_currency | remove: ',' }}",
+      "priceCurrency": "{{ cart.currency.iso_code }}",
+      "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+      "url": "{{ shop.url }}{{ product.url }}?variant={{ variant.id }}"
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+
+{%- if request.page_type == 'page' and page.template_suffix == 'faq' -%}
+  {%- assign faq_section = page_content | default: '' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What do you do with my child's photo?", "acceptedAnswer": { "@type": "Answer", "text": "The photo is used only to illustrate your book. Stored encrypted, used to adapt each page to your child's features, then deleted within 30 days — or instantly on request. Never shared, never used for training, never used for anything else." } },
+    { "@type": "Question", "name": "How long does delivery take?", "acceptedAnswer": { "@type": "Answer", "text": "Printing takes 48 hours. Then 5–8 business days in Canada, 7–12 to the US and Europe." } },
+    { "@type": "Question", "name": "Are the books available in French?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — every story is hand-written in both French (Quebec variant) and English. You pick the language at preview time." } },
+    { "@type": "Question", "name": "What if I don't love the final book?", "acceptedAnswer": { "@type": "Answer", "text": "We replace it or refund you. No fine print. 30 days from delivery." } },
+    { "@type": "Question", "name": "How much does a book cost?", "acceptedAnswer": { "@type": "Answer", "text": "Hardcover from $29 CAD, paperback from $22 CAD. One-time purchase. Free shipping in Canada on orders over $75." } },
+    { "@type": "Question", "name": "Can I send a book directly as a gift?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. At checkout, tick 'This is a gift' — you can add a dedication and ship directly to the recipient." } },
+    { "@type": "Question", "name": "Do you use AI to make the illustrations?", "acceptedAnswer": { "@type": "Answer", "text": "Our illustrators use AI-assisted tools to adapt hand-drawn base scenes to your child's features. Every scene starts from art drawn by a human illustrator." } },
+    { "@type": "Question", "name": "Is this safe for children?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We follow Quebec Law 25 and European GDPR. Parental consent is required for every preview." } },
+    { "@type": "Question", "name": "What format is the book printed in?", "acceptedAnswer": { "@type": "Answer", "text": "24 pages, 21×21 cm, printed locally in Quebec. Hardcover: sewn binding, 170 g FSC paper. Paperback: 150 g paper." } },
+    { "@type": "Question", "name": "How does the preview work?", "acceptedAnswer": { "@type": "Answer", "text": "Pick a story, upload one photo, get all 24 pages drafted in ~2 minutes. Review, regenerate, and only pay when you order." } }
+  ]
+}
+</script>
+{%- endif -%}
+
+{%- if request.page_type == 'product' or request.page_type == 'collection' or request.page_type == 'article' or request.page_type == 'page' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ shop.url }}/" }
+    {%- if request.page_type == 'product' and product != blank -%}
+    ,{ "@type": "ListItem", "position": 2, "name": "Library", "item": "{{ shop.url }}/collections/all" },
+    { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": "{{ shop.url }}{{ product.url }}" }
+    {%- elsif request.page_type == 'collection' and collection != blank -%}
+    ,{ "@type": "ListItem", "position": 2, "name": {{ collection.title | json }}, "item": "{{ shop.url }}{{ collection.url }}" }
+    {%- elsif request.page_type == 'article' and article != blank -%}
+    ,{ "@type": "ListItem", "position": 2, "name": {{ blog.title | json }}, "item": "{{ shop.url }}{{ blog.url }}" },
+    { "@type": "ListItem", "position": 3, "name": {{ article.title | json }}, "item": "{{ shop.url }}{{ article.url }}" }
+    {%- elsif request.page_type == 'page' and page != blank and page.handle != 'home' -%}
+    ,{ "@type": "ListItem", "position": 2, "name": {{ page.title | json }}, "item": "{{ shop.url }}{{ page.url }}" }
+    {%- endif -%}
+  ]
+}
+</script>
+{%- endif -%}
