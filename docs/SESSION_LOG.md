@@ -4,6 +4,39 @@ Running log of each build session. Most recent at top.
 
 ---
 
+## S8 + S9 — preview-api scaffold + Book #1 content (2026-04-22)
+
+**Objective**: Stand up the AI pipeline foundation (`/generate-page` endpoint) and write Book #1 from scratch (24-page bedtime story, manifest, illustrator brief).
+
+### S9 — Book #1 content (complete)
+
+- `content/book-01/script.md` — full 24-page story arc for "[NAME] and the Stars". Act I (pages 1–6: stars fall from sky onto [NAME]'s bed), Act II (pages 7–18: [NAME] releases them one by one from bedroom → window sill → garden → rooftop → hill), Act III (pages 19–24: sky is whole again, [NAME] sleeps, one star watches over). Every page has FR (Quebec) + EN text, a short scene note, and the `[NAME]` substitution token. The script is explicitly gender-neutral on the hero: no *il/elle/petit/petite*, so any first name substitutes cleanly. Token appears ~11×.
+- `content/book-01/manifest.json` — machine-readable spec. 24 pages each with `text.fr`, `text.en`, `scene_file`, `hero_bounds` (normalized face-oval bbox per page, for face-swap targeting in S10), and a palette triple. Cover has its own block with front/back synopsis in both languages. Substitution rules inlined: case preservation, hyphen/apostrophe handling, gender-pronoun mapping for render-time.
+- `content/book-01/base-scenes/scene-notes.md` — illustrator brief for all 24 pages + cover. Composition, mood, palette lead, hero pose per scene. Style bible at bottom: watercolor, soft line, one light source, negative space for text, face oval as skin-tone flat. Commission-ready.
+
+### S8 — preview-api scaffold (partial — real Imagen call deferred)
+
+- `preview-api/pyproject.toml` — Python 3.11+, FastAPI 0.115, Pydantic 2, httpx, google-auth, google-cloud-secret-manager, Pillow. Ruff/pytest in `[dev]` extras.
+- `preview-api/app/config.py` — `pydantic-settings`, env-driven. `USE_MOCK` defaults true so fresh clones run.
+- `preview-api/app/schemas.py` — `ChildAttributes`, `GeneratePageRequest`, `VariantImage`, `GeneratePageResponse`. Field validators trim names, enforce age/skin_idx ranges.
+- `preview-api/app/prompts.py` — builds the Imagen prompt from (child phrase + one-sentence scene note + style bible). Scene notes for all 24 pages inlined; they mirror the illustrator brief but are trimmed enough for a single-prompt call.
+- `preview-api/app/mock.py` — deterministic SVG placeholder per (page_num, variant_idx). Same 4-palette set as the Next.js `BookPageSpread` so the preview-app stays visually coherent when the real model is absent.
+- `preview-api/app/imagen_client.py` — ported the `Downloads/perso/main.py` pattern: Secret Manager → refresh token → OAuth2 token exchange → Vertex AI Imagen 4 `:predict`. Caches access tokens with 30-second safety buffer. Async httpx throughout.
+- `preview-api/app/main.py` — FastAPI app factory. `GET /health` + `POST /generate-page`. Content root pinned to `../content/{book_id}/manifest.json`. CORS restricted to localhost:3000 + preview.livrome.com.
+- `preview-api/README.md` — quick-start (mock mode in 4 commands), env var table for prod, project layout, next steps.
+
+**Smoke test** (TestClient): `USE_MOCK=1` returns 4 SVG variants in <1 ms for `book-01` page 3. Prompt hash `8c3d3afe1565`, deterministic seeds per variant.
+
+**Contract docs** — `docs/API_CONTRACTS.md` now fully describes `/generate-page`: request JSON with examples, response shape, all error codes, mock vs prod switching, prompt template, quality-spike plan, rate-limit math (60 req/min Imagen quota → 12-concurrency orchestration for S10).
+
+### Not delivered (deferred)
+
+- **Real Imagen call** — needs GCP credentials wired and a manual one-shot quality spike per page. Can't automate without the refresh token being available to this sandbox. User runs `USE_MOCK=0 uvicorn app.main:app` with the env vars set and tries one call.
+- **Inngest HMAC auth** — S10, not S8.
+- **Face compositing** — the endpoint returns 4 whole-scene variants today. Face-swap (composite the child's face into the pre-painted base scene's oval) is a distinct pipeline step planned for S10/S11.
+
+---
+
 ## S6 + S7 — steps 3 through 7 UI (2026-04-22)
 
 **Objective**: fill in the remaining 5 preview-flow routes with real UI (photo upload, generation loading, page review, flipbook, order).

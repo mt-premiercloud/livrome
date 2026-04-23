@@ -1,0 +1,80 @@
+{
+  "id": "book-01",
+  "slug": "leo-stars",
+  "title": {
+    "fr": "Les étoiles de [NAME]",
+    "en": "[NAME] and the Stars"
+  },
+  "base_hero_name": "Léo",
+  "theme": { "fr": "Coucher", "en": "Bedtime" },
+  "age_range": "3-6",
+  "language_support": ["fr", "en"],
+  "page_count": 24,
+  "physical": {
+    "size_cm": [21, 21],
+    "binding_options": ["hardcover", "paperback"],
+    "paper_gsm": { "hardcover": 170, "paperback": 150 },
+    "print_location": "Mile-End, Montreal, Quebec"
+  },
+  "palette_bible": {
+    "plum": "#5B2A6F",
+    "plum_deep": "#3F1C4F",
+    "honey": "#F4B942",
+    "cream": "#FFF8EC",
+    "ink": "#1E1A17"
+  },
+  "hero_neutral_template": {
+    "description": "Generic 4-5 year old child figure, ambiguous gender, simple rounded pyjamas in cream-with-plum-accent. Face area is solid oval reserved for face-swap; never drawn with features.",
+    "swap_mode": "face_oval",
+    "bounds_note": "Each page's `hero_bounds` is the face oval bounding box in viewbox coordinates (0..1000). The illustration pipeline (S8/S10) places the personalized face inside these bounds with the skin tone passed via preview-state."
+  },
+  "cover": {
+    "title_fr": "Les étoiles de [NAME]",
+    "title_en": "[NAME] and the Stars",
+    "subtitle_fr": "Un livre Livrome",
+    "subtitle_en": "A Livrome book",
+    "back_synopsis_fr": "Une étoile tombe sur le lit de [NAME]. Puis deux. Puis six. Ensemble, ils les ramènent à leur place, une par une, du rebord de la fenêtre jusqu'au sommet de la colline. Un conte tendre sur le courage que l'on trouve quand on aide quelqu'un d'autre.",
+    "back_synopsis_en": "A star falls on [NAME]'s bed. Then two. Then six. Together, they bring them home, one by one, from the window sill to the hilltop. A tender tale about the courage you find when you help someone else.",
+    "scene_file": "base-scenes/cover.png",
+    "hero_bounds": { "x1": 0.42, "y1": 0.28, "x2": 0.58, "y2": 0.42 },
+    "palette": ["plum_deep", "honey", "cream"]
+  },
+  "pages": [
+    { "num": 1,  "text": { "fr": "Un soir, [NAME] n'arrivait pas à dormir.", "en": "One evening, [NAME] couldn't fall asleep." }, "scene_file": "base-scenes/page-01.png", "hero_bounds": { "x1": 0.42, "y1": 0.34, "x2": 0.56, "y2": 0.50 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 2,  "text": { "fr": "La nuit semblait si grande. Si sombre.", "en": "The night seemed so big. So dark." }, "scene_file": "base-scenes/page-02.png", "hero_bounds": { "x1": 0.18, "y1": 0.62, "x2": 0.27, "y2": 0.72 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 3,  "text": { "fr": "Puis une étoile tomba du ciel — plop! — sur la couverture.", "en": "Then a star fell from the sky — plop! — onto the blanket." }, "scene_file": "base-scenes/page-03.png", "hero_bounds": { "x1": 0.44, "y1": 0.30, "x2": 0.58, "y2": 0.44 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 4,  "text": { "fr": "— Pardon, dit l'étoile. Je suis perdue.", "en": "\"Excuse me,\" said the star. \"I'm lost.\"" }, "scene_file": "base-scenes/page-04.png", "hero_bounds": { "x1": 0.32, "y1": 0.22, "x2": 0.54, "y2": 0.48 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 5,  "text": { "fr": "Et puis… deux, trois, six! Toute une famille perdue.", "en": "And then… two, three, six! A whole lost family." }, "scene_file": "base-scenes/page-05.png", "hero_bounds": { "x1": 0.42, "y1": 0.32, "x2": 0.56, "y2": 0.48 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 6,  "text": { "fr": "[NAME] sourit. — On va vous ramener.", "en": "[NAME] smiled. \"We'll get you home.\"" }, "scene_file": "base-scenes/page-06.png", "hero_bounds": { "x1": 0.44, "y1": 0.30, "x2": 0.58, "y2": 0.46 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 7,  "text": { "fr": "Il fallait un manteau. Des bottes. Et un peu de courage.", "en": "A coat was needed. Boots. And a little courage." }, "scene_file": "base-scenes/page-07.png", "hero_bounds": { "x1": 0.40, "y1": 0.24, "x2": 0.56, "y2": 0.42 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 8,  "text": { "fr": "Premier arrêt : le rebord de la fenêtre.", "en": "First stop: the window sill." }, "scene_file": "base-scenes/page-08.png", "hero_bounds": { "x1": 0.38, "y1": 0.30, "x2": 0.52, "y2": 0.48 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 9,  "text": { "fr": "Deuxième arrêt : le jardin où dort le chat.", "en": "Second stop: the garden where the cat is sleeping." }, "scene_file": "base-scenes/page-09.png", "hero_bounds": { "x1": 0.40, "y1": 0.42, "x2": 0.54, "y2": 0.58 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 10, "text": { "fr": "Trois étoiles étaient rentrées. Il en restait trois.", "en": "Three stars were home. Three to go." }, "scene_file": "base-scenes/page-10.png", "hero_bounds": { "x1": 0.46, "y1": 0.36, "x2": 0.58, "y2": 0.52 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 11, "text": { "fr": "— Par ici, murmurèrent les étoiles.", "en": "\"This way,\" the stars whispered." }, "scene_file": "base-scenes/page-11.png", "hero_bounds": { "x1": 0.40, "y1": 0.44, "x2": 0.52, "y2": 0.60 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 12, "text": { "fr": "Le toit touchait presque les nuages.", "en": "The rooftop almost touched the clouds." }, "scene_file": "base-scenes/page-12.png", "hero_bounds": { "x1": 0.38, "y1": 0.42, "x2": 0.50, "y2": 0.56 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 13, "text": { "fr": "— Merci, souffla la quatrième étoile en s'envolant.", "en": "\"Thank you,\" whispered the fourth star as it flew up." }, "scene_file": "base-scenes/page-13.png", "hero_bounds": { "x1": 0.44, "y1": 0.38, "x2": 0.58, "y2": 0.54 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 14, "text": { "fr": "Le ciel était plus grand que tout.", "en": "The sky was bigger than everything." }, "scene_file": "base-scenes/page-14.png", "hero_bounds": { "x1": 0.44, "y1": 0.70, "x2": 0.52, "y2": 0.80 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 15, "text": { "fr": "[NAME] aurait pu avoir peur. Mais non.", "en": "[NAME] could have been afraid. But [NAME] wasn't." }, "scene_file": "base-scenes/page-15.png", "hero_bounds": { "x1": 0.34, "y1": 0.22, "x2": 0.66, "y2": 0.64 }, "palette": ["plum", "honey", "cream"] },
+    { "num": 16, "text": { "fr": "La dernière traversée : la colline.", "en": "The last crossing: the hill." }, "scene_file": "base-scenes/page-16.png", "hero_bounds": { "x1": 0.42, "y1": 0.46, "x2": 0.54, "y2": 0.60 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 17, "text": { "fr": "Tout en haut, tout était calme.", "en": "At the top, everything was still." }, "scene_file": "base-scenes/page-17.png", "hero_bounds": { "x1": 0.46, "y1": 0.54, "x2": 0.52, "y2": 0.62 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 18, "text": { "fr": "Les deux dernières partirent ensemble.", "en": "The last two flew off together." }, "scene_file": "base-scenes/page-18.png", "hero_bounds": { "x1": 0.44, "y1": 0.42, "x2": 0.56, "y2": 0.56 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 19, "text": { "fr": "Le ciel était complet de nouveau.", "en": "The sky was whole again." }, "scene_file": "base-scenes/page-19.png", "hero_bounds": { "x1": 0.42, "y1": 0.62, "x2": 0.54, "y2": 0.78 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 20, "text": { "fr": "— Bonne nuit, [NAME], murmurèrent les étoiles.", "en": "\"Goodnight, [NAME],\" the stars whispered." }, "scene_file": "base-scenes/page-20.png", "hero_bounds": { "x1": 0.36, "y1": 0.46, "x2": 0.64, "y2": 0.84 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 21, "text": { "fr": "Et [NAME] rentra par le même chemin.", "en": "And [NAME] came home the same way." }, "scene_file": "base-scenes/page-21.png", "hero_bounds": { "x1": 0.44, "y1": 0.48, "x2": 0.54, "y2": 0.62 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 22, "text": { "fr": "Le lit était encore chaud.", "en": "The bed was still warm." }, "scene_file": "base-scenes/page-22.png", "hero_bounds": { "x1": 0.42, "y1": 0.36, "x2": 0.58, "y2": 0.50 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 23, "text": { "fr": "Les yeux se fermèrent doucement.", "en": "[NAME]'s eyes closed gently." }, "scene_file": "base-scenes/page-23.png", "hero_bounds": { "x1": 0.30, "y1": 0.24, "x2": 0.70, "y2": 0.66 }, "palette": ["plum_deep", "honey", "cream"] },
+    { "num": 24, "text": { "fr": "Dehors, une dernière étoile veillait. Elle souriait aussi.", "en": "Outside, one last star was watching. It was smiling too." }, "scene_file": "base-scenes/page-24.png", "hero_bounds": null, "palette": ["plum_deep", "honey", "cream"] }
+  ],
+  "substitution": {
+    "token": "[NAME]",
+    "occurrence_count": 11,
+    "rules": [
+      "Replace [NAME] with the child's first name as provided (preserve original capitalization).",
+      "Do not gender-agree in French; the base script avoids il/elle/petit/petite on the hero so any name works without rewrites.",
+      "If the name contains a hyphen or apostrophe (e.g. Marie-Ève, D'Arcy), substitute verbatim.",
+      "Pronouns at render time: `boy → il / son / lui`, `girl → elle / sa / elle`, `neutral → they/them in EN · use the name or 'l'enfant' in FR`."
+    ]
+  },
+  "version": "1.0.0",
+  "last_updated": "2026-04-22"
+}
