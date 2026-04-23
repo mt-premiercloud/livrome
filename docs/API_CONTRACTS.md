@@ -65,7 +65,25 @@ Service-to-service interfaces. Filled in as each service is built.
 **Modes**:
 
 - **Mock** (`USE_MOCK=1`, default in dev): returns deterministic SVG placeholders via `app/mock.py`. Same 4-palette set used by the preview-app's `BookPageSpread` component so the UI looks coherent when the real model is absent. Zero external calls.
-- **Prod** (`USE_MOCK=0`): calls Vertex AI Imagen 4 (`imagen-4.0-generate-001`) through Gemini Enterprise OAuth refresh-token — same pattern as `Downloads/perso/main.py`. Access token cached for ~1 hour. Refresh token comes from Secret Manager (`user-refresh-token`) or `REFRESH_TOKEN` env var.
+- **Prod** (`USE_MOCK=0`): calls **Discovery Engine `:streamAssist`** (Gemini Enterprise) — `discoveryengine.googleapis.com/v1alpha/projects/{NUMBER}/locations/global/collections/default_collection/engines/{ENGINE_ID}/assistants/default_assistant:streamAssist`. Engine defaults to `premiercloud_1747631331912`. Auth is the Gemini Enterprise OAuth refresh-token pattern from `Downloads/perso/main.py`; access tokens cached for ~1 hour. Refresh token comes from Secret Manager (`user-refresh-token` on project number `9058228956`) or `REFRESH_TOKEN` env var. streamAssist returns **one image per call**, so `variant_count` calls are fanned out concurrently via `asyncio.gather`. **Do NOT switch to Vertex AI `:predict` direct** — that bills separately and is not covered by the Gemini Enterprise license. See `feedback_gemini_enterprise_streamassist.md`.
+
+**Request body sent to streamAssist** (constructed in `gemini_client.py`):
+
+```jsonc
+{
+  "query": {
+    "parts": [
+      { "inlineData": { "mimeType": "image/jpeg", "data": "<child photo base64>" } },
+      { "text": "<assembled prompt from prompts.py>" }
+    ]
+  },
+  "toolsSpec": { "imageGenerationSpec": {} }
+}
+```
+
+With header `X-Goog-User-Project: 9058228956` (required by Discovery Engine).
+
+Response is a streamed JSON array of chunks; images are extracted from `chunk.answer.replies[].content.parts[].inlineData.data` (base64 PNG).
 
 ### Prompt template
 
@@ -89,7 +107,7 @@ When we're happy with the spike, we lock the prompt template and advance to S10 
 
 ### Rate limits + quota
 
-- Imagen 4 quota at the account level: 60 req/min. At 4 variants × 24 pages = 96 calls per preview, we hit the limit on a single preview generated in less than ~2 minutes. S10 plans: **rolling 12-concurrency** with 5-second spacing so one preview takes ~40 s of wall time but stays under quota if two happen simultaneously.
+- Gemini Enterprise streamAssist doesn't publish a per-minute quota the way Vertex AI does, but practical throughput from `Downloads/perso/` observations is ≤30 concurrent image requests before we see back-pressure. At 4 variants × 24 pages = 96 calls per preview, S10's orchestrator uses **rolling 12-concurrency** so one preview takes ~40 s of wall time and two previews in flight stay comfortably under the observed ceiling.
 - Mock mode has no rate limit.
 
 ### Versioning

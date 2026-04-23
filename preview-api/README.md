@@ -33,7 +33,9 @@ curl -s -X POST http://localhost:8787/generate-page \
 
 You'll get back four SVG placeholder variants.
 
-## Prod mode (real Imagen 4)
+## Prod mode (Gemini Enterprise streamAssist — NOT Vertex AI direct)
+
+The generator is Discovery Engine `:streamAssist` on project `pcagentspace`, engine `premiercloud_1747631331912`. This is covered by the Gemini Enterprise license — **do not** switch to Vertex AI `:predict` direct (it bills separately). See `../memory/feedback_gemini_enterprise_streamassist.md`.
 
 Required env vars:
 
@@ -44,16 +46,17 @@ Required env vars:
 | `OAUTH_CLIENT_SECRET` | Same app's secret. |
 | `GCP_PROJECT_ID` | Defaults to `pcagentspace`. |
 | `GCP_PROJECT_NUMBER` | Defaults to `9058228956`. |
+| `DE_ENGINE_ID` | Defaults to `premiercloud_1747631331912`. |
+| `DE_LOCATION` | Defaults to `global`. |
 | `REFRESH_TOKEN_SECRET` | Secret Manager secret name; defaults to `user-refresh-token`. |
 | `REFRESH_TOKEN` | *Optional.* Bypass Secret Manager and use this value directly (dev only). |
-| `IMAGEN_MODEL` | Defaults to `imagen-4.0-generate-001`. |
 | `ALLOWED_ORIGINS` | Comma-separated CORS origins. Defaults to localhost:3000 + preview.livrome.com. |
 
 ## Project layout
 
 ```
 preview-api/
-├─ pyproject.toml           # FastAPI + Imagen deps
+├─ pyproject.toml           # FastAPI + Gemini Enterprise deps
 ├─ README.md                # this file
 └─ app/
    ├─ __init__.py
@@ -61,7 +64,7 @@ preview-api/
    ├─ schemas.py            # request/response types
    ├─ prompts.py            # prompt builder + scene descriptions
    ├─ mock.py               # SVG placeholder generator
-   ├─ imagen_client.py      # Imagen 4 over Gemini Enterprise OAuth
+   ├─ gemini_client.py      # Discovery Engine :streamAssist client
    └─ main.py               # FastAPI app + /generate-page
 ```
 

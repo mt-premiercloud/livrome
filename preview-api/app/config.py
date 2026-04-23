@@ -27,7 +27,12 @@ class Settings(BaseSettings):
     # GCP / Gemini Enterprise
     gcp_project_id: str = Field(default="pcagentspace", alias="GCP_PROJECT_ID")
     gcp_project_number: str = Field(default="9058228956", alias="GCP_PROJECT_NUMBER")
-    gcp_location: str = Field(default="us-central1", alias="GCP_LOCATION")
+
+    # Discovery Engine — the streamAssist endpoint covered by the Gemini Enterprise
+    # license (NO Vertex AI costs). See feedback_gemini_enterprise_streamassist.md.
+    de_engine_id: str = Field(default="premiercloud_1747631331912", alias="DE_ENGINE_ID")
+    de_location: str = Field(default="global", alias="DE_LOCATION")
+    de_assistant: str = Field(default="default_assistant", alias="DE_ASSISTANT")
 
     # OAuth client (shared Gemini Enterprise app)
     oauth_client_id: str = Field(default="", alias="OAUTH_CLIENT_ID")
@@ -38,10 +43,12 @@ class Settings(BaseSettings):
     # Optional override — if set, skip Secret Manager and use this directly
     refresh_token_override: str | None = Field(default=None, alias="REFRESH_TOKEN")
 
-    # Imagen model + pricing
-    imagen_model: str = Field(default="imagen-4.0-generate-001", alias="IMAGEN_MODEL")
-    default_aspect_ratio: str = Field(default="1:1", alias="DEFAULT_ASPECT_RATIO")
+    # Generation knobs. streamAssist generates images via Gemini's imageGenerationSpec —
+    # we don't pick the model ID explicitly (Gemini Enterprise picks nano-banana or whatever
+    # is current). Variant count is enforced by issuing `variants_per_request` separate calls
+    # because streamAssist returns 1 image per call.
     variants_per_request: int = Field(default=4, alias="VARIANTS_PER_REQUEST")
+    stream_timeout_seconds: int = Field(default=180, alias="STREAM_TIMEOUT_SECONDS")
 
     # HTTP
     allowed_origins: list[str] = Field(

@@ -26,7 +26,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import Settings, get_settings
-from .imagen_client import ImagenClient, ImagenError, prompt_hash
+from .gemini_client import GeminiEnterpriseClient, GeminiEnterpriseError, prompt_hash
 from .mock import make_svg_png_placeholder, stable_seed, svg_to_data_url
 from .prompts import build_prompt
 from .schemas import GeneratePageRequest, GeneratePageResponse, VariantImage
@@ -53,19 +53,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type"],
     )
 
-    imagen: ImagenClient | None = None if cfg.use_mock else ImagenClient(cfg)
+    gemini: GeminiEnterpriseClient | None = (
+        None if cfg.use_mock else GeminiEnterpriseClient(cfg)
+    )
 
     @app.on_event("shutdown")
     async def _shutdown() -> None:
-        if imagen:
-            await imagen.aclose()
+        if gemini:
+            await gemini.aclose()
 
     @app.get("/health")
     def health() -> dict:
         return {
             "ok": True,
             "mode": "mock" if cfg.use_mock else "prod",
-            "imagen_model": cfg.imagen_model,
+            "generator": "mock-svg" if cfg.use_mock else "gemini-enterprise-streamAssist",
+            "engine_id": cfg.de_engine_id,
         }
 
     @app.post("/generate-page", response_model=GeneratePageResponse)
@@ -97,7 +100,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
         variants: list[VariantImage] = []
 
-        if cfg.use_mock or imagen is None:
+        if cfg.use_mock or gemini is None:
             for v in range(req.variant_count):
                 svg = make_svg_png_placeholder(
                     page_num=req.page_num,
@@ -114,16 +117,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     )
                 )
         else:
+            # Forward the child photo as a reference image for character consistency.
+            # streamAssist accepts inline data as base64; strip the data-URL prefix.
+            reference_b64: str | None = None
+            if req.photo_data_url.startswith("data:"):
+                _, _, b64 = req.photo_data_url.partition(",")
+                reference_b64 = b64 or None
+
             try:
-                png_bytes_list = await imagen.generate(
+                png_bytes_list = await gemini.generate_image(
                     prompt=prompt,
                     sample_count=req.variant_count,
-                    aspect_ratio=cfg.default_aspect_ratio,
-                    seed=req.seed,
+                    reference_image_b64=reference_b64,
                 )
-            except ImagenError as e:
-                logger.error("imagen failure: %s", e)
-                raise HTTPException(status_code=502, detail=f"imagen upstream error: {e}") from e
+            except GeminiEnterpriseError as e:
+                logger.error("streamAssist failure: %s", e)
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"gemini-enterprise upstream error: {e}",
+                ) from e
 
             for v, png in enumerate(png_bytes_list):
                 variants.append(
